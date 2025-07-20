@@ -1,3 +1,4 @@
+
 #!/bin/bash
 
 # ========================
@@ -6,53 +7,60 @@
 
 STATE_FILE="/var/tmp/block_schedule_state"
 LOG_FILE="/var/log/block_schedule.log"
+BLOCK_DURATION=1200   # 20 min
+WORK_DURATION=3000    # 50 min
 
-# Logging function
 log() {
     echo "$(date): $1" | tee -a "$LOG_FILE"
 }
 
-# Load block state
-if [[ -f "$STATE_FILE" ]]; then
-    source "$STATE_FILE"
-else
-    BLOCK_REMAINING=1200  # Start with 20-minute block (in seconds)
-    echo "BLOCK_REMAINING=$BLOCK_REMAINING" > "$STATE_FILE"
-    log "Initial block state set: 20 minutes"
+# Init state file if not found
+if [[ ! -f "$STATE_FILE" ]]; then
+    echo "LAST_EVENT_TIME=$(date +%s)" > "$STATE_FILE"
+    echo "PHASE=BLOCK" >> "$STATE_FILE"
+    log "Initialized new state: BLOCK phase"
 fi
 
-# Nighttime enforcement
+# Read state
+source "$STATE_FILE"
+NOW=$(date +%s)
 current_hour=$(date +%H)
+ELAPSED=$((NOW - LAST_EVENT_TIME))
+
+# Shutdown at night (20:00–06:59)
 if [[ $current_hour -ge 20 || $current_hour -lt 7 ]]; then
-    log "Nighttime detected — shutting down immediately"
+    log "Nighttime detected — shutdown"
+    echo "LAST_EVENT_TIME=$NOW" > "$STATE_FILE"
+    echo "PHASE=BLOCK" >> "$STATE_FILE"
     shutdown now
     exit 0
 fi
 
-# Main loop
-while true; do
-    current_hour=$(date +%H)
-
-    if [[ $current_hour -ge 20 || $current_hour -lt 7 ]]; then
-        log "Nighttime during loop — shutting down"
-        shutdown now
-        exit 0
-    fi
-
-    if [[ $BLOCK_REMAINING -gt 0 ]]; then
-        log "Blocking in progress — $BLOCK_REMAINING seconds remaining"
-        echo "BLOCK_REMAINING=1200" > "$STATE_FILE"
-        log "Shutdown to enforce blocking"
+# PHASE = BLOCK
+if [[ "$PHASE" == "BLOCK" ]]; then
+    if [[ $ELAPSED -lt $BLOCK_DURATION ]]; then
+        REMAIN=$((BLOCK_DURATION - ELAPSED))
+        log "BLOCK phase — $REMAIN sec remaining"
         shutdown now
         exit 0
     else
-        log "Unblocked: Starting 50 minutes of work"
-        sleep $((50 * 60))  # 50 minutes work time
+        log "BLOCK over — switching to WORK"
+        echo "LAST_EVENT_TIME=$NOW" > "$STATE_FILE"
+        echo "PHASE=WORK" >> "$STATE_FILE"
+        exit 0
+    fi
 
-        BLOCK_REMAINING=1200
-        echo "BLOCK_REMAINING=1200" > "$STATE_FILE"
-        log "Work period ended — initiating blocking phase"
+# PHASE = WORK
+else
+    if [[ $ELAPSED -lt $WORK_DURATION ]]; then
+        REMAIN=$((WORK_DURATION - ELAPSED))
+        log "WORK phase — $REMAIN sec remaining"
+        exit 0
+    else
+        log "WORK over — switching to BLOCK and shutting down"
+        echo "LAST_EVENT_TIME=$NOW" > "$STATE_FILE"
+        echo "PHASE=BLOCK" >> "$STATE_FILE"
         shutdown now
         exit 0
     fi
-done
+fi
