@@ -90,7 +90,9 @@ sudo chmod +x /usr/local/sbin/usb_crypt_login.sh
 ### 3. 🔐 Configure PAM
 
 Edit the relevant PAM configuration file.
-
+```bash
+sudo vim /etc/pam.d/gdm-password
+```
 For SSH:
 ```bash
 sudo nano /etc/pam.d/sshd
