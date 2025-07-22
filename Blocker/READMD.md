@@ -36,7 +36,7 @@ Type=oneshot
 Save it as:
 
 ```bash
-sudo nano /etc/systemd/system/block-schedule.service
+sudo vim /etc/systemd/system/block-schedule.service
 ```
 
 3. Create systemd timer:
@@ -56,7 +56,7 @@ WantedBy=timers.target
 Save it as:
 
 ```bash
-sudo nano /etc/systemd/system/block-schedule.timer
+sudo vim /etc/systemd/system/block-schedule.timer
 ```
 
 4. Enable and start the timer:
