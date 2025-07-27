@@ -23,7 +23,8 @@ sudo chmod +x /usr/local/bin/block_schedule.sh
 
 2. Create systemd service:
 
-```ini
+```bash
+sudo tee /etc/systemd/system/block-schedule.service > /dev/null << 'EOF'
 [Unit]
 Description=Blocking Schedule Daemon
 After=network.target
@@ -31,17 +32,13 @@ After=network.target
 [Service]
 ExecStart=/usr/local/bin/block_schedule.sh
 Type=oneshot
-```
+EOF
 
-Save it as:
-
-```bash
-sudo vim /etc/systemd/system/block-schedule.service
-```
 
 3. Create systemd timer:
 
 ```ini
+sudo tee /etc/systemd/system/block-schedule.timer > /dev/null << 'EOF'
 [Unit]
 Description=Run block_schedule.sh every 2 minutes
 
@@ -51,15 +48,11 @@ OnUnitActiveSec=2min
 
 [Install]
 WantedBy=timers.target
+EOF
 ```
 
-Save it as:
 
-```bash
-sudo vim /etc/systemd/system/block-schedule.timer
-```
-
-4. Enable and start the timer:
+1. Enable and start the timer:
 
 ```bash
 sudo systemctl daemon-reload
