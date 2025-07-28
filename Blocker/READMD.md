@@ -32,7 +32,9 @@ After=network.target
 [Service]
 ExecStart=/usr/local/bin/block_schedule.sh
 Type=oneshot
+User=root
 EOF
+```
 
 
 3. Create systemd timer:

@@ -34,13 +34,13 @@ NOW=$(date +%s)
 CURRENT_HOUR=$(date +%H)
 ELAPSED=$((NOW - LAST_EVENT_TIME))
 
-# Show how long since shutdown if available
+# Show how long since sudo shutdown if available
 if [[ -n "$LAST_SHUTDOWN_TIME" ]]; then
     SHUTDOWN_ELAPSED=$((NOW - LAST_SHUTDOWN_TIME))
     log "Time since last shutdown: $SHUTDOWN_ELAPSED seconds"
 fi
 
-# Nighttime shutdown (20:00–06:59)
+# Nighttime sudo shutdown (20:00–06:59)
 if [[ $CURRENT_HOUR -ge 20 || $CURRENT_HOUR -lt 7 ]]; then
     log "Nighttime detected — initiating shutdown"
     {
@@ -49,7 +49,7 @@ if [[ $CURRENT_HOUR -ge 20 || $CURRENT_HOUR -lt 7 ]]; then
         echo "LAST_SHUTDOWN_TIME=$NOW"
         echo "NOTIFIED=0"
     } > "$STATE_FILE"
-    shutdown now
+    sudo systemctl poweroff -i
     exit 0
 fi
 
@@ -63,7 +63,7 @@ if [[ "$PHASE" == "BLOCK" ]]; then
             DISPLAY=:0 DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/$(id -u)/bus \
                 notify-send "⚠️ System will shut down in $REMAIN seconds!" "Block time is ending soon."
 
-            log "Sent 3-minute shutdown warning (REMAIN=$REMAIN)"
+            log "Sent 3-minute sudo shutdown warning (REMAIN=$REMAIN)"
 
             {
                 echo "LAST_EVENT_TIME=$LAST_EVENT_TIME"
@@ -80,7 +80,7 @@ if [[ "$PHASE" == "BLOCK" ]]; then
             echo "LAST_SHUTDOWN_TIME=$NOW"
             echo "NOTIFIED=$NOTIFIED"
         } > "$STATE_FILE"
-        shutdown now
+        sudo systemctl poweroff -i
         exit 0
     else
         log "BLOCK phase complete — switching to WORK"
@@ -107,7 +107,7 @@ elif [[ "$PHASE" == "WORK" ]]; then
             echo "LAST_SHUTDOWN_TIME=$NOW"
             echo "NOTIFIED=0"
         } > "$STATE_FILE"
-        shutdown now
+        sudo systemctl poweroff -i
         exit 0
     fi
 
@@ -120,6 +120,6 @@ else
         echo "LAST_SHUTDOWN_TIME=$NOW"
         echo "NOTIFIED=0"
     } > "$STATE_FILE"
-    shutdown now
+    sudo systemctl poweroff -i
     exit 1
 fi
