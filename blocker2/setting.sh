@@ -81,14 +81,20 @@ chmod -R 755 /opt/shutdown_cui
 
 # サービスを有効化・開始
 echo -e "\nサービスを有効化中..."
+
+# サービスを有効化・開始・再起動・状態確認（全ユーザー分）
+echo -e "\nサービスを有効化・再起動中..."
 for USERNAME in $ALL_USERS; do
   SERVICE_NAME_USER="shutdown-cui-$USERNAME.service"
-  echo "有効化中: $SERVICE_NAME_USER"
+  echo "有効化・再起動中: $SERVICE_NAME_USER"
   systemctl enable "$SERVICE_NAME_USER"
-  systemctl start "$SERVICE_NAME_USER"
+  systemctl restart "$SERVICE_NAME_USER"
 done
 
 echo -e "\n=== インストール完了 ==="
 echo "サービス状態を確認中..."
-systemctl list-units --type=service --all | grep shutdown-cui
+for USERNAME in $ALL_USERS; do
+  SERVICE_NAME_USER="shutdown-cui-$USERNAME.service"
+  systemctl status "$SERVICE_NAME_USER" --no-pager | head -20
+done
 

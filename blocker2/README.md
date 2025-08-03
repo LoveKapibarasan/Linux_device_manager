@@ -1,12 +1,32 @@
+
 ### Log Monitoring
-**Real-time log monitoring for regular users:**
+
+本アプリの動作ログは各ユーザーのホームディレクトリに出力されます。
+
+- ログファイル: `~/.shutdown_cui.log`
+
+#### リアルタイム監視
+
 ```bash
-# View current log contents
-cat ~/.shutdown_cui.log
-
-# Monitor logs in real-time
 tail -f ~/.shutdown_cui.log
+```
 
-# View recent log entries
-tail -20 ~/.shutdown_cui.log
+#### すべてのユーザーのログをまとめて監視（rootで）
+
+```bash
+tail -f /home/*/.shutdown_cui.log
+```
+
+#### サービスの状態確認
+
+```bash
+systemctl status shutdown-cui-$(whoami).service
+```
+
+
+
+
+
+```bash
+sudo apt install libnotify-bin
 ```
