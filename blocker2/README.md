@@ -266,8 +266,7 @@ rm -f ~/.shutdown_app_usage.json
 
 - **Automatic Shutdown**: The system WILL shut down when the time limit is reached
 - **Data Safety**: Always save your work when receiving the 2-minute warning
-- **System Suspend**: During breaks, the system automatically suspends until 20 minutes have passed
-- **Break Time Management**: Uses protected timestamp file `/tmp/.break_start_time` (read-only for users)
+- **System Suspend**: During breaks, the system automatically suspends 
 - **Multi-User**: Each user has their own time tracking and service instance
 - **Protection Active**: Service cannot be terminated without sudo privileges
 - **Log Monitoring**: Check `~/.shutdown_cui.log` for activity monitoring
