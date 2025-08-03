@@ -1,11 +1,19 @@
-# Linux Device Blocker - CUI Version
+# Linux Device Blocker - CUI Version (Protected Mode)
 
-A productivity-focused system service that automatically manages computer usage time with Pomodoro technique integration and automatic shutdown functionality.
+A productivity-focused system service that automatically manages computer usage time with Pomodoro technique integration, automatic shutdown functionality, and advanced protection against unauthorized termination.
 
-## 🚀 Features
+## 🔒 Security Features
 
-- **Daily Usage Limit**: x-hour daily computer usage limit
-- **Pomodoro Timer**: y-minute work sessions followed by z-minute breaks
+- **Protection Mode**: Prevents unauthorized termination without sudo privileges
+- **Signal Blocking**: Intercepts and blocks common termination signals
+- **Auto-Recovery**: Automatically restarts on unexpected errors
+- **Tamper Detection**: Monitors and logs unauthorized termination attempts
+- **Sudo-Only Exit**: Only users with sudo privileges can terminate the service
+
+## 🚀 Core Features
+
+- **Daily Usage Limit**: 5-hour daily computer usage limit
+- **Pomodoro Timer**: 50-minute work sessions followed by 20-minute breaks
 - **Automatic Shutdown**: System automatically powers off when time limit is reached
 - **Notification System**: Desktop notifications + console output + bell sounds
 - **Multi-User Support**: Individual services for each system user
@@ -92,6 +100,21 @@ nohup python3 shutdown_cui.py > ~/shutdown_app.log 2>&1 &
 - **Time Up**: Automatic system shutdown
 
 ## 🔧 Configuration
+
+### Protection Mode Settings
+The application runs in protected mode by default:
+- **Sudo-Only Termination**: Only users with sudo privileges can stop the service
+- **Signal Blocking**: Ctrl+C, SIGTERM, and other signals are intercepted and blocked
+- **Tamper Detection**: Multiple termination attempts trigger security notifications
+
+**To force stop the application:**
+```bash
+# Only works with sudo privileges
+sudo pkill -f shutdown_cui.py
+
+# Or stop the systemd service
+sudo systemctl stop shutdown-cui-<username>.service
+```
 
 ### Time Limits
 Edit `block_manager.py` to modify time limits:

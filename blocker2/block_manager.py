@@ -67,44 +67,60 @@ class UsageManager:
     def is_limit_exceeded(self):
         return self.seconds_left() <= 0
 
-# Pomodoro処理本体（1秒単位で制御）
+# Pomodoro処理本体（1秒単位で制御）- 保護モード
 def start_combined_loop():
+    """保護モード付きメインループ"""
     usage = UsageManager()
     notified_2min = False
     phase = "focus"
     counter = 0
+    
+    notify("🔒 システム監視開始", "デバイス使用制限が有効になりました")
 
     while True:
-        if usage.seconds_left() <= 120 and not notified_2min:
-            notify("警告", "残り2分です。作業を保存してください")
-            notified_2min = True
+        try:
+            if usage.seconds_left() <= 120 and not notified_2min:
+                notify("⚠️ 警告", "残り2分です。作業を保存してください")
+                notified_2min = True
 
-        if usage.is_limit_exceeded():
-            try:
-                subprocess.run(["systemctl", "poweroff", "--ignore-inhibitors", "-i"], check=True)
-            except Exception as e:
-                notify("シャットダウン失敗", str(e))
-            break
-
-        if phase == "focus":
-            if counter == 0:
-                notify("集中時間", "50分作業開始")
-            counter += 1
-            if counter >= 50 * 60:
-                phase = "break"
-                counter = 0
-
-        elif phase == "break":
-            if counter == 0:
-                notify("休憩時間", "20分休憩開始")
+            if usage.is_limit_exceeded():
+                notify("🔴 時間制限", "使用時間が上限に達しました。シャットダウンします。")
                 try:
-                    subprocess.run(["systemctl", "suspend", "--ignore-inhibitors"], check=True)
+                    subprocess.run(["systemctl", "poweroff", "--ignore-inhibitors", "-i"], check=True)
                 except Exception as e:
-                    notify("サスペンド失敗", str(e))
-            counter += 1
-            if counter >= 20 * 60:
-                phase = "focus"
-                counter = 0
+                    notify("❌ シャットダウン失敗", f"エラー: {str(e)}")
+                break
 
-        usage.add_second()
-        time.sleep(1)
+            if phase == "focus":
+                if counter == 0:
+                    notify("🎯 集中時間", "50分作業開始")
+                counter += 1
+                if counter >= 50 * 60:
+                    phase = "break"
+                    counter = 0
+
+            elif phase == "break":
+                if counter == 0:
+                    notify("☕ 休憩時間", "20分休憩開始")
+                    # サスペンド機能は一時的に無効化（安定性のため）
+                    # try:
+                    #     subprocess.run(["systemctl", "suspend", "--ignore-inhibitors"], check=True)
+                    # except Exception as e:
+                    #     notify("❌ サスペンド失敗", f"エラー: {str(e)}")
+                counter += 1
+                if counter >= 20 * 60:
+                    phase = "focus"
+                    counter = 0
+
+            usage.add_second()
+            time.sleep(1)
+            
+        except KeyboardInterrupt:
+            # キーボード割り込みを無視
+            notify("🚫 終了試行検出", "保護モードのため終了を拒否しました")
+            continue
+        except Exception as e:
+            # その他のエラーもキャッチして継続
+            notify("⚠️ エラー発生", f"処理を継続します: {str(e)}")
+            time.sleep(1)
+            continue

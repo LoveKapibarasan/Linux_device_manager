@@ -25,15 +25,16 @@ for USERNAME in $ALL_USERS; do
 
   read -r -d '' SERVICE_CONTENT <<EOF || true
 [Unit]
-Description=Shutdown CUI App for $USERNAME
+Description=Shutdown CUI App for $USERNAME (Protected Mode)
 After=multi-user.target
 Wants=multi-user.target
 
 [Service]
 Type=simple
 ExecStart=/usr/bin/python3 $APP_PATH
-Restart=on-failure
-RestartSec=5
+Restart=always
+RestartSec=3
+StartLimitInterval=0
 User=$USERNAME
 Group=$USERNAME
 Environment=HOME=$HOME_DIR
@@ -41,6 +42,10 @@ Environment=USER=$USERNAME
 WorkingDirectory=/opt/shutdown_cui
 StandardOutput=journal
 StandardError=journal
+KillMode=mixed
+KillSignal=SIGTERM
+TimeoutStopSec=30
+SendSIGKILL=yes
 
 [Install]
 WantedBy=multi-user.target
