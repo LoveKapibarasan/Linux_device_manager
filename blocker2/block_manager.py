@@ -3,17 +3,33 @@ import subprocess
 import json
 import os
 from datetime import datetime
-from gi.repository import Notify
 
-USAGE_FILE = "/var/log/shutdown_app_usage.json"
+# ユーザーのホームディレクトリに保存するように変更
+USAGE_FILE = os.path.expanduser("~/.shutdown_app_usage.json")
 DAILY_LIMIT_SEC = 300 * 60  # 1日の制限時間（秒）
 
-# 通知の初期化
-Notify.init("ShutdownApp")
-
 def notify(summary, body):
-    n = Notify.Notification.new(summary, body)
-    n.show()
+    """CUI版通知 - コンソールに出力 + システム通知"""
+    timestamp = datetime.now().strftime("%H:%M:%S")
+    print(f"\n[{timestamp}] 🔔 {summary}: {body}")
+    
+    # システム通知を試行
+    try:
+        subprocess.run([
+            "notify-send", 
+            "--urgency=critical", 
+            "--expire-time=5000",
+            f"{summary}", 
+            f"{body}"
+        ], check=False, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+    except:
+        pass  # 失敗しても無視
+    
+    # さらに目立つようにベルを鳴らす
+    try:
+        print("\a", end="", flush=True)  # ベル音
+    except:
+        pass
 
 # 時間情報を管理するクラス
 class UsageManager:
