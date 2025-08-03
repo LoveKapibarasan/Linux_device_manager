@@ -213,8 +213,7 @@ def start_combined_loop():
                         }
                         with open(state_file, "w") as f:
                             json.dump(state_data, f)
-                        os.chmod(state_file, 0o644)
-                        os.chown(state_file, 0, 0)
+                        os.chmod(state_file, 0o600)  # 所有ユーザーのみ読み書き可
                         
                         notify("💤 システムサスペンド", f"残り休憩時間: {remaining_min}分")
                         subprocess.run(["systemctl", "suspend", "--ignore-inhibitors"], check=True)
@@ -329,8 +328,7 @@ def start_combined_loop():
                 with open(state_file, "w") as f:
                     json.dump(state_data, f)
                 # sudo以外編集禁止 (root:root 644)
-                os.chmod(state_file, 0o644)
-                os.chown(state_file, 0, 0)  # root:root
+                os.chmod(state_file, 0o600)  # 所有ユーザーのみ読み書き可
             except Exception as e:
                 notify("⚠️ 警告", f"ステート保存エラー: {str(e)}")
 
