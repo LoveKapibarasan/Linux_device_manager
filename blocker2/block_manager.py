@@ -18,8 +18,14 @@ def notify(summary, body):
         user_log_file = os.path.expanduser("~/.shutdown_cui.log")
         with open(user_log_file, "a") as f:
             f.write(f"[{timestamp}] {summary}: {body}\n")
-    except:
-        pass
+    except Exception as e:
+        err_msg = f"[{timestamp}] [ERROR] ログ書き込み失敗: {e}\n"
+        print(err_msg)
+        try:
+            with open("/tmp/shutdown_cui_error.log", "a") as ef:
+                ef.write(err_msg)
+        except:
+            pass
     
     # システム通知を試行
     try:
@@ -52,8 +58,14 @@ class UsageManager:
         return datetime.now().strftime("%Y-%m-%d")
 
     def _load(self):
-        with open(USAGE_FILE, "r") as f:
-            return json.load(f)
+        try:
+            with open(USAGE_FILE, "r") as f:
+                return json.load(f)
+        except (json.JSONDecodeError, FileNotFoundError):
+            # ファイルが空・壊れている・存在しない場合は初期化
+            data = {"date": self._today(), "seconds": 0}
+            self._save(data)
+        return data
 
     def _save(self, data):
         with open(USAGE_FILE, "w") as f:
