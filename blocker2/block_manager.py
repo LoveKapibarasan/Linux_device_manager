@@ -281,9 +281,7 @@ def start_combined_loop():
                         }
                         with open(state_file, "w") as f:
                             json.dump(state_data, f)
-                        os.chmod(state_file, 0o644)
-                        os.chown(state_file, 0, 0)
-                        
+                        os.chmod(state_file, 0o600)  # 実行ユーザーのみ読み書き可
                         notify("💤 システムサスペンド", "休憩時間のためサスペンドします")
                         subprocess.run(["systemctl", "suspend", "--ignore-inhibitors"], check=True)
                     except Exception as e:
