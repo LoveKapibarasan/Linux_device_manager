@@ -102,15 +102,48 @@ def start_combined_loop():
             elif phase == "break":
                 if counter == 0:
                     notify("☕ 休憩時間", "20分休憩開始")
-                    # サスペンド機能は一時的に無効化（安定性のため）
-                    # try:
-                    #     subprocess.run(["systemctl", "suspend", "--ignore-inhibitors"], check=True)
-                    # except Exception as e:
-                    #     notify("❌ サスペンド失敗", f"エラー: {str(e)}")
-                counter += 1
-                if counter >= 20 * 60:
-                    phase = "focus"
-                    counter = 0
+                    # 休憩開始時刻を保護されたファイルに記録
+                    break_start_file = "/tmp/.break_start_time"
+                    try:
+                        with open(break_start_file, "w") as f:
+                            f.write(str(time.time()))
+                        # ファイルを読み取り専用に設定（一般ユーザーが編集不可）
+                        os.chmod(break_start_file, 0o444)
+                    except Exception as e:
+                        notify("⚠️ 警告", f"休憩時刻記録エラー: {str(e)}")
+                
+                # 休憩時間の経過をチェック
+                break_start_file = "/tmp/.break_start_time"
+                try:
+                    if os.path.exists(break_start_file):
+                        with open(break_start_file, "r") as f:
+                            break_start_time = float(f.read().strip())
+                        
+                        elapsed_break_time = time.time() - break_start_time
+                        remaining_break_time = (20 * 60) - elapsed_break_time
+                        
+                        if elapsed_break_time >= 20 * 60:
+                            # 20分経過：集中モードに戻る
+                            notify("🎯 休憩終了", "集中時間に戻ります")
+                            phase = "focus"
+                            counter = 0
+                            # 休憩時刻ファイルを削除
+                            try:
+                                os.remove(break_start_file)
+                            except:
+                                pass
+                        else:
+                            # 20分未経過：常にサスペンド実行
+                            try:
+                                notify("💤 システムサスペンド", f"残り休憩時間: {int(remaining_break_time/60)}分{int(remaining_break_time%60)}秒")
+                                subprocess.run(["systemctl", "suspend", "--ignore-inhibitors"], check=True)
+                            except Exception as e:
+                                notify("❌ サスペンド失敗", f"エラー: {str(e)}")
+                    else:
+                        # ファイルが存在しない場合は再作成
+                        counter = 0
+                except Exception as e:
+                    notify("⚠️ エラー", f"休憩時間管理エラー: {str(e)}")
 
             usage.add_second()
             time.sleep(1)

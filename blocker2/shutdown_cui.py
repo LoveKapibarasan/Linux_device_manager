@@ -11,6 +11,9 @@ class ShutdownCUIApp:
         self.running = True
         self.usage = UsageManager()
         
+        # ログファイルの設定
+        self.log_file = os.path.expanduser("~/.shutdown_cui.log")
+        
         # より多くのシグナルをキャッチ
         signal.signal(signal.SIGINT, self.signal_handler)
         signal.signal(signal.SIGTERM, self.signal_handler)
@@ -25,19 +28,36 @@ class ShutdownCUIApp:
         
         # 保護モード開始の通知
         self.notify_protection_start()
+        self.log_message("🔒 保護モード開始 - デバイス使用制限が有効になりました")
+    
+    def log_message(self, message):
+        """ユーザーアクセス可能なログファイルに記録"""
+        try:
+            timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+            log_entry = f"[{timestamp}] {message}\n"
+            with open(self.log_file, "a", encoding="utf-8") as f:
+                f.write(log_entry)
+        except Exception as e:
+            print(f"ログ記録エラー: {e}")
     
     def signal_handler(self, signum, frame):
         """シグナル受信時の処理 - sudo権限チェック"""
-        print("\n⚠️  終了リクエストが検出されました")
+        message = f"⚠️ 終了リクエストが検出されました (シグナル: {signum})"
+        print(f"\n{message}")
         print("このアプリケーションはsudo権限でのみ終了できます。")
+        self.log_message(message)
         
         # sudo権限のチェック
         if not self.check_sudo_permission():
-            print("❌ sudo権限が必要です。終了が拒否されました。")
+            deny_message = "❌ sudo権限が必要です。終了が拒否されました。"
+            print(deny_message)
             print("終了するには: sudo pkill -f shutdown_cui.py")
+            self.log_message(deny_message)
             return
         
-        print("✅ sudo権限が確認されました。アプリケーションを終了します...")
+        success_message = "✅ sudo権限が確認されました。アプリケーションを終了します..."
+        print(success_message)
+        self.log_message(success_message)
         self.running = False
     
     def check_sudo_permission(self):
@@ -105,10 +125,6 @@ class ShutdownCUIApp:
                     consecutive_interrupts += 1
                     print(f"\n🚫 終了試行が検出されました (試行回数: {consecutive_interrupts})")
                     print("sudo権限が必要です。強制終了は無視されます。")
-                    if consecutive_interrupts >= 5:
-                        print("⚠️  複数回の終了試行が検出されました。管理者に通知します。")
-                        self.notify_tampering_attempt()
-                        consecutive_interrupts = 0
                     continue
                     
         except Exception as e:
@@ -125,19 +141,6 @@ class ShutdownCUIApp:
             else:
                 print("\n✅ 正常に終了しました。")
     
-    def notify_tampering_attempt(self):
-        """改ざん試行の通知"""
-        try:
-            import subprocess
-            subprocess.run([
-                "notify-send", 
-                "--urgency=critical", 
-                "🚨 セキュリティ警告",
-                "不正な終了試行が検出されました。管理者に報告されます。"
-            ], check=False, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
-        except:
-            pass
-
 if __name__ == "__main__":
     app = ShutdownCUIApp()
     app.run()
