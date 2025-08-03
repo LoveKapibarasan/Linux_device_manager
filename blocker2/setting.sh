@@ -98,6 +98,8 @@ for USERNAME in $ALL_USERS; do
   systemctl status "$SERVICE_NAME_USER" --no-pager | head -20
 done
 
+
+# allow suspend/shutdown for all users
 sudo mkdir -p /etc/polkit-1/localauthority/50-local.d/
 sudo tee /etc/polkit-1/localauthority/50-local.d/50-shutdown-cui.pkla > /dev/null <<'EOF'
 [Allow suspend/shutdown for shutdown-cui users]
