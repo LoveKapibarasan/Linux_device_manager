@@ -98,3 +98,12 @@ for USERNAME in $ALL_USERS; do
   systemctl status "$SERVICE_NAME_USER" --no-pager | head -20
 done
 
+sudo mkdir -p /etc/polkit-1/localauthority/50-local.d/
+sudo tee /etc/polkit-1/localauthority/50-local.d/50-shutdown-cui.pkla > /dev/null <<'EOF'
+[Allow suspend/shutdown for shutdown-cui users]
+Identity=unix-user:*
+Action=org.freedesktop.login1.suspend;org.freedesktop.login1.hibernate;org.freedesktop.login1.power-off;org.freedesktop.login1.reboot
+ResultActive=yes
+EOF
+
+sudo systemctl restart polkit
