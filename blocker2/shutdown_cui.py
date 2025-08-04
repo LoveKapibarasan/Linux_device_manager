@@ -17,7 +17,8 @@ class ShutdownCUIApp:
             with open(self.log_file, "a", encoding="utf-8") as f:
                 pass
         except Exception as e:
-            print(f"ログファイル作成エラー: {e}")
+            from block_manager import notify
+            notify("ログファイル作成エラー", str(e))
 
     
     def log_message(self, message):
@@ -28,25 +29,26 @@ class ShutdownCUIApp:
             with open(self.log_file, "a", encoding="utf-8") as f:
                 f.write(log_entry)
         except Exception as e:
-            print(f"ログ記録エラー: {e}")
+            from block_manager import notify
+            notify("ログ記録エラー", str(e))
 
     def signal_handler(self, signum, frame):
         """シグナル受信時の処理 - sudo権限チェック"""
+        from block_manager import notify
         message = f"⚠️ 終了リクエストが検出されました (シグナル: {signum})"
-        print(f"\n{message}")
-        print("このアプリケーションはsudo権限でのみ終了できます。")
+        notify("終了リクエスト", message)
+        notify("終了リクエスト", "このアプリケーションはsudo権限でのみ終了できます。")
         self.log_message(message)
 
         # sudo権限のチェック
         if not self.check_sudo_permission():
             deny_message = "❌ sudo権限が必要です。終了が拒否されました。"
-            print(deny_message)
-            print("終了するには: sudo pkill -f shutdown_cui.py")
+            notify("終了拒否", deny_message)
             self.log_message(deny_message)
             return
 
         success_message = "✅ sudo権限が確認されました。アプリケーションを終了します..."
-        print(success_message)
+        notify("終了", success_message)
         self.log_message(success_message)
         self.running = False
 
@@ -67,6 +69,7 @@ class ShutdownCUIApp:
 
     def run(self):
         """メインループ - 保護モード"""
+        from block_manager import notify
         try:
             # バックグラウンドで時間管理スレッドを開始
             control_thread = threading.Thread(target=start_combined_loop, daemon=True)
@@ -78,22 +81,21 @@ class ShutdownCUIApp:
                 try:
                     time.sleep(0.1)
                 except KeyboardInterrupt:
-                    print("sudo権限が必要です。強制終了は無視されます。")
+                    notify("強制終了無視", "sudo権限が必要です。強制終了は無視されます。")
                     continue
 
         except Exception as e:
-            print(f"\n❌ 予期しないエラー: {e}")
-            print("保護モードを維持します...")
+            notify("予期しないエラー", str(e))
             # エラーが発生しても終了しない
             time.sleep(1)
             if self.running:
-                print("🔄 アプリケーションを再起動します...")
+                notify("再起動", "🔄 アプリケーションを再起動します...")
                 self.run()  # 再帰的に再起動
         finally:
             if self.running:
-                print("\n🔒 保護モードが維持されています。")
+                notify("保護モード", "🔒 保護モードが維持されています。")
             else:
-                print("\n✅ 正常に終了しました。")
+                notify("正常終了", "✅ 正常に終了しました。")
 
 if __name__ == "__main__":
     app = ShutdownCUIApp()
