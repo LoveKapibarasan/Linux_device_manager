@@ -55,12 +55,7 @@ HOUR = 60 * MINUTE
 
 # === Pomodoro/Blocker Timing Settings (Global) ===
 
-LOG_INTERVAL_SEC = 5 * MINUTE  # 5分ごとにログ出力
-FOCUS_MINUTES = 50
-BREAK_MINUTES = 20
-DAILY_LIMIT_HOURS = 5
-FOCUS_SEC = FOCUS_MINUTES * MINUTE
-BREAK_SEC = BREAK_MINUTES * MINUTE
+DAILY_LIMIT_HOURS = 9
 DAILY_LIMIT_SEC = DAILY_LIMIT_HOURS * HOUR
 WARN_2MIN_BEFORE_SEC = 2 * MINUTE
 
@@ -207,12 +202,24 @@ def start_combined_loop():
     while True:
         try:
             # 夜間強制ブロック
+
             if is_block_time():
                 notify("⏰ 強制ブロック時間", f"現在は{BLOCKDURATION_START.strftime('%H:%M')}~{BLOCKDURATION_END.strftime('%H:%M')}の間です。シャットダウンします。")
+                shutdown_success = False
+                error_msgs = []
                 try:
                     subprocess.run(["systemctl", "poweroff", "--ignore-inhibitors", "-i"], check=True)
+                    shutdown_success = True
                 except Exception as e:
-                    notify("❌ シャットダウン失敗", f"エラー: {str(e)}")
+                    error_msgs.append(f"systemctl poweroff失敗: {str(e)}")
+                if not shutdown_success:
+                    try:
+                        subprocess.run(["shutdown", "-h", "now"], check=True)
+                        shutdown_success = True
+                    except Exception as e2:
+                        error_msgs.append(f"shutdown -h now失敗: {str(e2)}")
+                if not shutdown_success:
+                    notify("❌ シャットダウン失敗", "エラー: " + "; ".join(error_msgs))
                 break
 
             # 固定時間制ポモドーロブロック
@@ -220,10 +227,21 @@ def start_combined_loop():
                 if not notified_block:
                     notify("⏰ ポモドーロブロック", "毎時55分～00分は使用禁止です。シャットダウンします。")
                     notified_block = True
+                shutdown_success = False
+                error_msgs = []
                 try:
                     subprocess.run(["systemctl", "poweroff", "--ignore-inhibitors", "-i"], check=True)
+                    shutdown_success = True
                 except Exception as e:
-                    notify("❌ シャットダウン失敗", f"エラー: {str(e)}")
+                    error_msgs.append(f"systemctl poweroff失敗: {str(e)}")
+                if not shutdown_success:
+                    try:
+                        subprocess.run(["shutdown", "-h", "now"], check=True)
+                        shutdown_success = True
+                    except Exception as e2:
+                        error_msgs.append(f"shutdown -h now失敗: {str(e2)}")
+                if not shutdown_success:
+                    notify("❌ シャットダウン失敗", "エラー: " + "; ".join(error_msgs))
                 break
             else:
                 notified_block = False

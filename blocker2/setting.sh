@@ -43,17 +43,20 @@ echo -e "\n依存関係をインストール中..."
 apt update
 apt install -y python3 libnotify-bin
 
-    # install GUI app
-    echo -e "\nGUIアプリをインストール中..."
-    cp /home/takanori/Linux_device_blocker/blocker2/shutdown_cui.py /opt/shutdown_cui/
-    cp /home/takanori/Linux_device_blocker/blocker2/block_manager.py /opt/shutdown_cui/
-    cp /home/takanori/Linux_device_blocker/blocker2/requirements.txt /opt/shutdown_cui/
+
+# install GUI app
+echo -e "\nGUIアプリをインストール中..."
+sudo rm -rf /opt/shutdown_cui
+sudo mkdir -p /opt/shutdown_cui
+sudo cp /home/takanori/Linux_device_blocker/blocker2/shutdown_cui.py /opt/shutdown_cui/
+sudo cp /home/takanori/Linux_device_blocker/blocker2/block_manager.py /opt/shutdown_cui/
+sudo cp /home/takanori/Linux_device_blocker/blocker2/requirements.txt /opt/shutdown_cui/
 
 echo -e "\nPythonパッケージをインストール中..."
 pip3 install --break-system-packages -r /opt/shutdown_cui/requirements.txt
 
-chown -R root:root /opt/shutdown_cui
-chmod -R 755 /opt/shutdown_cui
+sudo chown -R root:root /opt/shutdown_cui
+sudo chmod -R 755 /opt/shutdown_cui
 
 # サービスを有効化・開始
 echo -e "\nサービスを有効化中..."
@@ -68,9 +71,11 @@ echo "サービス状態を確認中..."
 systemctl status "$SERVICE_NAME" --no-pager | head -20
 
 
+
 # allow suspend/shutdown for all users
 sudo mkdir -p /etc/polkit-1/localauthority/50-local.d/
-sudo tee /etc/polkit-1/localauthority/50-local.d/50-shutdown-cui.pkla > /dev/null <<'EOF'
+sudo rm -f /etc/polkit-1/localauthority/50-local.d/50-shutdown-cui.pkla
+cat <<EOF | sudo tee /etc/polkit-1/localauthority/50-local.d/50-shutdown-cui.pkla > /dev/null
 [Allow suspend/shutdown for shutdown-cui users]
 Identity=unix-user:*
 Action=org.freedesktop.login1.suspend;org.freedesktop.login1.hibernate;org.freedesktop.login1.power-off;org.freedesktop.login1.reboot
