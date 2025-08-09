@@ -48,9 +48,10 @@ apt install -y python3 libnotify-bin
 echo -e "\nGUIアプリをインストール中..."
 sudo rm -rf /opt/shutdown_cui
 sudo mkdir -p /opt/shutdown_cui
-sudo cp /home/takanori/Linux_device_blocker/blocker2/shutdown_cui.py /opt/shutdown_cui/
-sudo cp /home/takanori/Linux_device_blocker/blocker2/block_manager.py /opt/shutdown_cui/
-sudo cp /home/takanori/Linux_device_blocker/blocker2/requirements.txt /opt/shutdown_cui/
+sudo cp shutdown_cui.py /opt/shutdown_cui/
+sudo cp block_manager.py /opt/shutdown_cui/
+sudo cp requirements.txt /opt/shutdown_cui/
+
 
 echo -e "\nPythonパッケージをインストール中..."
 pip3 install --break-system-packages -r /opt/shutdown_cui/requirements.txt

@@ -1,14 +1,9 @@
 #!/bin/bash
+set -a
+source .env
+set +a
 
-# 2. remove takanori from sudo group in a takanori terminal
-
-# Variables
-USER="newadmin"
-PASSWORD="]zS7g80cRq+|eOR#f%FkW6"
-NORMAL_USER="takanori"
-NORMAL_PASSWORD="0711"
-
-# Remove takanori from sudo group
+# Remove $NORMAL_USER from sudo group
 if id "$NORMAL_USER" &>/dev/null; then
     if groups "$NORMAL_USER" | grep -qw sudo; then
         echo "$NORMAL_PASSWORD" | sudo -S gpasswd -d "$NORMAL_USER" sudo
