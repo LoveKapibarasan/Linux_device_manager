@@ -1,2 +1,0 @@
-# CUI版では外部依存関係なし
-# システム通知にはnotify-sendを使用（libnotify-binパッケージ）

@@ -72,7 +72,7 @@ systemctl status "$SERVICE_NAME" --no-pager | head -20
 
 
 
-# allow suspend/shutdown for all users
+# allow suspend/shutdown for non sudo users
 sudo mkdir -p /etc/polkit-1/localauthority/50-local.d/
 sudo rm -f /etc/polkit-1/localauthority/50-local.d/50-shutdown-cui.pkla
 cat <<EOF | sudo tee /etc/polkit-1/localauthority/50-local.d/50-shutdown-cui.pkla > /dev/null
@@ -83,6 +83,3 @@ ResultActive=yes
 EOF
 
 sudo systemctl restart polkit
-
-# takanoriユーザーにパスワードなしでblock_manager.pyを実行許可
-echo 'takanori ALL=(root) NOPASSWD: /usr/bin/python3 /opt/shutdown_cui/block_manager.py' | sudo tee -a /etc/sudoers
