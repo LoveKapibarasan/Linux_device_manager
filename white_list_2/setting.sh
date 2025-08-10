@@ -22,7 +22,7 @@ Description=white_list
 
 [Service]
 ExecStart=/bin/bash -c 'source /opt/white_list/venv/bin/activate && exec /usr/bin/python3 /opt/white_list/white_list_2.py'
-Restart=always
+Restart=on-abnormal
 RestartSec=1
 
 [Install]
