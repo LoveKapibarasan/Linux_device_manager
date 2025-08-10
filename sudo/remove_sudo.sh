@@ -1,46 +1,20 @@
 #!/usr/bin/env bash
-set -euo pipefail
+set -e
 
-# Load variables from .env
+# Load username from .env
 set -a
 source .env
 set +a
 
-if [[ -z "${NORMAL_USER:-}" ]]; then
-    echo "NORMAL_USER is not set in .env"
-    exit 1
-fi
-
 TARGET="$NORMAL_USER"
 
-echo "Removing sudo privileges for: $TARGET"
+echo "==> Removing $TARGET from sudo group..."
+sudo gpasswd -d "$TARGET" sudo
 
-# Remove from common sudo/admin groups
-for g in sudo wheel admin; do
-    if id -nG "$TARGET" | grep -qw "$g"; then
-        sudo gpasswd -d "$TARGET" "$g" || true
-    fi
-done
+echo "==> Clearing sudo authentication cache..."
+sudo -k                       # invalidate current timestamp
+sudo rm -rf /var/lib/sudo/$TARGET 2>/dev/null || true
 
-# Remove user-specific sudoers files
-sudo rm -f /etc/sudoers.d/"$TARGET" /etc/sudoers.d/"${TARGET}"_*
+echo "✅ Done. $TARGET should no longer have sudo privileges."
 
-# Remove sudo authentication cache
-sudo rm -rf /var/lib/sudo/"$TARGET" || true
-
-# Check main sudoers file for direct entries
-echo
-echo "Checking /etc/sudoers for '$TARGET' entries..."
-if sudo grep -E "^[^#].*\b$TARGET\b" /etc/sudoers; then
-    echo "⚠️ Found entries above. Use 'sudo visudo' to remove them."
-else
-    echo "No direct entries found in /etc/sudoers."
-fi
-
-# Verify
-echo
-if sudo -l -U "$TARGET" &>/dev/null; then
-    echo "❌ $TARGET STILL has sudo privileges."
-else
-    echo "✅ $TARGET no longer has sudo privileges."
-fi
+sudo -l
