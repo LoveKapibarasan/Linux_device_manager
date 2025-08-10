@@ -12,17 +12,44 @@ SECOND = 1
 MINUTE = 60 * SECOND
 HOUR = 60 * MINUTE
 
-# === Pomodoro/Blocker Timing Settings  ===
-DAILY_LIMIT_HOURS = 9
-DAILY_LIMIT_SEC = DAILY_LIMIT_HOURS * HOUR
-WARN_MIN = 2
-WARN_SEC = WARN_MIN * MINUTE
-POMODORO_START = 50  # xx:50 ~ xx:00 is block time
 
-# NIGHT BLOCKING TIME (Forced Block)
-BLOCK_DURATION_START = dtime(20, 0)  # 20:00
-BLOCK_DURATION_END = dtime(7, 0)    # 07:00
+CONFIG = {
+    "weekday": {
+        "DAILY_LIMIT_HOURS": 9,
+        "WARN_MIN": 2,
+        "POMODORO_START": 55,           # xx:50 ~ xx:00 is block
+        "BLOCK_START": dtime(20, 0),    # 20:00
+        "BLOCK_END": dtime(7, 0),       # 07:00
+    },
+    "weekend": {
+        "DAILY_LIMIT_HOURS": 4,         # <-- change if you want different on Sat/Sun
+        "WARN_MIN": 2,
+        "POMODORO_START": 30,
+        "BLOCK_START": dtime(20, 0),
+        "BLOCK_END": dtime(7, 0),
+    },
+}
 
+def _profile_for(now: datetime | None = None) -> str:
+    now = now or datetime.now()
+    # Monday=0 ... Sunday=6; weekend is 5,6
+    return "weekend" if now.weekday() >= 5 else "weekday"
+
+def _cfg(now: datetime | None = None) -> dict:
+    return CONFIG[_profile_for(now)]
+
+def daily_limit_sec(now: datetime | None = None) -> int:
+    return _cfg(now)["DAILY_LIMIT_HOURS"] * HOUR
+
+def warn_sec(now: datetime | None = None) -> int:
+    return _cfg(now)["WARN_MIN"] * MINUTE
+
+def pomodoro_start_minute(now: datetime | None = None) -> int:
+    return _cfg(now)["POMODORO_START"]
+
+def block_window(now: datetime | None = None) -> tuple[dtime, dtime]:
+    c = _cfg(now)
+    return c["BLOCK_START"], c["BLOCK_END"]
 
 # 時間情報を管理するクラス
 class UsageManager:
