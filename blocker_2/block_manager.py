@@ -90,32 +90,38 @@ class UsageManager:
         if data["date"] != self._today():
             protect_usage_file(self._today())
             return False
-        return max(0, DAILY_LIMIT_SEC - data.get("seconds", 0)) <= 0
+        return max(0, daily_limit_sec() - data.get("seconds", 0)) <= 0
 
     def notify_remaining_time(self):
         data = self._load()
         if data["date"] != self._today():
-            return DAILY_LIMIT_SEC
-        remaining = max(0, DAILY_LIMIT_SEC - data.get("seconds", 0))
-        if remaining <= WARN_SEC:
+            notify("Usage file is reset, no data available.")
+            return daily_limit_sec()
+        remaining = max(0, daily_limit_sec() - data.get("seconds", 0))
+        if remaining <= warn_sec():
             notify(f"⚠️残り時間: {remaining // MINUTE}分")
-        return remaining
+            return remaining
+
 
 
 # Pomodoro like block
 def is_pomodoro_block_time():
     now_minute = datetime.now().minute
-    # Between Pomodoro Start ~ xx:00 → block time
-    return now_minute >= POMODORO_START
+    return now_minute >= pomodoro_start_minute()
 
 # Check if the current time is within the blocking duration
 def is_block_time():
     now = datetime.now().time()
-    if BLOCK_DURATION_START < BLOCK_DURATION_END:
-        return BLOCK_DURATION_START <= now < BLOCK_DURATION_END
+    start, end = block_window()
+    if start < end:
+        return start <= now < end
     else:
-        return now >= BLOCK_DURATION_START or now < BLOCK_DURATION_END
+        return now >= start or now < end
 
+def is_notified():
+    current_minute = datetime.now().minute
+    current_second = datetime.now().second
+    return current_minute % 5 == 0 and current_second in (0, 1)
 
 def start_combined_loop():
     usage = UsageManager()
@@ -124,7 +130,9 @@ def start_combined_loop():
         try:
             # Night blocking time check
             if is_block_time() or usage.is_limit_exceeded():
-                notify(f"Now in {BLOCK_DURATION_START.strftime('%H:%M')}~{BLOCK_DURATION_END.strftime('%H:%M')}")
+                bs, be = block_window()
+                if is_notified():
+                    notify(f"Now in {bs.strftime('%H:%M')}~{be.strftime('%H:%M')}")
                 try:
                     shutdown_all_as_admin()
                 except Exception as e:
@@ -134,7 +142,8 @@ def start_combined_loop():
 
             # Pomodoro block time check
             if is_pomodoro_block_time():
-                notify("⏰Pomodoro block time detected, blocking now")
+                if is_notified():
+                    notify("⏰Pomodoro block time detected, blocking now")
                 try:
                     suspend_all_as_admin()
                 except Exception as e:
@@ -144,8 +153,8 @@ def start_combined_loop():
 
             usage.add_second()
 
-            if datetime.now().minute % 10 == 0:
-                usage.notify_remaining_time()
+            if is_notified():
+                notify(f"⏳Usage: {usage.notify_remaining_time() // MINUTE}分 remaining")
 
             time.sleep(1)
         except Exception as e:
