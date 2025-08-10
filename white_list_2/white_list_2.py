@@ -6,7 +6,7 @@ from datetime import datetime
 from white_list_extractor import extract_whitelist_domains
 
 WHITELIST_FILE = "/opt/white_list/bookmarks.html"
-START = 10    # 開始分
+START = 30    # 開始分
 END = 59      # 終了分
 CHECK_INTERVAL = 60  # 秒ごとにチェック
 
