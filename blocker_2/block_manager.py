@@ -100,7 +100,7 @@ class UsageManager:
         remaining = max(0, daily_limit_sec() - data.get("seconds", 0))
         if remaining <= warn_sec():
             notify(f"⚠️残り時間: {remaining // MINUTE}分")
-            return remaining
+        return remaining
 
 
 
@@ -154,8 +154,7 @@ def start_combined_loop():
             usage.add_second()
 
             if is_notified():
-                notify(f"⏳Usage: {usage.notify_remaining_time() // MINUTE}分 remaining")
-
+                usage.notify_remaining_time()
             time.sleep(1)
         except Exception as e:
             notify(f"⚠️Error happens: {str(e)}")

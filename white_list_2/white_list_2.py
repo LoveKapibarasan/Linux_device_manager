@@ -6,8 +6,8 @@ from datetime import datetime
 from white_list_extractor import extract_whitelist_domains
 
 WHITELIST_FILE = "/opt/white_list/bookmarks.html"
-START = 0     # 開始分
-END = 10      # 終了分
+START = 10    # 開始分
+END = 59      # 終了分
 CHECK_INTERVAL = 60  # 秒ごとにチェック
 
 def apply_firewall_whitelist(bookmarks_file):
@@ -57,7 +57,7 @@ def clear_firewall():
 
 def block_time_check():
     minute = datetime.now().minute
-    return START <= minute <= END
+    return  START <= minute <= END
 
 if __name__ == "__main__":
     last_state = None

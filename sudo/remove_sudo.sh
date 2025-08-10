@@ -1,34 +1,46 @@
-#!/bin/bash
+#!/usr/bin/env bash
+set -euo pipefail
+
+# Load variables from .env
 set -a
 source .env
 set +a
 
-# Check if user exists
-if id "$NORMAL_USER" &>/dev/null; then
-    # Check sudo access before removal
-    echo "Checking sudo access for $NORMAL_USER..."
-    if sudo -l -U "$NORMAL_USER" &>/dev/null; then
-        echo "$NORMAL_USER currently has sudo privileges."
-    else
-        echo "$NORMAL_USER does NOT currently have sudo privileges."
-    fi
+if [[ -z "${NORMAL_USER:-}" ]]; then
+    echo "NORMAL_USER is not set in .env"
+    exit 1
+fi
 
-    # Remove from sudo group
-    if groups "$NORMAL_USER" | grep -qw sudo; then
-        echo "$NORMAL_PASSWORD" | sudo -S gpasswd -d "$NORMAL_USER" sudo
-        if [ $? -eq 0 ]; then
-            echo "$NORMAL_USER removed from sudo group."
-        else
-            echo "Failed to remove $NORMAL_USER from sudo group."
+TARGET="$NORMAL_USER"
 
-        fi
-    else
-        echo "$NORMAL_USER is not in the sudo group."
-    # Clear sudo cache
-    echo "Clearing sudo authentication cache..."
-    echo "$NORMAL_PASSWORD" | sudo -S -k
-    echo "Sudo cache cleared."
+echo "Removing sudo privileges for: $TARGET"
+
+# Remove from common sudo/admin groups
+for g in sudo wheel admin; do
+    if id -nG "$TARGET" | grep -qw "$g"; then
+        sudo gpasswd -d "$TARGET" "$g" || true
     fi
+done
+
+# Remove user-specific sudoers files
+sudo rm -f /etc/sudoers.d/"$TARGET" /etc/sudoers.d/"${TARGET}"_*
+
+# Remove sudo authentication cache
+sudo rm -rf /var/lib/sudo/"$TARGET" || true
+
+# Check main sudoers file for direct entries
+echo
+echo "Checking /etc/sudoers for '$TARGET' entries..."
+if sudo grep -E "^[^#].*\b$TARGET\b" /etc/sudoers; then
+    echo "⚠️ Found entries above. Use 'sudo visudo' to remove them."
 else
-    echo "User $NORMAL_USER does not exist."
+    echo "No direct entries found in /etc/sudoers."
+fi
+
+# Verify
+echo
+if sudo -l -U "$TARGET" &>/dev/null; then
+    echo "❌ $TARGET STILL has sudo privileges."
+else
+    echo "✅ $TARGET no longer has sudo privileges."
 fi
