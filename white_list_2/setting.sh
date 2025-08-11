@@ -13,6 +13,11 @@ SERVICE_PATH=/etc/systemd/system/${SERVICE_NAME}
 . ../disable_time.sh
 
 
+sudo apt-get update
+sudo apt-get install -y dnsmasq ipset
+# （systemd-resolved を使っているなら）dns を dnsmasq に向けるのはスクリプト側で実施済み
+
+
 # Reset the service
 reset_system "${SERVICE_NAME}"
 

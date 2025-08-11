@@ -1,72 +1,127 @@
+# /opt/white_list/white_list_2.py
 import subprocess
-import socket
 import time
-from urllib.parse import urlparse
 from datetime import datetime
 from white_list_extractor import extract_whitelist_domains
 
 WHITELIST_FILE = "/opt/white_list/bookmarks.html"
-START = 30    # 開始分
-END = 59      # 終了分
-CHECK_INTERVAL = 60  # 秒ごとにチェック
+DNSMASQ_CONF   = "/etc/dnsmasq.d/whitelist.conf"
+CHECK_INTERVAL = 5  # seconds
 
-def apply_firewall_whitelist(bookmarks_file):
-    domains = extract_whitelist_domains(bookmarks_file)
+# Weekday settings
+WEEKDAY_START = 00
+WEEKDAY_END = 55
 
-    subprocess.run(["sudo", "iptables", "-F", "OUTPUT"])
+# Weekend settings
+WEEKEND_START = 30
+WEEKEND_END = 59
+
+today = datetime.datetime.now().weekday()
+current_hour = datetime.datetime.now().hour
+# weekday() returns 0=Monday ... 6=Sunday
+
+if today < 5 and 9 < current_hour < 17:  # Monday–Friday
+    START = WEEKDAY_START
+    END = WEEKDAY_END
+else:  # Saturday–Sunday
+    START = WEEKEND_START
+    END = WEEKEND_END
+
+
+def write_dnsmasq_whitelist(domains):
+    """
+    Generate /etc/dnsmasq.d/whitelist.conf with ipset lines so that
+    *.domain gets added into WHITELIST4/6 automatically on DNS resolve.
+    """
+    lines = [
+        "listen-address=127.0.0.1,::1",
+        "bind-interfaces",
+    ]
+
+    seen = set()
+    for d in domains:
+        d = d.strip().lower()
+        if not d or d in seen:
+            continue
+        seen.add(d)
+        # 同一サイト全サブドメインを対象にする
+        lines.append(f"ipset=/{d}/WHITELIST4,WHITELIST6")
+
+    content = "\n".join(lines) + "\n"
+    with open(DNSMASQ_CONF, "w") as f:
+        f.write(content)
+
+    # 反映
+    subprocess.run(["sudo", "systemctl", "restart", "dnsmasq"], check=False)
+    # systemd-resolved を併用しているなら DNS を dnsmasq に向ける
+    subprocess.run(["sudo", "resolvectl", "dns", "lo", "127.0.0.1", "::1"], check=False)
+    subprocess.run(["sudo", "resolvectl", "flush-caches"], check=False)
+
+def apply_firewall_base():
+    # ipset 作成（存在すれば -exist でOK）
+    subprocess.run(["sudo", "ipset", "create", "WHITELIST4", "hash:ip", "timeout", "3600", "-exist"])
+    subprocess.run(["sudo", "ipset", "create", "WHITELIST6", "hash:ip", "family", "inet6", "timeout", "3600", "-exist"])
+
+    # OUTPUT 再構成
+    subprocess.run(["sudo", "iptables",  "-F", "OUTPUT"])
     subprocess.run(["sudo", "ip6tables", "-F", "OUTPUT"])
 
-    subprocess.run(["sudo", "iptables", "-A", "OUTPUT", "-o", "lo", "-j", "ACCEPT"])
+    # 既存接続の継続・localhost
+    subprocess.run(["sudo", "iptables",  "-A", "OUTPUT", "-m", "conntrack", "--ctstate", "ESTABLISHED,RELATED", "-j", "ACCEPT"])
+    subprocess.run(["sudo", "ip6tables", "-A", "OUTPUT", "-m", "conntrack", "--ctstate", "ESTABLISHED,RELATED", "-j", "ACCEPT"])
+    subprocess.run(["sudo", "iptables",  "-A", "OUTPUT", "-o", "lo", "-j", "ACCEPT"])
     subprocess.run(["sudo", "ip6tables", "-A", "OUTPUT", "-o", "lo", "-j", "ACCEPT"])
 
-    subprocess.run(["sudo", "iptables", "-A", "OUTPUT", "-p", "udp", "--dport", "53", "-j", "ACCEPT"])
-    subprocess.run(["sudo", "ip6tables", "-A", "OUTPUT", "-p", "udp", "--dport", "53", "-j", "ACCEPT"])
+    # DNS を TCP/UDP 両方許可（dnsmasq 利用）
+    for proto in ("udp", "tcp"):
+        subprocess.run(["sudo", "iptables",  "-A", "OUTPUT", "-p", proto, "--dport", "53", "-j", "ACCEPT"])
+        subprocess.run(["sudo", "ip6tables", "-A", "OUTPUT", "-p", proto, "--dport", "53", "-j", "ACCEPT"])
 
-    for domain in domains:
-        try:
-            parsed = urlparse(domain if "://" in domain else "http://" + domain)
-            hostname = parsed.hostname
-            if not hostname:
-                continue
+    # PMTU など
+    subprocess.run(["sudo", "iptables",  "-A", "OUTPUT", "-p", "icmp",   "-j", "ACCEPT"])
+    subprocess.run(["sudo", "ip6tables", "-A", "OUTPUT", "-p", "icmpv6", "-j", "ACCEPT"])
 
-            for family in (socket.AF_INET, socket.AF_INET6):
-                try:
-                    infos = socket.getaddrinfo(hostname, None, family, socket.SOCK_STREAM)
-                    for info in infos:
-                        ip = info[4][0]
-                        if family == socket.AF_INET:
-                            subprocess.run(["sudo", "iptables", "-A", "OUTPUT", "-d", ip, "-j", "ACCEPT"])
-                        else:
-                            subprocess.run(["sudo", "ip6tables", "-A", "OUTPUT", "-d", ip, "-j", "ACCEPT"])
-                        print(f"Allowed: {hostname} ({ip})")
-                except socket.gaierror:
-                    pass
-        except Exception as e:
-            print(f"Failed to resolve {domain}: {e}")
+    # Web は ipset（同一サイトのみ）に宛先が入っている場合だけ許可
+    subprocess.run(["sudo", "iptables",  "-A", "OUTPUT", "-p", "tcp", "-m", "multiport", "--dports", "80,443",
+                    "-m", "set", "--match-set", "WHITELIST4", "dst", "-j", "ACCEPT"])
+    subprocess.run(["sudo", "ip6tables", "-A", "OUTPUT", "-p", "tcp", "-m", "multiport", "--dports", "80,443",
+                    "-m", "set", "--match-set", "WHITELIST6", "dst", "-j", "ACCEPT"])
 
-    subprocess.run(["sudo", "iptables", "-P", "OUTPUT", "DROP"])
+    # （任意）HTTP/3(QUIC) を許可
+    subprocess.run(["sudo", "iptables",  "-A", "OUTPUT", "-p", "udp", "--dport", "443",
+                    "-m", "set", "--match-set", "WHITELIST4", "dst", "-j", "ACCEPT"])
+    subprocess.run(["sudo", "ip6tables", "-A", "OUTPUT", "-p", "udp", "--dport", "443",
+                    "-m", "set", "--match-set", "WHITELIST6", "dst", "-j", "ACCEPT"])
+
+    # 最後にデフォルト DROP
+    subprocess.run(["sudo", "iptables",  "-P", "OUTPUT", "DROP"])
     subprocess.run(["sudo", "ip6tables", "-P", "OUTPUT", "DROP"])
-    print("Firewall whitelist applied.")
 
 def clear_firewall():
-    subprocess.run(["sudo", "iptables", "-F", "OUTPUT"])
+    subprocess.run(["sudo", "iptables",  "-F", "OUTPUT"])
     subprocess.run(["sudo", "ip6tables", "-F", "OUTPUT"])
-    subprocess.run(["sudo", "iptables", "-P", "OUTPUT", "ACCEPT"])
+    subprocess.run(["sudo", "iptables",  "-P", "OUTPUT", "ACCEPT"])
     subprocess.run(["sudo", "ip6tables", "-P", "OUTPUT", "ACCEPT"])
-    print("Firewall cleared.")
 
 def block_time_check():
     minute = datetime.now().minute
-    return  START <= minute <= END
+    return START <= minute <= END
 
 if __name__ == "__main__":
     last_state = None
+
+    # 起動時に一度、dnsmasq の allowlist を同期
+    domains = extract_whitelist_domains(WHITELIST_FILE)
+    write_dnsmasq_whitelist(domains)
+
     while True:
         state = block_time_check()
         if state != last_state:
             if state:
-                apply_firewall_whitelist(WHITELIST_FILE)
+                # ルール適用
+                apply_firewall_base()
             else:
+                # 全許可に戻す
                 clear_firewall()
             last_state = state
         time.sleep(CHECK_INTERVAL)
