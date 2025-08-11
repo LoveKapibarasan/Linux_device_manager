@@ -16,8 +16,8 @@ WEEKDAY_END = 55
 WEEKEND_START = 30
 WEEKEND_END = 59
 
-today = datetime.datetime.now().weekday()
-current_hour = datetime.datetime.now().hour
+today = datetime.now().weekday()
+current_hour = datetime.now().hour
 # weekday() returns 0=Monday ... 6=Sunday
 
 if today < 5 and 9 < current_hour < 17:  # Monday–Friday
