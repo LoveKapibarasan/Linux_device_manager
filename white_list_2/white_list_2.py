@@ -9,8 +9,8 @@ DNSMASQ_CONF   = "/etc/dnsmasq.d/whitelist.conf"
 CHECK_INTERVAL = 5  # seconds
 
 # Weekday settings
-WEEKDAY_START = 00
-WEEKDAY_END = 55
+WEEKDAY_START = 55
+WEEKDAY_END = 59
 
 # Weekend settings
 WEEKEND_START = 30
