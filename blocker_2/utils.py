@@ -134,6 +134,15 @@ def suspend_all_as_admin():
         print("Suspend failed, falling back to shutdown.")
         shutdown_all_as_admin()
 
+def cancel_shutdown():
+    """Cancel any pending shutdown jobs"""
+    try:
+        subprocess.run(["shutdown", "-c"], check=False)
+        print("Pending shutdowns cancelled.")
+    except Exception as e:
+        print(f"Failed to cancel shutdown: {e}")
+
+
 def run_as_admin(command):
     """rootとしてコマンド実行"""
     return subprocess.run(command, shell=True).returncode == 0

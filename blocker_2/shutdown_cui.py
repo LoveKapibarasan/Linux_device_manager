@@ -1,13 +1,14 @@
 import threading
 import time
 from block_manager import UsageManager, start_combined_loop
-from utils import notify
+from utils import notify, cancel_shutdown
 
 class ShutdownCUIApp:
     def __init__(self):
         self.usage = UsageManager()
 
     def run(self):
+        cancel_shutdown()
         try:
             start_combined_loop()  # blocks until killed
         except Exception as e:
