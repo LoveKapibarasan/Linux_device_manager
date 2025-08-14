@@ -1,29 +1,30 @@
-# /opt/white_list/white_list_extractor.py
-from bs4 import BeautifulSoup
-from urllib.parse import urlparse
-from typing import List
+#!/usr/bin/env python3
 
-def extract_whitelist_domains(bookmarks_file: str) -> List[str]:
-    """
-    Extract unique hostnames from a Netscape-format bookmarks HTML file.
-    Returns e.g. ["example.com", "sub.example.com"] without scheme.
-    """
-    with open(bookmarks_file, "r", encoding="utf-8") as f:
-        soup = BeautifulSoup(f, "html.parser")
+import csv
+import os
+import json
+from typing import Set, List, Tuple
 
-    urls = [a["href"] for a in soup.find_all("a", href=True)]
 
-    hosts = []
-    for url in urls:
-        try:
-            host = urlparse(url).hostname
-            if host:
-                hosts.append(host.lower().strip("."))
-        except Exception:
-            pass
-    print(sorted(set(hosts)))
-    return sorted(set(hosts))
+WHITE_CSV = "/opt/white_list/white_list.csv"
+BLOCK_CSV = "/opt/white_list/block_list.csv"
 
-if __name__ == "__main__":
-    for d in extract_whitelist_domains("bookmarks.html"):
-        print(d)
+def extract_url(csv_path: str) -> Set[str]:
+    domains = set()
+    if not os.path.exists(csv_path):
+        return domains
+    with open(csv_path, newline="", encoding="utf-8") as f:
+        reader = csv.reader(f)
+        for row in reader:
+            if not row:
+                continue
+            if row[0].startswith("#") or row[0].lower() in {"domain", "domains"}:
+                continue
+            for cell in row:
+                cell = cell.strip().lower()
+                if cell.startswith("http://") or cell.startswith("https://"):
+                    cell = cell.split("/")[2]
+                if cell and not cell.startswith("#"):
+                    domains.add(cell.strip("."))
+    return domains
+

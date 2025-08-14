@@ -2,9 +2,11 @@
 import subprocess
 import time
 from datetime import datetime
-from white_list_extractor import extract_whitelist_domains
+from white_list_extractor import extract_url
 
-WHITELIST_FILE = "/opt/white_list/bookmarks.html"
+WHITE_CSV = "/opt/white_list/white_list.csv"
+BLOCK_CSV = "/opt/white_list/block_list.csv"
+
 DNSMASQ_CONF   = "/etc/dnsmasq.d/whitelist.conf"
 CHECK_INTERVAL = 5  # seconds
 
@@ -15,17 +17,6 @@ WEEKDAY_END = 59
 # Weekend settings
 WEEKEND_START = 30
 WEEKEND_END = 59
-
-today = datetime.now().weekday()
-current_hour = datetime.now().hour
-# weekday() returns 0=Monday ... 6=Sunday
-
-if today < 5 and 9 < current_hour < 17:  # Monday–Friday
-    START = WEEKDAY_START
-    END = WEEKDAY_END
-else:  # Saturday–Sunday
-    START = WEEKEND_START
-    END = WEEKEND_END
 
 
 def write_dnsmasq_whitelist(domains):
@@ -103,16 +94,83 @@ def clear_firewall():
     subprocess.run(["sudo", "iptables",  "-P", "OUTPUT", "ACCEPT"])
     subprocess.run(["sudo", "ip6tables", "-P", "OUTPUT", "ACCEPT"])
 
+def apply_block_list(domains):
+    """
+    Apply firewall rules to always block given blocklist domains.
+    Creates IP sets for blocked IPv4/IPv6 and inserts DROP rules.
+    """
+    # Create ipsets for blocked domains
+    subprocess.run(["sudo", "ipset", "create", "BLOCKLIST4", "hash:ip", "-exist"])
+    subprocess.run(["sudo", "ipset", "create", "BLOCKLIST6", "hash:ip", "family", "inet6", "-exist"])
+
+    # Flush existing blocklist entries
+    subprocess.run(["sudo", "ipset", "flush", "BLOCKLIST4"])
+    subprocess.run(["sudo", "ipset", "flush", "BLOCKLIST6"])
+
+    for d in domains:
+        d = d.strip().lower()
+        if not d:
+            continue
+
+        # IPv4 addresses
+        res4 = subprocess.run(
+            ["dig", "+short", "A", d],
+            capture_output=True, text=True
+        )
+        for ip in res4.stdout.splitlines():
+            if ip:
+                subprocess.run(["sudo", "ipset", "add", "BLOCKLIST4", ip, "-exist"])
+
+        # IPv6 addresses
+        res6 = subprocess.run(
+            ["dig", "+short", "AAAA", d],
+            capture_output=True, text=True
+        )
+        for ip in res6.stdout.splitlines():
+            if ip:
+                subprocess.run(["sudo", "ipset", "add", "BLOCKLIST6", ip, "-exist"])
+
+    # Add DROP rules if not already present
+    if subprocess.run(
+        ["sudo", "iptables", "-C", "OUTPUT", "-m", "set", "--match-set", "BLOCKLIST4", "dst", "-j", "DROP"],
+        check=False
+    ).returncode != 0:
+        subprocess.run(["sudo", "iptables", "-A", "OUTPUT", "-m", "set", "--match-set", "BLOCKLIST4", "dst", "-j", "DROP"])
+
+    if subprocess.run(
+        ["sudo", "ip6tables", "-C", "OUTPUT", "-m", "set", "--match-set", "BLOCKLIST6", "dst", "-j", "DROP"],
+        check=False
+    ).returncode != 0:
+        subprocess.run(["sudo", "ip6tables", "-A", "OUTPUT", "-m", "set", "--match-set", "BLOCKLIST6", "dst", "-j", "DROP"])
+
+
+
 def block_time_check():
+    """
+    Check if the current minute is within the blocking window,
+    with START/END decided dynamically based on weekday/weekend.
+    """
+    today = datetime.now().weekday()   # 0=Monday, 6=Sunday
+    current_hour = datetime.now().hour
+    if today < 5 and 9 < current_hour < 17:
+        start = WEEKDAY_START
+        end = WEEKDAY_END
+    else:
+        start = WEEKEND_START
+        end = WEEKEND_END
+
     minute = datetime.now().minute
-    return START <= minute <= END
+    return start <= minute <= end
+
 
 if __name__ == "__main__":
     last_state = None
 
     # 起動時に一度、dnsmasq の allowlist を同期
-    domains = extract_whitelist_domains(WHITELIST_FILE)
-    write_dnsmasq_whitelist(domains)
+    white_list_domains = extract_url(WHITE_CSV)
+    black_list_domains = extract_url(BLOCK_CSV)
+    write_dnsmasq_whitelist(white_list_domains)
+    apply_block_list(black_list_domains)
 
     while True:
         state = block_time_check()
@@ -123,5 +181,6 @@ if __name__ == "__main__":
             else:
                 # 全許可に戻す
                 clear_firewall()
+            apply_block_list(black_list_domains)
             last_state = state
         time.sleep(CHECK_INTERVAL)
