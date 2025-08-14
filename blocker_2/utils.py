@@ -126,6 +126,14 @@ def suspend_all_as_admin():
     # Force suspend, ignore inhibitors
     return run_as_admin("systemctl suspend -i")
 
+def suspend_all_as_admin():
+    try:
+        # Force suspend, ignore inhibitors
+        run_as_admin("systemctl suspend -i")
+    except subprocess.CalledProcessError:
+        print("Suspend failed, falling back to shutdown.")
+        shutdown_all_as_admin()
+
 def run_as_admin(command):
     """rootとしてコマンド実行"""
     return subprocess.run(command, shell=True).returncode == 0
