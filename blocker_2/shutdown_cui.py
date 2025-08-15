@@ -8,7 +8,6 @@ class ShutdownCUIApp:
         self.usage = UsageManager()
 
     def run(self):
-        cancel_shutdown()
         try:
             start_combined_loop()  # blocks until killed
         except Exception as e:
