@@ -138,7 +138,7 @@ def start_combined_loop():
                 except Exception as e:
                     notify(f"❌Shutdown failed {str(e)}")
                 time.sleep(1)
-                continue
+                return
 
             # Pomodoro block time check
             if is_pomodoro_block_time():
@@ -149,7 +149,7 @@ def start_combined_loop():
                 except Exception as e:
                     notify(f"❌Suspend failed {str(e)}")
                 time.sleep(1)
-                continue
+                return
 
             usage.add_second()
 

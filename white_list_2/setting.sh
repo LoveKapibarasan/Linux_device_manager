@@ -41,3 +41,6 @@ available_journal
 disable_time
 
 start_service "$SERVICE_NAME"
+
+
+sudo ./youtube_block.sh

@@ -36,7 +36,8 @@ sudo apt install -y vim
 sudo update-alternatives --set editor /usr/bin/vim.basic
 
 # 7. Install dev stack
-sudo apt install -y git code python3 python3-pip gcc g++ texlive-latex-recommended texlive-latex-extra texlive-fonts-recommended npm r-base default-jdk
+sudo apt install -y git code python3 python3-pip gcc g++ texlive-latex-recommended texlive-latex-extra texlive-fonts-recommended npm r-base default-jdk, postgresql
+
 
 # 8. Set X11 as default
 sudo raspi-config nonint do_wayland 1
