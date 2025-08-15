@@ -122,9 +122,6 @@ def shutdown_all_as_admin():
     # Force shutdown, ignore inhibitors
     return run_as_admin("systemctl poweroff -i --force --force")
 
-def suspend_all_as_admin():
-    # Force suspend, ignore inhibitors
-    return run_as_admin("systemctl suspend -i")
 
 def suspend_all_as_admin():
     try:
