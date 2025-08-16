@@ -43,7 +43,7 @@ disable_time
 start_service "$SERVICE_NAME"
 
 
-sudo ./youtube_block.sh
+sudo ./block.sh
 
 
 # for rasberry pi
@@ -51,9 +51,6 @@ sudo apt install dnsutils -y
 
 sudo apt install systemd-resolved -y
 sudo systemctl enable --now systemd-resolved
-
-# /etc/resolv.conf を stub に向ける
-sudo ln -sf /run/systemd/resolve/stub-resolv.conf /etc/resolv.conf
 
 # 再起動
 sudo systemctl restart dnsmasq

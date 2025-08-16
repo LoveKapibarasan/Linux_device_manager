@@ -24,7 +24,7 @@ CONFIG = {
     "weekend": {
         "DAILY_LIMIT_HOURS": 4,         # <-- change if you want different on Sat/Sun
         "WARN_MIN": 2,
-        "POMODORO_START": 30,
+        "POMODORO_START": 50,
         "BLOCK_START": dtime(20, 0),
         "BLOCK_END": dtime(7, 0),
     },
