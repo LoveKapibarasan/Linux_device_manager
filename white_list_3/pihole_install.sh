@@ -26,11 +26,11 @@ sudo vim /etc/systemd/resolved.conf
 sudo systemctl stop apache2
 sudo systemctl disable apache2
 
-# lighttpd をインストール&起動
-sudo apt install lighttpd -y
-sudo systemctl enable lighttpd
-sudo systemctl start lighttpd
+# delete lightpd
 
+sudo systemctl stop lighttpd.service
+sudo systemctl disable lighttpd.service
+sudo systemctl restart pihole-FTL.service
 
 
 # choose wlp3s0 interface

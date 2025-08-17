@@ -25,6 +25,10 @@
 (^|\.)security\.ubuntu\.com$
 (^|\.)archive\.ubuntu\.com$
 
-
+(^|\.)shogi-extend\.com$
+(^|\.)teams\.microsoft\.com$
+(^|\.)mail\.google\.com$
+(^|\.)outlook\.office\.com$
+(^|\.)accounts\.google\.com\/?.*$
 
 
