@@ -37,4 +37,4 @@ sudo systemctl restart pihole-FTL.service
 # choose cloudflare or google
 # show everything for ETL
 
-# http://10.0.0.2/admin/login
+# http://10.0.0.2/admin/logina
