@@ -31,4 +31,9 @@
 (^|\.)outlook\.office\.com$
 (^|\.)accounts\.google\.com\/?.*$
 
+(^|\.)debian\.org$
+(^|\.)raspbian\.raspberrypi\.com$
+(^|\.)archive\.raspberrypi\.com$
+
+
 

@@ -8,7 +8,6 @@ set -e
 PIHOLE_CONF_DIR="/etc/pihole"
 BACKUP_DIR="/root/pihole_backup"
 PASSWORD_FILE="$BACKUP_DIR/pihole_ui_password.txt"
-TMP_FILE="~/tmp.txt"
 
 echo "[1] Backing up Pi-hole config -> $BACKUP_DIR"
 mkdir -p "$BACKUP_DIR"
@@ -28,9 +27,9 @@ systemctl mask systemd-resolved.service
 
 echo "[5] Generate strong random WebUI password..."
 RANDOM_PASS="$(tr -dc 'A-Za-z0-9!@#$%^&*()-_=+' </dev/urandom | head -c 32)"
-printf '%s\n' "$RANDOM_PASS" | pihole -a setpassword
+printf '%s\n' "$RANDOM_PASS"
+sudo pihole setpassword $RANDOM_PASS
 echo "$RANDOM_PASS" > "$PASSWORD_FILE"
-echo "$RANDOM_PASS" > "$TMP_FILE"
 chmod 600 "$PASSWORD_FILE"
 echo "New Pi-hole password saved to: $PASSWORD_FILE"
 
