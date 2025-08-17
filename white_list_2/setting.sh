@@ -1,4 +1,6 @@
 #!/bin/bash
+# This should be the first.
+sudo ./block.sh
 
 # Path declarations
 SERVICE_NAME=white-list.service
@@ -42,8 +44,6 @@ disable_time
 
 start_service "$SERVICE_NAME"
 
-
-sudo ./block.sh
 
 
 # for rasberry pi
