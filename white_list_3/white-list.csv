@@ -20,4 +20,11 @@
 ^(.+\.)?hs\-regensburg\.de$
 
 
+(^|\.)packages\.microsoft\.com$
+(^|\.)download\.docker\.com$
+(^|\.)security\.ubuntu\.com$
+(^|\.)archive\.ubuntu\.com$
+
+
+
 
