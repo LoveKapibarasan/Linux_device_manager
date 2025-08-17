@@ -6,8 +6,10 @@
 
 ^(.+\.)?github\.com$
 ^(.+\.)?githubusercontent\.com$
+^(.+\.)?githubassets\.com$
 ^(.+\.)?gitlab\.com$
 ^(.+\.)?bitbucket\.org$
+^(.+\.)?githubcopilot\.com$
 
 
 ^(.+\.)?chatgpt\.com$
