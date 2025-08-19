@@ -121,8 +121,11 @@ def run_as_admin_output(command):
 def shutdown_all_as_admin():
     # Force shutdown, ignore inhibitors
     return run_as_admin("systemctl poweroff -i --force --force")
-
-
+"""
+# for rusberry pi
+def suspend_all_as_admin():
+    shutdown_all_as_admin()
+"""
 def suspend_all_as_admin():
     try:
         # Force suspend, ignore inhibitors
@@ -130,6 +133,7 @@ def suspend_all_as_admin():
     except subprocess.CalledProcessError:
         print("Suspend failed, falling back to shutdown.")
         shutdown_all_as_admin()
+
 
 def cancel_shutdown():
     """Cancel any pending shutdown jobs"""
