@@ -18,9 +18,10 @@ sudo iptables -A OUTPUT -p tcp --dport 443 -d 8.8.4.4 -j REJECT
 
 
 sudo vim /etc/systemd/resolved.conf
-
-#DNS=10.0.0.2
-#FallbackDNS=
+"""
+DNS=10.0.0.2
+FallbackDNS=
+"""
 
 # Apache を無効化 → Pi-hole 標準lighttpdが使えるように
 sudo systemctl stop apache2
@@ -37,4 +38,5 @@ sudo systemctl restart pihole-FTL.service
 # choose cloudflare or google
 # show everything for ETL
 
-# http://10.0.0.2/admin/logina
+# hostname -I
+# http://<ip_address>/admin/login
