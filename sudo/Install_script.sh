@@ -53,16 +53,22 @@ run_as_user xdg-settings set default-web-browser firefox-esr.desktop
 
 # 6. Purge nano, install vim
 sudo apt purge -y nano
-sudo apt install -y vim
-sudo update-alternatives --set editor /usr/bin/vim.basic
+sudo apt purge vim vim-tiny vim-common vim-runtime -y
+sudo apt install vim-gtk3
 
-# 7. Install dev stack
+
+# 7.1. Install dev stack
 sudo apt install -y git python3 python3-pip gcc g++ texlive-latex-recommended texlive-latex-extra texlive-fonts-recommended npm r-base openjdk-17-jdk postgresql
 
 # tex, codeはかなり重い
+# 7.2. Install utils
+sudo apt install cheese
+
 
 # 8. Set X11 as default(Advanced option)
-sudo raspi-config
+# sudo raspi-config
+
+# Memo. labwc(default) is much faster
 
 # 9. Remove backgrounds, set plain color
 sudo find /usr/share/backgrounds -type f -name '*.png' -delete

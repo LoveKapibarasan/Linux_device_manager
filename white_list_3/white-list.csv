@@ -6,8 +6,10 @@
 
 ^(.+\.)?github\.com$
 ^(.+\.)?githubusercontent\.com$
+^(.+\.)?githubassets\.com$
 ^(.+\.)?gitlab\.com$
 ^(.+\.)?bitbucket\.org$
+^(.+\.)?githubcopilot\.com$
 
 
 ^(.+\.)?chatgpt\.com$
@@ -30,5 +32,10 @@
 (^|\.)mail\.google\.com$
 (^|\.)outlook\.office\.com$
 (^|\.)accounts\.google\.com\/?.*$
+
+(^|\.)debian\.org$
+(^|\.)raspbian\.raspberrypi\.com$
+(^|\.)archive\.raspberrypi\.com$
+
 
 
