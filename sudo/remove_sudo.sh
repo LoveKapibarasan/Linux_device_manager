@@ -17,4 +17,5 @@ sudo rm -rf /var/lib/sudo/$TARGET 2>/dev/null || true
 
 echo "✅ Done. $TARGET should no longer have sudo privileges."
 
+sudo rm .env
 sudo -l
