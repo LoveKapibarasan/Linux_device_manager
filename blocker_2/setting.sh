@@ -56,12 +56,5 @@ sudo timedatectl list-timezones | grep Berlin
 # タイムゾーンを固定（再起動後も保持される）
 sudo timedatectl set-timezone Europe/Berlin
 
-# NTP 同期を有効化（任意）
-sudo timedatectl set-ntp true
-
-# 設定確認
-timedatectl
-
-
 
 start_service "$SERVICE_NAME"
