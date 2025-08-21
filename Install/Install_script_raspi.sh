@@ -20,22 +20,20 @@ DEBIAN_FRONTEND=noninteractive sudo apt install -y fcitx5 fcitx5-mozc fcitx5-con
 run_as_user im-config -n fcitx5
 
 # 3. purge
-# 3 - 1. Purge text editor, default programming editor
+
+# 3-1. Purge text editor, default programming editor
 sudo apt purge -y leafpad mousepad pluma gedit kate geany thonny mu-editor
+
 # GUI (PIXEL desktop) 本体
 # sudo apt purge raspberrypi-ui-mods lxappearance lightdm
 
-# LibreOffice一式
+# 3-2. LibreOffice一式
 sudo apt purge libreoffice-*
 
-# Wolfram, Scratch, Minecraft など教育系
+# 3-3. Wolfram, Scratch, Minecraft など教育系
 sudo apt purge wolfram-engine scratch* idle* minecraft-pi nuscratch
 
-# 本棚 Bookshelf
-sudo apt purge pi-package-bookshelf
-sudo apt purge raspberrypi-help
-
-# VLC メディアプレイヤー
+# 3-5. VLC メディアプレイヤー
 sudo apt purge vlc vlc-*
 
 sudo apt autoremove --purge
@@ -56,7 +54,6 @@ sudo apt purge -y nano
 sudo apt purge vim vim-tiny vim-common vim-runtime -y
 sudo apt install vim-gtk3
 
-
 # 7.1. Install dev stack
 sudo apt install -y git python3 python3-pip gcc g++ texlive-latex-recommended texlive-latex-extra texlive-fonts-recommended npm r-base openjdk-17-jdk postgresql
 
@@ -67,13 +64,6 @@ sudo apt install cheese
 
 # 8. Set X11 as default(Advanced option)
 # sudo raspi-config
-
 # Memo. labwc(default) is much faster
-
-# 9. Remove backgrounds, set plain color
-sudo find /usr/share/backgrounds -type f -name '*.png' -delete
-sudo find /usr/share/rpd-wallpaper -type f -name '*.png' -delete
-sudo dbus-launch gsettings set org.gnome.desktop.background picture-uri ''
-sudo dbus-launch gsettings set org.gnome.desktop.background primary-color '#000000'
 
 sudo reboot
