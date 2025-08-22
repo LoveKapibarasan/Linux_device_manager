@@ -125,7 +125,6 @@ def is_notified():
 
 def start_combined_loop():
     usage = UsageManager()
-    notify("🔒 Starting")
     while True:
         try:
             # Night blocking time check

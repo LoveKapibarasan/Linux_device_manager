@@ -1,9 +1,14 @@
+
+# Shogi wars
 ^(.+\.)?cloudfront\.net$
 ^(.+\.)?gstatic\.com$
 ^(.+\.)?unity3d\.com$
 ^(.+\.)?googleapis\.com$
 ^(.+\.)?heroz\.jp$
+(^|\.)doubleclick\.net$ 
+(^|\.)challenges\.cloudflare\.com$ 
 
+# github
 ^(.+\.)?github\.com$
 ^(.+\.)?githubusercontent\.com$
 ^(.+\.)?githubassets\.com$
@@ -11,25 +16,20 @@
 ^(.+\.)?bitbucket\.org$
 ^(.+\.)?githubcopilot\.com$
 
-
+# chatgpt
 ^(.+\.)?chatgpt\.com$
 ^(.+\.)?openai\.com$
 (^|\.)cdn\.oaistatic\.com$
 (^|\.)lh3\.googleusercontent\.com$
 
+# oth
 ^(.+\.)?elearning\.oth-regensburg\.de$
 ^(.+\.)?oth-regensburg\.de$
 ^(.+\.)?hs\-regensburg\.de$
 
 
+# microsoft
 (^|\.)packages\.microsoft\.com$
-(^|\.)download\.docker\.com$
-(^|\.)security\.ubuntu\.com$
-(^|\.)archive\.ubuntu\.com$
-
-(^|\.)shogi-extend\.com$
-(^|\.)teams\.microsoft\.com$
-(^|\.)mail\.google\.com$
 (^|\.)outlook\.office\.com$
 (^|\.)(cdn|res)[.-].*\.office\.net$
 (^|\.)(login|auth)\.microsoftonline\.com$
@@ -41,20 +41,43 @@
 (^|\.)res\.office365\.com$
 (^|\.)ecs\.office\.com$
 
+# teams
+(^|\.)teams\.microsoft\.com$
 
+# docker
+(^|\.)download\.docker\.com$
 
+# ubuntu
+(^|\.)security\.ubuntu\.com$
+(^|\.)archive\.ubuntu\.com$
+
+# shogi-extend
+(^|\.)shogi-extend\.com$
+
+# google account
 (^|\.)accounts\.google\.com\/?.*$
 
+# rasberrypi
 (^|\.)debian\.org$
 (^|\.)raspbian\.raspberrypi\.com$
 (^|\.)archive\.raspberrypi\.com$
 
-
+# python
 (^|\.)pypi\.org$
 (^|\.)pythonhosted\.org$
 (^|\.)files\.pythonhosted\.org$
 
+# Gmail
+(^|\.)mail\.google\.com$
 (^|\.)googleusercontent\.com$
 (^|\.)gstatic\.com$
 (^|\.)googleapis\.com$
+
+
+# npm
+(^|\.)npmjs\.org$
+(^|\.)npmjs\.com$
+(^|\.)registry\.npmjs\.org$
+(^|\.)nodejs\.org$
+
 
