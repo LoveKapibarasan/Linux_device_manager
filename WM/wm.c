@@ -114,7 +114,7 @@ int main() {
     for(int k=1; k<=5; k++)
         XGrabKey(dpy,
             XKeysymToKeycode(dpy, XStringToKeysym((char[]){'0'+k,0})),
-            mask, root, True, GrabModeAsync, GrabModeAsync);
+            mask, root, False, GrabModeAsync, GrabModeAsync);
 
     XGrabKey(dpy, XKeysymToKeycode(dpy, XStringToKeysym("t")),
              mask, root, True, GrabModeAsync, GrabModeAsync);
