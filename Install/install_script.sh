@@ -58,9 +58,10 @@ sudo apt install vim-gtk3
 
 
 # 7.1. Install dev stack
-sudo apt install -y git python3 python3-pip gcc g++ texlive-latex-recommended texlive-latex-extra texlive-fonts-recommended npm r-base openjdk-17-jdk postgresql
+sudo apt install -y git python3 python3-pip gcc g++ 
+sudo apt install -y texlive-latex-recommended texlive-latex-extra texlive-fonts-recommended npm r-base openjdk-17-jdk postgresql
 
-# tex, codeはかなり重い
+# texはかなり重い
 # 7.2. Install utils
 sudo apt install cheese
 
