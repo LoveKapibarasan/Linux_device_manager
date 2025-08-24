@@ -140,6 +140,35 @@ int main() {
                 }
             }
         }
+		else if (ev.type == ConfigureRequest) {
+    		XWindowChanges wc;
+	    wc.x = ev.xconfigurerequest.x;
+    	wc.y = ev.xconfigurerequest.y;
+    	wc.width = ev.xconfigurerequest.width;
+	    wc.height = ev.xconfigurerequest.height;
+    	wc.border_width = ev.xconfigurerequest.border_width;
+	    wc.sibling = ev.xconfigurerequest.above;
+    	wc.stack_mode = ev.xconfigurerequest.detail;
+    	XConfigureWindow(dpy, ev.xconfigurerequest.window,
+                     ev.xconfigurerequest.value_mask, &wc);
+		}
+		else if (ev.type == DestroyNotify) {
+    		// 管理リストから削除
+		    for (int i = 0; i < MAX_WINDOWS; i++) {
+    	    	if (slots[i] == ev.xdestroywindow.window) {
+        		    slots[i] = 0;
+        		}
+		 	}
+		}
+		else if (ev.type == UnmapNotify) {
+    	// これも一応クリーンアップ
+    		for (int i = 0; i < MAX_WINDOWS; i++) {
+        		if (slots[i] == ev.xunmap.window) {
+            		slots[i] = 0;
+        		}
+    	}
+}
+
     }
     return 0;
 }
