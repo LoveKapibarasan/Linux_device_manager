@@ -141,16 +141,17 @@ int main() {
             }
         }
 		else if (ev.type == ConfigureRequest) {
-    		XWindowChanges wc;
-	    wc.x = ev.xconfigurerequest.x;
-    	wc.y = ev.xconfigurerequest.y;
-    	wc.width = ev.xconfigurerequest.width;
-	    wc.height = ev.xconfigurerequest.height;
-    	wc.border_width = ev.xconfigurerequest.border_width;
-	    wc.sibling = ev.xconfigurerequest.above;
-    	wc.stack_mode = ev.xconfigurerequest.detail;
-    	XConfigureWindow(dpy, ev.xconfigurerequest.window,
-                     ev.xconfigurerequest.value_mask, &wc);
+    		 Window w = ev.xconfigurerequest.window;
+    		if (listmode) {
+        		// 2x2 配置を再教育
+        		show_list();
+    		} else if (current >= 0 && slots[current] == w) {
+        	// 現在表示しているウィンドウならフルスクリーンを再教育
+        	show_window(current);
+    		} else {
+        	// それ以外（非表示スロットとか）は要求無視
+        	// （→勝手にサイズ変えようとしても「黙って座ってろ！」）
+    		}
 		}
 		else if (ev.type == DestroyNotify) {
     		// 管理リストから削除
