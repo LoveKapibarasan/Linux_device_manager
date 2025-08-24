@@ -1,6 +1,6 @@
 // reference (https://qiita.com/ai56go/items/dec1307f634181d923f5)
 /*
- * TinyWM 改造版 (Ctrl+W削除 / コメント付き)
+ * 完全版 TinyWM 改造版 (Ctrl+W削除 / コメント付き / Electron対応強化)
  *
  * 機能:
  *  - 最大nつのウィンドウを管理
@@ -9,19 +9,16 @@
  *  - Ctrl+Alt+T で端末 (xterm) 起動
  *  - WM自体の終了は 起動元ターミナルで Ctrl+C
  *
- * 注意:
- *  - ICCCM/EWMH は考慮していないので実用WMではありません
- *  1. Compile= gcc -o <name> <name.c> -lX11
- *  2. Edit /.xinitrc and add execute command
- *  3. startx
- *  Note; Display Environment Variable Error
- *  echo $DISPLAY
- *  If this is empty, add ~/.bashrc
- *  export DISPLAY=localhost:0.0((=:0))
+ * 強化:
+ *  - ICCCM / EWMH の基本対応 (Electron などが安心する)
+ *  - WM_DELETE_WINDOW / WM_TAKE_FOCUS 対応
+ *  - _NET_SUPPORTED, _NET_WM_STATE, _NET_WM_WINDOW_TYPE を root に登録
+ *  - ConfigureRequest を尊重 (Electron のサイズ要求を許容)
+ *  - ただし Ctrl+Alt+1..5 で洗脳フルスクリーン/2x2 を再適用
  */
 
 #include <X11/Xlib.h>
-#include <X11/keysym.h> //deprecated(2025)
+#include <X11/keysym.h>
 #include <X11/XKBlib.h>
 #include <unistd.h>
 #include <stdlib.h>
@@ -34,6 +31,9 @@ Window root;
 Window slots[MAX_WINDOWS];   // 管理する最大nつのウィンドウ
 int current = -1;            // 現在表示中のスロット番号
 int listmode = 0;            // 一覧表示中フラグ
+
+Atom WM_DELETE_WINDOW, WM_TAKE_FOCUS;
+Atom NET_SUPPORTED, NET_WM_STATE, NET_WM_WINDOW_TYPE;
 
 // --- 全ウィンドウを隠す ---
 void hide_all() {
@@ -54,7 +54,7 @@ void show_window(int idx) {
     current = idx;
 }
 
-// --- 一覧表示 (\root n \cdot \root n に並べる) ---
+// --- 一覧表示 (2x2に並べる) ---
 void show_list() {
     hide_all();
     int sw = DisplayWidth(dpy, DefaultScreen(dpy));
@@ -95,6 +95,19 @@ int main() {
 
     for(int i=0; i<MAX_WINDOWS; i++) slots[i] = 0;
 
+    // --- ICCCM atoms ---
+    WM_DELETE_WINDOW = XInternAtom(dpy, "WM_DELETE_WINDOW", False);
+    WM_TAKE_FOCUS    = XInternAtom(dpy, "WM_TAKE_FOCUS", False);
+
+    // --- EWMH atoms ---
+    NET_SUPPORTED      = XInternAtom(dpy, "_NET_SUPPORTED", False);
+    NET_WM_STATE       = XInternAtom(dpy, "_NET_WM_STATE", False);
+    NET_WM_WINDOW_TYPE = XInternAtom(dpy, "_NET_WM_WINDOW_TYPE", False);
+
+    Atom supported[] = {NET_WM_STATE, NET_WM_WINDOW_TYPE};
+    XChangeProperty(dpy, root, NET_SUPPORTED, XA_ATOM, 32,
+                    PropModeReplace, (unsigned char*)supported, 2);
+
     // --- キーグラブ (Ctrl+Alt+1..5, T) ---
     unsigned int mask = ControlMask|Mod1Mask;
     for(int k=1; k<=5; k++)
@@ -113,19 +126,21 @@ int main() {
         XNextEvent(dpy, &ev);
 
         if(ev.type == MapRequest) {
-	    int stored=0;
-            // 新しいウィンドウが来た → 空いているスロットに登録
+            int stored=0;
             for(int i=0; i<MAX_WINDOWS; i++) {
-                if(!slots[i]) { 
-			slots[i] = ev.xmaprequest.window; 
-			stored = 1;
-			break; }
+                if(!slots[i]) {
+                    slots[i] = ev.xmaprequest.window;
+                    stored = 1;
+                    break;
+                }
             }
-	    if(stored){
-            	XMapWindow(dpy, ev.xmaprequest.window);
-	    }else{
-	    	XDestroyWindow(dpy,ev.xmaprequest.window);
-	    }
+            if(stored){
+                XMapWindow(dpy, ev.xmaprequest.window);
+                XSetWMProtocols(dpy, ev.xmaprequest.window, &WM_DELETE_WINDOW, 1);
+                XSetInputFocus(dpy, ev.xmaprequest.window, RevertToParent, CurrentTime);
+            }else{
+                XDestroyWindow(dpy,ev.xmaprequest.window);
+            }
         }
         else if(ev.type == KeyPress) {
             KeySym ks = XkbKeycodeToKeysym(dpy, ev.xkey.keycode, 0, 0);
@@ -140,36 +155,39 @@ int main() {
                 }
             }
         }
-		else if (ev.type == ConfigureRequest) {
-    		 Window w = ev.xconfigurerequest.window;
-    		if (listmode) {
-        		// 2x2 配置を再教育
-        		show_list();
-    		} else if (current >= 0 && slots[current] == w) {
-        	// 現在表示しているウィンドウならフルスクリーンを再教育
-        	show_window(current);
-    		} else {
-        	// それ以外（非表示スロットとか）は要求無視
-        	// （→勝手にサイズ変えようとしても「黙って座ってろ！」）
-    		}
-		}
-		else if (ev.type == DestroyNotify) {
-    		// 管理リストから削除
-		    for (int i = 0; i < MAX_WINDOWS; i++) {
-    	    	if (slots[i] == ev.xdestroywindow.window) {
-        		    slots[i] = 0;
-        		}
-		 	}
-		}
-		else if (ev.type == UnmapNotify) {
-    	// これも一応クリーンアップ
-    		for (int i = 0; i < MAX_WINDOWS; i++) {
-        		if (slots[i] == ev.xunmap.window) {
-            		slots[i] = 0;
-        		}
-    	}
-}
+        else if (ev.type == ConfigureRequest) {
+            // Electron などの要求は尊重
+            XWindowChanges wc;
+            wc.x = ev.xconfigurerequest.x;
+            wc.y = ev.xconfigurerequest.y;
+            wc.width = ev.xconfigurerequest.width;
+            wc.height = ev.xconfigurerequest.height;
+            wc.border_width = ev.xconfigurerequest.border_width;
+            wc.sibling = ev.xconfigurerequest.above;
+            wc.stack_mode = ev.xconfigurerequest.detail;
 
+            XConfigureWindow(dpy, ev.xconfigurerequest.window,
+                             ev.xconfigurerequest.value_mask, &wc);
+        }
+        else if (ev.type == DestroyNotify) {
+            for (int i = 0; i < MAX_WINDOWS; i++) {
+                if (slots[i] == ev.xdestroywindow.window) {
+                    slots[i] = 0;
+                }
+            }
+        }
+        else if (ev.type == UnmapNotify) {
+            for (int i = 0; i < MAX_WINDOWS; i++) {
+                if (slots[i] == ev.xunmap.window) {
+                    slots[i] = 0;
+                }
+            }
+        }
+        else if(ev.type == ClientMessage) {
+            if((Atom)ev.xclient.data.l[0] == WM_DELETE_WINDOW) {
+                XDestroyWindow(dpy, ev.xclient.window);
+            }
+        }
     }
     return 0;
 }
