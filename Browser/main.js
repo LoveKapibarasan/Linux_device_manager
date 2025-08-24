@@ -15,8 +15,11 @@ function createWindow() {
 
   win.loadURL("about:blank");
 
-  // 複数タブ禁止
-  win.webContents.setWindowOpenHandler(() => ({ action: "deny" }));
+  win.webContents.setWindowOpenHandler(({ url }) => {
+  win.loadURL(url); // 現在のウィンドウに読み込み直す
+  return { action: "deny" }; // 新しいタブ・ウィンドウは禁止
+  });
+
 
   // ダウンロード処理
   session.defaultSession.on("will-download", (event, item) => {
