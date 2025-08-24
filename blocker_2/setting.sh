@@ -9,8 +9,6 @@ SERVICE_PATH=/etc/systemd/system/${SERVICE_NAME}
 # Import functions
 . ../reset_system.sh
 . ../copy_files.sh
-. ../available_journal.sh
-. ../disable_time.sh
 
 # Reset the service
 reset_system "${SERVICE_NAME}"
@@ -33,28 +31,8 @@ RestartSec=1
 WantedBy=multi-user.target
 EOF
 
-# install system dependencies
-sudo apt update
-sudo apt install -y python3 libnotify-bin
-
 copy_files "$APP_DIR"
 
-
-# make utils.py unreadable because it contains admin password
-sudo chown root:root ${APP_DIR}/.env # Change ownership to root
-sudo chmod 440 ${APP_DIR}/.env # Owner can read, no one else can read or write
-
-
 create_venv "$APP_DIR"
-
-available_journal
-disable_time
-
-# タイムゾーン一覧に Berlin があるか確認
-sudo timedatectl list-timezones | grep Berlin
-
-# タイムゾーンを固定（再起動後も保持される）
-sudo timedatectl set-timezone Europe/Berlin
-
 
 start_service "$SERVICE_NAME"
