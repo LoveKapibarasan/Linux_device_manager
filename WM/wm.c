@@ -11,10 +11,18 @@
  *
  * 注意:
  *  - ICCCM/EWMH は考慮していないので実用WMではありません
+ *  1. Compile= gcc -o <name> <name.c> -lX11
+ *  2. Edit /.xinitrc and add execute command
+ *  3. startx
+ *  Note; Display Environment Variable Error
+ *  echo $DISPLAY
+ *  If this is empty, add ~/.bashrc
+ *  export DISPLAY=localhost:0.0((=:0))
  */
 
 #include <X11/Xlib.h>
-#include <X11/keysym.h>
+#include <X11/keysym.h> //deprecated(2025)
+#include <X11/XKBlib.h>
 #include <unistd.h>
 #include <stdlib.h>
 #include <stdio.h>
@@ -105,14 +113,22 @@ int main() {
         XNextEvent(dpy, &ev);
 
         if(ev.type == MapRequest) {
+	    int stored=0;
             // 新しいウィンドウが来た → 空いているスロットに登録
             for(int i=0; i<MAX_WINDOWS; i++) {
-                if(!slots[i]) { slots[i] = ev.xmaprequest.window; break; }
+                if(!slots[i]) { 
+			slots[i] = ev.xmaprequest.window; 
+			stored = 1;
+			break; }
             }
-            XMapWindow(dpy, ev.xmaprequest.window);
+	    if(stored){
+            	XMapWindow(dpy, ev.xmaprequest.window);
+	    }else{
+	    	XDestroyWindow(dpy,ev.xmaprequest.window);
+	    }
         }
         else if(ev.type == KeyPress) {
-            KeySym ks = XKeycodeToKeysym(dpy, ev.xkey.keycode, 0);
+            KeySym ks = XkbKeycodeToKeysym(dpy, ev.xkey.keycode, 0, 0);
 
             if((ev.xkey.state & ControlMask) && (ev.xkey.state & Mod1Mask)) {
                 if(ks >= XK_1 && ks <= XK_4) {
