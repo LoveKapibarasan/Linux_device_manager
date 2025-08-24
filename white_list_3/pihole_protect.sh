@@ -23,7 +23,13 @@ chown root:root "$DNS_CONF"
 chmod 600 "$DNS_CONF"
 
 echo "[4] Lock systemd override so DNS settings cannot be modified"
-systemctl mask systemd-resolved.service
+sudo systemctl stop dnsmasq.service
+sudo systemctl disable dnsmasq.service
+sudo systemctl stop systemd-resolved.service
+sudo systemctl disable systemd-resolved.service
+sudo systemctl stop apache2
+sudo systemctl disable apache2
+
 
 echo "[5] Generate strong random WebUI password..."
 RANDOM_PASS="$(tr -dc 'A-Za-z0-9!@#$%^&*()-_=+' </dev/urandom | head -c 32)"
@@ -38,3 +44,4 @@ chmod 700 /usr/local/bin/pihole
 
 echo done.
 echo "Pi-hole lockdown is complete."
+
