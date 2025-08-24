@@ -140,6 +140,12 @@ int main() {
                 }
             }
         }
+	else if (ev.type == ConfigureRequest){
+		printf("configureRequest is called");
+	}
+	else{
+		printf("Unknown ev type");
+	}
     }
     return 0;
 }
