@@ -63,7 +63,7 @@ sudo pacman -S fuse2 fuse3
 sudo pacman -S noto-fonts noto-fonts-cjk noto-fonts-emoji
 
 sudo pacman -S fcitx5 fcitx5-configtool fcitx5-mozc fcitx5-gtk fcitx5-qt
-# Add ~/.xinitrc
+# Add ~/.xinitrc, ~/.xprofile /etc/environment(no export) 
 # export GTK_IM_MODULE=fcitx
 # export QT_IM_MODULE=fcitx
 # export XMODIFIERS=@im=fcit
