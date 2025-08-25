@@ -63,8 +63,8 @@ sudo pacman -S fuse2 fuse3
 sudo pacman -S noto-fonts noto-fonts-cjk noto-fonts-emoji
 
 sudo pacman -S fcitx5 fcitx5-configtool fcitx5-mozc fcitx5-gtk fcitx5-qt
-# Add ~/.xinitrc
-# export GTK_IM_MODULE=fcitx
+# Add ~/.xinitrc, ~/.xprofile /etc/environment(no export) 
+# export GTK_IM_MODULE=fcitx(5)
 # export QT_IM_MODULE=fcitx
 # export XMODIFIERS=@im=fcit
 # fcitx5 d
@@ -83,4 +83,23 @@ sudo pacman -S python-virtualenv python-tox python-pytest
 
 # 4. Documentation
 sudo pacman -S python-docs
+
+
+# 3-9. Purge vim and install gvim
+sudo pacman -R vim
+sudo pacman -S gvim
+
+# 3-10. Install PostgreSQL 7z docker
+sudo pacman -S postgresql
+# Initialize database cluster
+sudo -iu postgres initdb -D /var/lib/postgres/data
+sudo systemctl enable --now postgresql
+
+sudo pacman -S docker
+sudo systemctl enable --now docker
+# without sudo
+sudo usermod -aG docker $USER
+docker run hello-world
+
+sudo pacman -S p7zip
 
