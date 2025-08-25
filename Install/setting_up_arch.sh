@@ -84,3 +84,22 @@ sudo pacman -S python-virtualenv python-tox python-pytest
 # 4. Documentation
 sudo pacman -S python-docs
 
+
+# 3-9. Purge vim and install gvim
+sudo pacman -R vim
+sudo pacman -S gvim
+
+# 3-10. Install PostgreSQL 7z docker
+sudo pacman -S postgresql
+# Initialize database cluster
+sudo -iu postgres initdb -D /var/lib/postgres/data
+sudo systemctl enable --now postgresql
+
+sudo pacman -S docker
+sudo systemctl enable --now docker
+# without sudo
+sudo usermod -aG docker $USER
+docker run hello-world
+
+sudo pacman -S p7zip
+
