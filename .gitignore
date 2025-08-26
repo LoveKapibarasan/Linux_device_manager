@@ -1,3 +1,5 @@
 .env
 sudo/.env
 blocker_2/.env
+node_modules/
+dist/
