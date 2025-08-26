@@ -30,5 +30,7 @@ chmod 755 "$TMP_SCRIPT"
 # `su` 経由でそのスクリプトを newadmin として実行
 echo "$PASSWORD" | su - "$USER" -c "$TMP_SCRIPT"
 
+# su - <username>
+
 # 一時ファイルを削除
 rm -f "$TMP_SCRIPT"

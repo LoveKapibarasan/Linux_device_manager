@@ -103,3 +103,7 @@ docker run hello-world
 
 sudo pacman -S p7zip
 
+# 3-11. Install code explorer
+sudo pacman -S pcmanfm
+# 1. Add Vim extension
+# 2. enable autosave
