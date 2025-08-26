@@ -19,4 +19,17 @@ copy_files "$APP_DIR"
 
 create_venv "$APP_DIR"
 
+
+# Add port=5353 to /etc/dnsmasq.d/forward.conf
+sudo systemctl restart dnsmasq
+
+# Use localhost as a DNS server
+nmcli device modify wlan0 ipv4.dns 127.0.0.1
+# ignore the DNS addresses sent by the Wi-Fi router (via DHCP).
+nmcli device modify wlan0 ipv4.ignore-auto-dns yes
+nmcli device modify wlan0 ipv6.ignore-auto-dns yes
+
 start_service "$SERVICE_NAME"
+
+
+
