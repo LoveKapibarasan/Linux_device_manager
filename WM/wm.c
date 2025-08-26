@@ -9,6 +9,7 @@
  *   - EWMH最低限サポート (_NET_SUPPORTED 等)
  *   - ConfigureRequest を尊重 (Electronの要求を通す)
  *   - GPU コンポジット (XComposite + GLX)
+ *   Compile Command: gcc wm.c -o wm -lX11 -lXcomposite -lXdamage -lXfixes -lGL -lGLX
  */
 
 #include <X11/Xlib.h>

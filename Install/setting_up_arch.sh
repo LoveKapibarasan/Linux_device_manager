@@ -33,11 +33,8 @@ pacman -S sudo
 # Change user
 su - <username>
 
-# 3-2. X.Org Server for GUI
-sudo pacman -S xorg-server xorg-xinit xkeyboard-config xorg-xkbcomp xterm
-startx # "pkill Xorg" to kill
-# memo cat <log_file> | grep "EE" # to extract error
-# Add setxkbmap jp & to ~/.xinitrc
+
+
 
 
 # 3-3. Basic Packages
@@ -63,11 +60,6 @@ sudo pacman -S fuse2 fuse3
 sudo pacman -S noto-fonts noto-fonts-cjk noto-fonts-emoji
 
 sudo pacman -S fcitx5 fcitx5-configtool fcitx5-mozc fcitx5-gtk fcitx5-qt
-# Add ~/.xinitrc, ~/.xprofile /etc/environment(no export) 
-# export GTK_IM_MODULE=fcitx(5)
-# export QT_IM_MODULE=fcitx
-# export XMODIFIERS=@im=fcit
-# fcitx5 d
 
 # 3-8. Install Python
 # Then setting up shutdown-cui
@@ -104,6 +96,30 @@ docker run hello-world
 sudo pacman -S p7zip
 
 # 3-11. Install code explorer
-sudo pacman -S pcmanfm
+sudo pacman -S dolphin
 # 1. Add Vim extension
 # 2. enable autosave
+
+# 4. WM
+sudo pacman -S kitty wl-clipboard xdg-desktop-portal-hyprland xdg-desktop-portal xdg-desktop-portal-wlr zsh
+ 
+systemctl --user status xdg-desktop-portal-hyprland
+sudo pacman -S  dunst waybar grim slurp
+# kitty → terminal
+# waybar → panel
+# dunst → Notification
+# wl-clipboard → Clipboard (Wayland)
+# grim/slurp → screenshot
+# xdg-desktop-portal-hyprland → for Electron/Flatpak
+
+# Make zsh as default
+chsh -s $(which zsh)
+
+vim  ~/.zprofile
+#if [[ -z $DISPLAY ]] && [[ $(tty) == /dev/tty1 ]]; then
+#  exec Hyprland
+#fi
+
+
+
+
