@@ -1,0 +1,1 @@
+*/30 * * * * /home/$USER/Linux_device_manager/sudo/check_sudo.sh

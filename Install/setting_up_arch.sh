@@ -37,7 +37,7 @@ su - <username>
 sudo pacman -S base-devel
 
 # 3-4. Install git
-sudo pacman -S git openssh git-lfs vi less gh
+sudo pacman -S git openssh git-lfs vi less git-filter-repo
 git --version
 git lfs install
 git config --global user.name "<name>"
@@ -158,7 +158,8 @@ cd yay
 makepkg -si
 yay -S nkf
 
-
+# 10. cron
+sudo pacman -S cronie
 
 
 
