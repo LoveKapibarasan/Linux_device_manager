@@ -15,6 +15,8 @@
 ^(.+\.)?gitlab\.com$
 ^(.+\.)?bitbucket\.org$
 ^(.+\.)?githubcopilot\.com$
+^(github\.com|github-cloud\.s3\.amazonaws\.com|github-production-release-asset-[^.]+\.s3\.amazonaws\.com)$
+
 
 # chatgpt
 ^(.+\.)?chatgpt\.com$

@@ -18,6 +18,26 @@ systemctl status pihole.service
 sudo vim /etc/resolv.conf
 # and only nameserver 127.0.0.1
 
+
+# 2-1-1.
+sudo vim /etc/NetworkManager/NetworkManager.conf
+# If NetworkManager edit this,
+# [main]
+# dns=none
+# 2-1-2.
+sudo vim /etc/NetworkManager/conf.d/dns-reject.conf
+# [main]
+# dns=default
+ 
+# [ipv4]
+# ignore-auto-dns=true
+# dns=127.0.0.1;
+
+# [ipv6]
+# ignore-auto-dns=true
+# dns=::1;
+
+# 2-1-2.
 sudo vim /etc/systemd/resolved.conf
 # [Resolve]
 # DNS=127.0.0.1
@@ -32,18 +52,11 @@ cat /etc/systemd/resolved.conf
 cat /run/systemd/resolve/resolv.conf
 cat /etc/systemd/resolved.conf.d/dns.conf
 
-sudo vim /etc/NetworkManager/conf.d/dns-reject.conf
+# 2-2-2.
+sudo systemctl stop systemd-resolved
+sudo systemctl disable systemd-resolved
 
-# [main]
-# dns=default
- 
-# [ipv4]
-# ignore-auto-dns=true
-# dns=127.0.0.1;
 
-# [ipv6]
-# ignore-auto-dns=true
-# dns=::1;
 
 
 # set password
