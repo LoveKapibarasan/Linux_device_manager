@@ -17,7 +17,6 @@ chmod 700 ~/.ssh              # ディレクトリは自分だけアクセス
 chmod 600 ~/.ssh/id_rsa       # 秘密鍵は自分だけ読める
 chmod 644 ~/.ssh/id_rsa.pub   # 公開鍵は誰でも読めてOK
 
-
 ## nmtui is installed.
 
 # 2. Fonts
@@ -29,3 +28,5 @@ cp /etc/sway/config ~/.config/sway/config
 curl -sSL https://install.pi-hole.net | bash
 
 
+# 4 fcitx5
+sudo apt install fcitx5 fcitx5-config-qt fcitx5-frontend-gtk3 fcitx5-frontend-gtk4 fcitx5-frontend-qt5 fcitx5-chinese-addons

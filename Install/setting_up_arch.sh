@@ -33,8 +33,6 @@ pacman -S sudo
 # Change user
 su - <username>
 
-
-
 # 3-3. Basic Packages
 sudo pacman -S base-devel
 
