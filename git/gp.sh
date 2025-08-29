@@ -3,6 +3,7 @@
 # remote = upstream, origin
 
 # Directory to scan (default = home)
+COMMIT_MSG="Auto Commit"
 BASE_DIR="$HOME"
 # 探索と処理
 find "$BASE_DIR" -type d -name ".git" | while read gitdir; do

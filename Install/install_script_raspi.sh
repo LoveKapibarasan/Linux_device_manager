@@ -20,9 +20,10 @@ git lfs install
 git config --global user.name "<name>"
 git config --global user.email "<email_address>"
 chsh -s $(which zsh)
-chmod 700 ~/.ssh              # ディレクトリは自分だけアクセス
-chmod 600 ~/.ssh/id_rsa       # 秘密鍵は自分だけ読める
-chmod 644 ~/.ssh/id_rsa.pub   # 公開鍵は誰でも読めてOK
+# chmod
+chmod 700 ~/.ssh             
+chmod 600 ~/.ssh/id_rsa      
+chmod 644 ~/.ssh/id_rsa.pub  
 
 ## nmtui is installed.
 
@@ -41,7 +42,7 @@ fcitx5-configtool
 
 ## 1. /etc/environment
 ## 2. ~/.zprofile
-## 3. ~/.config/sway/config
 
 # 5. Dev tools
 sudo apt install -y python3 python3-pip python3-venv
+sudo apt install -y nodejs npm
