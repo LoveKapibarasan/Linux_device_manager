@@ -1,4 +1,3 @@
-
 #!/usr/bin/env python3
 from dnslib.server import DNSServer, BaseResolver
 from dnslib import DNSRecord, RCODE

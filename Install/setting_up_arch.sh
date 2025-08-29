@@ -35,22 +35,32 @@ su - <username>
 
 
 
-
-
 # 3-3. Basic Packages
 sudo pacman -S base-devel
 
 # 3-4. Install git
-sudo pacman -S git openssh vi
+sudo pacman -S git openssh git-lfs vi less gh
 git --version
+git lfs install
 git config --global user.name "<name>"
 git config --global user.email "<email_address>"
 git config --list
 
+chmod 700 ~/.ssh              # ディレクトリは自分だけアクセス
+chmod 600 ~/.ssh/id_rsa       # 秘密鍵は自分だけ読める
+chmod 644 ~/.ssh/id_rsa.pub   # 公開鍵は誰でも読めてOK
+
+
+
 # 3-5. Install node.js
-sudo pacman -S nodejs npm
+sudo pacman -S nodejs npm nvm
 node -v
 npm -v
+
+sudo vim ~/.zshrc
+# export NVM_DIR="$HOME/.nvm"
+# [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+
 
 # 3-6. For Electron
 sudo pacman -Syu atk at-spi2-core at-spi2-atk gtk3 nss alsa-lib libdrm libgbm libxkbcommon libcups
@@ -88,6 +98,7 @@ sudo -iu postgres initdb -D /var/lib/postgres/data
 sudo systemctl enable --now postgresql
 
 sudo pacman -S docker
+sudo pacman -Syu docker-compose
 sudo systemctl enable --now docker
 # without sudo
 sudo usermod -aG docker $USER
@@ -99,6 +110,9 @@ sudo pacman -S p7zip
 sudo pacman -S dolphin
 # 1. Add Vim extension
 # 2. enable autosave
+
+# 3-12. clang
+sudo pacman -Syu clang llvm lld
 
 # 4. WM
 sudo pacman -S kitty wl-clipboard xdg-desktop-portal-hyprland xdg-desktop-portal xdg-desktop-portal-wlr zsh
@@ -119,6 +133,32 @@ vim  ~/.zprofile
 #if [[ -z $DISPLAY ]] && [[ $(tty) == /dev/tty1 ]]; then
 #  exec Hyprland
 #fi
+
+# kitty automatically care system shell default
+
+# 5 Network settings
+sudo pacman -Syu bind wget
+
+# 6 time zone
+sudo timedatectl set-timezone Europe/Berlin
+
+# 7 Audio
+sudo pacman -S pipewire pipewire-alsa pipewire-pulse pipewire-jack wireplumber pavucontrol helvum easyeffects sof-firmware
+
+# 8 Fingerprint
+sudo pacman -S fprintd
+fprintd-enroll $USER -f right-index-finger
+sudo -E vim /etc/pam.d/system-local-login
+
+# 9 yay
+cd ~
+git clone https://aur.archlinux.org/yay.git
+cd yay
+makepkg -si
+yay -S nkf
+
+
+
 
 
 

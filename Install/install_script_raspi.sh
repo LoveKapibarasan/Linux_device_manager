@@ -1,70 +1,31 @@
 #!/usr/bin/env bash
-set -euo pipefail # three safety options
-IFS=$'\n\t'
-
-USER_NAME=${SUDO_USER:-${USER}}
-USER_HOME=$(getent passwd "$USER_NAME" | cut -d: -f6)
-
-run_as_user() {
-  sudo -u "$USER_NAME" env XDG_RUNTIME_DIR="/run/user/$(id -u "$USER_NAME")" HOME="$USER_HOME" "$@"
-}
-
-# 1. Disable GNOME on-screen keyboard
-sudo apt purge squeekboard
 
 
+# 0. Wifi, keyboard, username, password, hostname, localization settings
+sudo raspi-config
 
-# 2. Install fcitx5 + mozc
-sudo apt update
-DEBIAN_FRONTEND=noninteractive sudo apt install -y fcitx5 fcitx5-mozc fcitx5-config-qt fcitx5-frontend-gtk3 fcitx5-modules im-config
-run_as_user im-config -n fcitx5
-
-# 3. purge
-
-# 3-1. Purge text editor, default programming editor
-sudo apt purge -y leafpad mousepad pluma gedit kate geany thonny mu-editor
-
-# GUI (PIXEL desktop) 本体
-# sudo apt purge raspberrypi-ui-mods lxappearance lightdm
-
-# 3-2. LibreOffice一式
-sudo apt purge libreoffice-*
-
-# 3-3. Wolfram, Scratch, Minecraft など教育系
-sudo apt purge wolfram-engine scratch* idle* minecraft-pi nuscratch
-
-# 3-5. VLC メディアプレイヤー
-sudo apt purge vlc vlc-*
-
-sudo apt autoremove --purge
-sudo apt clean
-
-# 4. Create a template file
-mkdir -p "$USER_HOME/Templates"
-touch "$USER_HOME/Templates/Empty File"
-chown -R "$USER_NAME":"$USER_NAME" "$USER_HOME/Templates"
-
-# 5. Purge Chromium, install Firefox
-sudo apt purge -y chromium chromium-browser
-sudo apt install -y firefox-esr
-run_as_user xdg-settings set default-web-browser firefox-esr.desktop
-
-# 6. Purge nano, install vim
-sudo apt purge -y nano
-sudo apt purge vim vim-tiny vim-common vim-runtime -y
-sudo apt install vim-gtk3
-
-# 7.1. Install dev stack
-sudo apt install -y git python3 python3-pip gcc g++ openssh-client 
-sudo apt install -y texlive-latex-recommended texlive-latex-extra texlive-fonts-recommended npm r-base openjdk-17-jdk postgresql
-
-# texはかなり重い
-# 7.2. Install utils
-sudo apt install cheese
+# 1. Install
+sudo apt update & sudo apt upgrade
+sudo apt purge nano
+sudo apt autoremove
+sudo apt install sway git git-lfs firefox zsh code pcmanfm vim xwayland -y
+git lfs install
+git config --global user.name "<name>"
+git config --global user.email "<email_address>"
+chsh -s $(which zsh)
+chmod 700 ~/.ssh              # ディレクトリは自分だけアクセス
+chmod 600 ~/.ssh/id_rsa       # 秘密鍵は自分だけ読める
+chmod 644 ~/.ssh/id_rsa.pub   # 公開鍵は誰でも読めてOK
 
 
-# 8. Set X11 as default(Advanced option)
-# sudo raspi-config
-# Memo. labwc(default) is much faster
+## nmtui is installed.
 
-sudo reboot
+# 2. Fonts
+sudo apt install fonts-noto-cjk fonts-noto-cjk-extra
+mkdir -p ~/.config/sway
+cp /etc/sway/config ~/.config/sway/config
+
+# 3. Pihole
+curl -sSL https://install.pi-hole.net | bash
+
+

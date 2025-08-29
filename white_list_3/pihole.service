@@ -1,0 +1,14 @@
+[Unit]
+Description=Pi-hole Docker Container
+After=docker.service
+Requires=docker.service
+
+[Service]
+Restart=always
+ExecStart=/usr/bin/docker compose -f /opt/pihole/docker-compose.yml up
+ExecStop=/usr/bin/docker compose -f /opt/pihole/docker-compose.yml down
+WorkingDirectory=/opt/pihole
+
+
+[Install]
+WantedBy=multi-user.target

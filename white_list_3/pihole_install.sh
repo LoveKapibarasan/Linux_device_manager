@@ -8,4 +8,5 @@ curl -sSL https://install.pi-hole.net | bash
 # choose cloudflare or google
 # show everything for ETL
 # sudo setpassword
-# http://<ip_address>/admin/login
+# From other device: http://<ip_address>/admin/login
+# From the same device: http://localhost/admin/

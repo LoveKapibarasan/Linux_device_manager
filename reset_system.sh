@@ -13,7 +13,7 @@ reset_system() {
 
 create_venv() {
     APP_DIR="$1"
-    sudo python3 -m venv "$APP_DIR/venv"
+    python3 -m venv "$APP_DIR/venv"
     sudo "$APP_DIR/venv/bin/pip" install -r "$APP_DIR/requirements.txt"
 }
 
