@@ -66,8 +66,11 @@ sudo pacman -S fuse2 fuse3
 
 # 3-7. Japanese setting
 sudo pacman -S noto-fonts noto-fonts-cjk noto-fonts-emoji
-
 sudo pacman -S fcitx5 fcitx5-configtool fcitx5-mozc fcitx5-gtk fcitx5-qt
+
+# 1. /etc/environment
+# 2. ~/.zprofile
+# 3. ~/.config/hypr/hyprland.conf
 
 # 3-8. Install Python
 # Then setting up shutdown-cui

@@ -1,7 +1,14 @@
 #!/usr/bin/env bash
 
 
-# 0. Wifi, keyboard, username, password, hostname, localization settings
+# 0. 
+# Wifi
+# keyboard
+# username, password
+# hostname
+# localization settings
+## Country
+## Timezone
 sudo raspi-config
 
 # 1. Install
@@ -28,5 +35,13 @@ cp /etc/sway/config ~/.config/sway/config
 curl -sSL https://install.pi-hole.net | bash
 
 
-# 4 fcitx5
-sudo apt install fcitx5 fcitx5-config-qt fcitx5-frontend-gtk3 fcitx5-frontend-gtk4 fcitx5-frontend-qt5 fcitx5-chinese-addons
+# 4. fcitx5
+sudo apt install fcitx5 fcitx5-config-qt fcitx5-frontend-gtk3 fcitx5-frontend-gtk4 fcitx5-frontend-qt5 fcitx5-mozc
+fcitx5-configtool
+
+## 1. /etc/environment
+## 2. ~/.zprofile
+## 3. ~/.config/sway/config
+
+# 5. Dev tools
+sudo apt install -y python3 python3-pip python3-venv
