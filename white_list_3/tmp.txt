@@ -11,6 +11,7 @@
 ^(.+\.)?gitlab\.com$
 ^(.+\.)?bitbucket\.org$
 ^(.+\.)?githubcopilot\.com$
+^(github\.com|github-cloud\.s3\.amazonaws\.com|github-production-release-asset-[^.]+\.s3\.amazonaws\.com)$
 ^(.+\.)?chatgpt\.com$
 ^(.+\.)?openai\.com$
 (^|\.)cdn\.oaistatic\.com$
@@ -49,4 +50,15 @@
 (^|\.)npmjs\.com$
 (^|\.)registry\.npmjs\.org$
 (^|\.)nodejs\.org$
-(^|\.)yarnpkg\.com$
+(^|\.)hotspot\.vodafone\.de$
+(^|\.)detectportal\.firefox\.com$
+(^|\.)open\-vsx\.org$
+(^|\.)incoming\.telemetry\.mozilla\.org$
+(^|\.)sync\.services\.mozilla\.com$
+(^|\.)push\.services\.mozilla\.com$
+(^|\.)profile\.accounts\.firefox\.com$
+(^|\.)ping\.archlinux\.org$
+(^|\.)ipv4only\.arpa$
+(^|\.)example\.org$
+(^|\.)example\.com$
+(^|\.)redirect.archlinux\.org$

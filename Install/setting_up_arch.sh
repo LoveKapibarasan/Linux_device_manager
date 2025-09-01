@@ -161,7 +161,8 @@ yay -S nkf
 # 10. cron
 sudo pacman -S cronie
 
-
+# 11. Graphic Drivers
+# Intel => Vulkan, mesa 
 
 
 

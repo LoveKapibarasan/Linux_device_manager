@@ -1,3 +1,3 @@
 
 # remove empty and comment lines
-grep -vE '^\s*#|^\s*$' file.sh > tmp.txt
+pc% grep -vE '^\s*#|^\s*$' white-list.csv > tmp.txt        

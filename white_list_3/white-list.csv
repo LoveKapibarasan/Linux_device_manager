@@ -82,4 +82,25 @@
 (^|\.)registry\.npmjs\.org$
 (^|\.)nodejs\.org$
 
+# Captive Portal
+(^|\.)hotspot\.vodafone\.de$
+(^|\.)impervadns\.net$
+(^|\.)detectportal\.firefox\.com$
+
+# VSCode
+(^|\.)open\-vsx\.org$
+
+# Firefox
+(^|\.)incoming\.telemetry\.mozilla\.org$
+(^|\.)sync\.services\.mozilla\.com$
+(^|\.)push\.services\.mozilla\.com$
+(^|\.)profile\.accounts\.firefox\.com$
+
+# Others
+(^|\.)ping\.archlinux\.org$
+(^|\.)ipv4only\.arpa$
+(^|\.)example\.org$
+(^|\.)example\.com$
+(^|\.)neverssl.com$
+(^|\.)redirect.archlinux\.org$
 

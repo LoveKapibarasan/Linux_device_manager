@@ -14,7 +14,7 @@ sudo systemctl enable --now pihole.service
 
 systemctl status pihole.service
 
-
+890a
 sudo vim /etc/resolv.conf
 # and only nameserver 127.0.0.1
 
@@ -66,9 +66,14 @@ echo "ADMIN_PASSWORD=$(openssl rand -base64 20)" | sudo tee .env
 docker exec -it pihole pihole setpassword "$(grep ADMIN_PASSWORD .env | cut -d'=' -f2)"
 
 
-# Rate limit
+
+##############################################
+# Nites
+# 1. Rate limit
 #      FTLCONF_dns_rateLimit_count: 0
 #      FTLCONF_dns_rateLimit_interval: 0
 # in env
 
-# gravity.db is setting file for domains
+# 2. gravity.db is setting file for domains
+# 3. ArchLinux <= NetworkManager, systemd-resolved
+#    Raspi Lite <= NetworkManager
