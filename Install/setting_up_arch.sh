@@ -160,11 +160,9 @@ yay -S nkf
 
 
 # 10. FortClient
-# the full GUI client forticlient
+# the full GUI client
 yay -S forticlient
 
 # 11. Graphic Drivers
 # Intel => Vulkan, mesa 
-
-
-
+sudo pacman -Syu mesa lib32-mesa vulkan-intel vulkan-radeon lib32-vulkan-intel lib32-vulkan-radeon
