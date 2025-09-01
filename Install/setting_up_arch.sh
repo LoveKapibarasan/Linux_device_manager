@@ -158,8 +158,10 @@ cd yay
 makepkg -si
 yay -S nkf
 
-# 10. cron
-sudo pacman -S cronie
+
+# 10. FortClient
+# the full GUI client forticlient
+yay -S forticlient
 
 # 11. Graphic Drivers
 # Intel => Vulkan, mesa 
