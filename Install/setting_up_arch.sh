@@ -37,7 +37,7 @@ su - <username>
 sudo pacman -S base-devel
 
 # 3-4. Install git
-sudo pacman -S git openssh git-lfs vi less git-filter-repo
+sudo pacman -S git openssh git-lfs vi less git-filter-repo github-cli
 git --version
 git lfs install
 git config --global user.name "<name>"
