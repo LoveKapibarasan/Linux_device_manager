@@ -1,4 +1,5 @@
 # visudo -f /etc/sudoers.d/ops
+# sudo groupadd ops
 
 # ops グループのユーザに対して限定的な sudo 権限を付与
 

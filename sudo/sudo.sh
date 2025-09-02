@@ -1,7 +1,5 @@
 #!/bin/bash
 
-
-
 # 1. Add sudo
 su -
 

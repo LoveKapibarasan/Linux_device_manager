@@ -163,7 +163,3 @@ yay -S forticlient
 # 11. Graphic Drivers
 # Intel => Vulkan, mesa 
 sudo pacman -Syu mesa lib32-mesa vulkan-intel vulkan-radeon lib32-vulkan-intel lib32-vulkan-radeon
-
-# 12. Dropbox
-yay -S dropbox
-dropbox start -i
