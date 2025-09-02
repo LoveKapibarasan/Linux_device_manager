@@ -1,0 +1,10 @@
+[Unit]
+Description=Run patrol.sh every 90 minutes as root
+
+[Timer]
+OnBootSec=5min
+OnUnitActiveSec=90min
+Unit=patrol.service
+
+[Install]
+WantedBy=timers.target

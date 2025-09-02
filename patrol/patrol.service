@@ -1,0 +1,7 @@
+[Unit]
+Description=Run patrol script as root
+
+[Service]
+Type=oneshot
+ExecStart=/opt/patrol/patrol.sh
+WorkingDirectory=/opt/patrol

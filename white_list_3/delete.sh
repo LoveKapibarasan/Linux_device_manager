@@ -9,9 +9,7 @@ systemctl status pihole.service
 
 
 # delete link
-
 sudo rm /etc/resolv.conf
-
 echo -e "nameserver 8.8.8.8\nnameserver 1.1.1.1" | sudo tee /etc/resolv.conf
 sudo systemctl enable --now systemd-resolved
 
