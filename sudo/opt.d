@@ -11,5 +11,8 @@ Cmnd_Alias SERVICE_OPS = /usr/bin/systemctl start *, /usr/bin/systemctl restart 
 # パッケージ管理 (Arch Linux)
 Cmnd_Alias PACKAGE_MGR = /usr/bin/pacman, /usr/bin/yay
 
+# Others
+Cmnd_Alias OTHERS = /bin/rm /root/shutdown_cui/usage_file.json
+
 # ops グループに適用
-%ops ALL=(ALL:ALL) NOPASSWD: LOGS, SERVICE_OPS, PACKAGE_MGR
+%ops ALL=(ALL:ALL) NOPASSWD: LOGS, SERVICE_OPS, PACKAGE_MGR, OTHERS

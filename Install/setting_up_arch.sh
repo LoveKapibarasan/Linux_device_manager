@@ -39,10 +39,7 @@ sudo pacman -S base-devel
 # 3-4. Install git
 sudo pacman -S git openssh git-lfs vi less git-filter-repo github-cli
 git --version
-git lfs install
-git config --global user.name "<name>"
-git config --global user.email "<email_address>"
-git config --list
+
 
 chmod 700 ~/.ssh              # ディレクトリは自分だけアクセス
 chmod 600 ~/.ssh/id_rsa       # 秘密鍵は自分だけ読める
@@ -166,3 +163,7 @@ yay -S forticlient
 # 11. Graphic Drivers
 # Intel => Vulkan, mesa 
 sudo pacman -Syu mesa lib32-mesa vulkan-intel vulkan-radeon lib32-vulkan-intel lib32-vulkan-radeon
+
+# 12. Dropbox
+yay -S dropbox
+dropbox start -i
