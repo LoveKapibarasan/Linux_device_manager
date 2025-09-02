@@ -116,13 +116,15 @@ sudo pacman -Syu clang llvm lld
 sudo pacman -S kitty wl-clipboard xdg-desktop-portal-hyprland xdg-desktop-portal xdg-desktop-portal-wlr zsh
  
 systemctl --user status xdg-desktop-portal-hyprland
-sudo pacman -S  dunst waybar grim slurp
+sudo pacman -S  dunst waybar grim slurp wtype
 # kitty → terminal
 # waybar → panel
 # dunst → Notification
 # wl-clipboard → Clipboard (Wayland)
 # grim/slurp → screenshot
 # xdg-desktop-portal-hyprland → for Electron/Flatpak
+# wtype → for python-util, screenshot
+
 
 # Make zsh as default
 chsh -s $(which zsh)
@@ -163,3 +165,6 @@ yay -S forticlient
 # 11. Graphic Drivers
 # Intel => Vulkan, mesa 
 sudo pacman -Syu mesa lib32-mesa vulkan-intel vulkan-radeon lib32-vulkan-intel lib32-vulkan-radeon
+
+# 12. PDF
+sudo pacman -S okular qpdf
