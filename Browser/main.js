@@ -1,20 +1,28 @@
+// 例: GitHubを開く
+// electron app.js https://github.com
+
+// 例: 引数なしの場合は about:blank を開く
+// electron app.js
+
+
+
 const { app, BrowserWindow, globalShortcut, session } = require("electron");
 const path = require("path");
 
 let win;
 
-function createWindow() {
+function createWindow(urlToLoad) {
   win = new BrowserWindow({
     fullscreen: true,
     webPreferences: {
       contextIsolation: true,
       nodeIntegration: false,
       webviewTag: true,
-      partition: "persist:default"
-    }
+      partition: "persist:default",
+    },
   });
 
-  win.loadURL("about:blank");
+  win.loadURL(urlToLoad || "about:blank");
 
   // Replace "open new window" → reload in current window
   win.webContents.setWindowOpenHandler(({ url }) => {
@@ -28,9 +36,11 @@ function createWindow() {
     item.setSavePath(savePath);
 
     item.once("done", (_e, state) => {
-      console.log(state === "completed"
-        ? `Download completed: ${savePath}`
-        : `Download failed: ${state}`);
+      console.log(
+        state === "completed"
+          ? `Download completed: ${savePath}`
+          : `Download failed: ${state}`
+      );
     });
   });
 
@@ -41,7 +51,10 @@ function createWindow() {
 }
 
 app.whenReady().then(() => {
-  createWindow();
+  // node ./app.js https://example.com
+  const args = process.argv.slice(2);
+  const targetURL = args[0];
+  createWindow(targetURL);
 });
 
 app.on("window-all-closed", () => {
