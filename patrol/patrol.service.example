@@ -1,0 +1,6 @@
+[Unit]
+
+[Service]
+Type=oneshot
+ExecStart=/home/${USER}/Linux_device_manager/patrol/patrol.sh
+WorkingDirectory=/home/${USER}/Linux_device_manager/patrol

@@ -16,8 +16,6 @@ reset_system "${SERVICE_NAME}"
 # Reset /root/shutdown_cui/usage_file.json
 sudo rm -f "/root/shutdown_cui/usage_file.json"
 
-
-
 sudo cat > ${SERVICE_PATH} <<  'EOF'
 [Unit]
 Description=Blocker_2

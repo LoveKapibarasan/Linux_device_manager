@@ -1,6 +1,10 @@
 #!/bin/bash
 
-REDIRECT_URL=$(curl -sI http://neverssl.com \
+# failed (blocked by vodafone..)
+
+ip=$(dig @8.8.8.8 +short neverssl.com)
+
+REDIRECT_URL=$(curl -sI http://$ip \
     | grep -i '^Location:' \
     | cut -d' ' -f2 \
     | tr -d '\r')

@@ -1,24 +1,14 @@
 #!/bin/bash
 
-# サービス → {ディレクトリ, 実行スクリプト} の対応表
-declare -A DIRS
-declare -A SCRIPTS
+# 引数: サービス名, 実行するスクリプトのパス
+patrol_service() {
+    local service="$1"
+    local path="$2"
 
-DIRS["shutdown-cui"]="/home/${USER}/Linux_device_manager/blocker_2"
-SCRIPTS["shutdown-cui"]="setting.sh"
-
-DIRS["pihole"]="/home/${USER}/Linux_device_manager/white_list_3"
-SCRIPTS["pihole"]="setting_docker.sh"
-
-
-LOGFILE="/var/log/patrol.log"
-
-for SERVICE in "${!SCRIPTS[@]}"; do
-  if ! systemctl is-active --quiet "$SERVICE"; then
-    echo "$(date): $SERVICE is not active, running ${SCRIPTS[$SERVICE]}" >> "$LOGFILE"
-    (
-      cd "${DIRS[$SERVICE]}" || exit
-      bash "${SCRIPTS[$SERVICE]}"
-    )
-  fi
-done
+    if ! systemctl is-active --quiet "$service"; then
+        echo "[$service] is not active. Running $path ..."
+        bash "$path"
+    else
+        echo "[$service] is active. Nothing to do."
+    fi
+}

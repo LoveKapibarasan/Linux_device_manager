@@ -1,45 +1,25 @@
+
+ls -l /etc/resolv.conf 
+
 sudo vim /etc/resolv.conf
-# and only nameserver 127.0.0.1
+# only 'nameserver 127.0.0.1' is best
 
-
-# 2-1-1.
+#=== NetworkManager ===
+# 1.
 sudo vim /etc/NetworkManager/NetworkManager.conf
-# If NetworkManager edit this,
 # [main]
 # dns=none
-# 2-1-2.
-sudo vim /etc/NetworkManager/conf.d/dns-reject.conf
-# [main]
-# dns=default
- 
-# [ipv4]
-# ignore-auto-dns=true
-# dns=127.0.0.1;
+cat /etc/NetworkManager/NetworkManager.conf
+# !!===Failed===!!
 
-# [ipv6]
-# ignore-auto-dns=true
-# dns=::1;
 
-# 2-1-2.
-sudo vim /etc/systemd/resolved.conf
-# [Resolve]
-# DNS=127.0.0.1
-# Domains=~.
-# DNSStubListener=no
+# 2. make file immutable
+sudo chattr +i /etc/resolv.conf
 
-sudo ln -sf /run/systemd/resolve/resolv.conf /etc/resolv.conf
-sudo systemctl restart systemd-resolved
 
-cat /etc/resolv.conf
-cat /etc/systemd/resolved.conf
-cat /run/systemd/resolve/resolv.conf
-cat /etc/systemd/resolved.conf.d/dns.conf
-
-# 2-2-2.
+#=== resolved ===
 sudo systemctl stop systemd-resolved
 sudo systemctl disable systemd-resolved
-
-
 
 
 # set password
@@ -47,16 +27,3 @@ sudo -s
 cd /opt/pihole
 echo "ADMIN_PASSWORD=$(openssl rand -base64 20)" | sudo tee .env
 docker exec -it pihole pihole setpassword "$(grep ADMIN_PASSWORD .env | cut -d'=' -f2)"
-
-
-
-##############################################
-# Nites
-# 1. Rate limit
-#      FTLCONF_dns_rateLimit_count: 0
-#      FTLCONF_dns_rateLimit_interval: 0
-# in env
-
-# 2. gravity.db is setting file for domains
-# 3. ArchLinux <= NetworkManager, systemd-resolved
-#    Raspi Lite <= NetworkManager

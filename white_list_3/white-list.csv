@@ -1,5 +1,3 @@
-
-# Shogi wars
 ^(.+\.)?cloudfront\.net$
 ^(.+\.)?gstatic\.com$
 ^(.+\.)?unity3d\.com$
@@ -7,8 +5,6 @@
 ^(.+\.)?heroz\.jp$
 (^|\.)doubleclick\.net$ 
 (^|\.)challenges\.cloudflare\.com$ 
-
-# github
 ^(.+\.)?github\.com$
 ^(.+\.)?githubusercontent\.com$
 ^(.+\.)?githubassets\.com$
@@ -16,21 +12,13 @@
 ^(.+\.)?bitbucket\.org$
 ^(.+\.)?githubcopilot\.com$
 ^(github\.com|github-cloud\.s3\.amazonaws\.com|github-production-release-asset-[^.]+\.s3\.amazonaws\.com)$
-
-
-# chatgpt
 ^(.+\.)?chatgpt\.com$
 ^(.+\.)?openai\.com$
 (^|\.)cdn\.oaistatic\.com$
 (^|\.)lh3\.googleusercontent\.com$
-
-# oth
 ^(.+\.)?elearning\.oth-regensburg\.de$
 ^(.+\.)?oth-regensburg\.de$
 ^(.+\.)?hs\-regensburg\.de$
-
-
-# microsoft
 (^|\.)packages\.microsoft\.com$
 (^|\.)outlook\.office\.com$
 (^|\.)(cdn|res)[.-].*\.office\.net$
@@ -42,65 +30,37 @@
 (^|\.)graph\.microsoft\.com$
 (^|\.)res\.office365\.com$
 (^|\.)ecs\.office\.com$
-
-# teams
 (^|\.)teams\.microsoft\.com$
-
-# docker
 (^|\.)download\.docker\.com$
-
-# ubuntu
 (^|\.)security\.ubuntu\.com$
 (^|\.)archive\.ubuntu\.com$
-
-# shogi-extend
 (^|\.)shogi-extend\.com$
-
-# google account
 (^|\.)accounts\.google\.com\/?.*$
-
-# rasberrypi
 (^|\.)debian\.org$
 (^|\.)raspbian\.raspberrypi\.com$
 (^|\.)archive\.raspberrypi\.com$
-
-# python
 (^|\.)pypi\.org$
 (^|\.)pythonhosted\.org$
 (^|\.)files\.pythonhosted\.org$
-
-# Gmail
 (^|\.)mail\.google\.com$
 (^|\.)googleusercontent\.com$
 (^|\.)gstatic\.com$
 (^|\.)googleapis\.com$
-
-
-# npm
 (^|\.)npmjs\.org$
 (^|\.)npmjs\.com$
 (^|\.)registry\.npmjs\.org$
 (^|\.)nodejs\.org$
-
-# Captive Portal
 (^|\.)hotspot\.vodafone\.de$
 (^|\.)impervadns\.net$
 (^|\.)detectportal\.firefox\.com$
-
-# VSCode
 (^|\.)open\-vsx\.org$
-
-# Firefox
 (^|\.)incoming\.telemetry\.mozilla\.org$
 (^|\.)sync\.services\.mozilla\.com$
 (^|\.)push\.services\.mozilla\.com$
 (^|\.)profile\.accounts\.firefox\.com$
-
-# Others
 (^|\.)ping\.archlinux\.org$
 (^|\.)ipv4only\.arpa$
 (^|\.)example\.org$
 (^|\.)example\.com$
 (^|\.)neverssl.com$
 (^|\.)redirect.archlinux\.org$
-
