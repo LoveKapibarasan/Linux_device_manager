@@ -1,11 +1,21 @@
 #!/bin/bash
 
-# .env ファイルを読み込み
-set -o allexport
-source /home/$USER/.env
-set +o allexport
+# このスクリプト自身があるディレクトリを取得
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 
-# 削除対象のグループ
+# .env を読み込み（rm_sudo.sh と同じディレクトリに置く）
+if [ -f "$SCRIPT_DIR/.env" ]; then
+    set -o allexport
+    source "$SCRIPT_DIR/.env"
+    set +o allexport
+else
+    echo "Error: $SCRIPT_DIR/.env not found"
+    exit 1
+fi
+
+# .env に TARGET_USER を書いておく
+# 例: TARGET_USER=takanori
+
 REMOVE_GROUPS=("wheel" "docker" "sudo")
 
 for GROUP in "${REMOVE_GROUPS[@]}"; do
@@ -14,3 +24,4 @@ for GROUP in "${REMOVE_GROUPS[@]}"; do
         sudo gpasswd -d "$TARGET_USER" "$GROUP"
     fi
 done
+
