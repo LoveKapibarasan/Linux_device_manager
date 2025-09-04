@@ -11,3 +11,8 @@ usermod -aG docker <username>
 gpasswd -d <username> sudo
 gpasswd -d <username> wheel
 gpasswd -d <username> docker
+
+# 3 Check
+groups <username>
+id <username>
+getent group wheel sudo
