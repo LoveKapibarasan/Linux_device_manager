@@ -102,4 +102,11 @@
 (^|\.)example\.com$
 (^|\.)neverssl.com$
 (^|\.)redirect.archlinux\.org$
+[0-9.]+\.in-addr\.arpa
 
+
+# Arch
+.*mirror.*
+
+# NordVPN
+(^|\.)nordvpn\.com$
