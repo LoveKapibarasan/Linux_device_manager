@@ -16,6 +16,7 @@
 ^(.+\.)?openai\.com$
 (^|\.)cdn\.oaistatic\.com$
 (^|\.)lh3\.googleusercontent\.com$
+(^|\.)oaiusercontent\.com$
 ^(.+\.)?elearning\.oth-regensburg\.de$
 ^(.+\.)?oth-regensburg\.de$
 ^(.+\.)?hs\-regensburg\.de$
