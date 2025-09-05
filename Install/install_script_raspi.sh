@@ -47,7 +47,7 @@ sudo apt install -y python3 python3-pip python3-venv
 sudo apt install -y nodejs npm
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/master/install.sh | bash
 
-# 6. NordVPN
+# 6. NordVPN FortClient
 sh <(curl -sSf https://downloads.nordcdn.com/apps/linux/install.sh)
 sudo usermod -aG nordvpn $USER
 nordvpn login --token <token>
@@ -55,6 +55,17 @@ sudo systemctl unmask nordvpnd
 sudo systemctl enable nordvpnd
 sudo systemctl start nordvpnd
 nordvpn set autoconnect on
+
+sudo apt install openfortivpn -y
+sudo sh -c 'cat >> /etc/openfortivpn/config <<EOF
+host = sslvpn.oth-regensburg.de
+port = 443
+realm = vpn-default
+trusted-cert = 364fb4fa107e591626b3919f0e7f8169e9d2097974f3e3d55e56c7c756a1f94a
+username = abc12345
+password = meinpasswort
+EOF'
+
 
 # 7. Graphics
 sudo apt install -y mesa-utils mesa-vulkan-drivers vulkan-tools
