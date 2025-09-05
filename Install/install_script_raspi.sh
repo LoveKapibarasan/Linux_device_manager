@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
 
-
 # 0. 
 # Wifi
 # keyboard
@@ -46,3 +45,16 @@ fcitx5-configtool
 # 5. Dev tools
 sudo apt install -y python3 python3-pip python3-venv
 sudo apt install -y nodejs npm
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/master/install.sh | bash
+
+# 6. NordVPN
+sh <(curl -sSf https://downloads.nordcdn.com/apps/linux/install.sh)
+sudo usermod -aG nordvpn $USER
+nordvpn login --token <token>
+sudo systemctl unmask nordvpnd
+sudo systemctl enable nordvpnd
+sudo systemctl start nordvpnd
+nordvpn set autoconnect on
+
+# 7. Graphics
+sudo apt install -y mesa-utils mesa-vulkan-drivers vulkan-tools
