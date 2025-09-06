@@ -30,10 +30,10 @@ _nss_regex_gethostbyname2_r(const char *name, int af,
     fclose(fp);
 
     if (matched) {
-        // 一致したら「見つからない」としてVPN(DNS)へ渡す
+        // Match -> NotFound -> VPN(DNS)
         return NSS_STATUS_NOTFOUND;
     } else {
-        // 一致しなかったら127.0.0.1に強制リダイレクト
+        // Loop back block
         static char loopback[] = "127.0.0.1";
         static struct in_addr addr;
         inet_pton(AF_INET, loopback, &addr);
@@ -54,18 +54,4 @@ _nss_regex_gethostbyname2_r(const char *name, int af,
 
         return NSS_STATUS_SUCCESS;
     }
-}
-
-enum nss_status
-_nss_regex_gethostbyaddr_r (const void *addr, socklen_t len, int af,
-                            struct hostent *result,
-                            char *buffer, size_t buflen,
-                            int *errnop, int *h_errnop)
-{
-    (void)addr; (void)len; (void)af;
-    (void)result; (void)buffer; (void)buflen;
-    (void)errnop; (void)h_errnop;
-
-    // 逆引きは全部対応しない
-    return NSS_STATUS_NOTFOUND;
 }
