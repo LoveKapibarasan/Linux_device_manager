@@ -69,3 +69,6 @@ EOF'
 
 # 7. Graphics
 sudo apt install -y mesa-utils mesa-vulkan-drivers vulkan-tools
+
+# 8 Others
+sudo apt install -y chromium

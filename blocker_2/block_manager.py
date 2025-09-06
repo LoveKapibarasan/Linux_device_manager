@@ -1,161 +1,152 @@
 import time
 import json
 import subprocess
+import requests
+import os
 from datetime import datetime
 from datetime import time as dtime
-from utils import notify, shutdown_all_as_admin,suspend_all_as_admin, protect_usage_file, read_usage_file, update_usage_file
-
-# === Pomodoro/Blocker Timing Settings  ===
+from utils import notify, shutdown_all, suspend_all, protect_usage_file, read_usage_file, update_usage_file
 
 # === Time Unit Constants ===
-SECOND = 1
-MINUTE = 60 * SECOND
-HOUR = 60 * MINUTE
+UNIT = 60
 
 
-CONFIG = {
-    "weekday": {
-        "DAILY_LIMIT_HOURS": 9,
-        "WARN_MIN": 2,
-        "POMODORO_START": 55,           # xx:50 ~ xx:00 is block
-        "BLOCK_START": dtime(20, 0),    # 20:00
-        "BLOCK_END": dtime(7, 0),       # 07:00
-    },
-    "weekend": {
-        "DAILY_LIMIT_HOURS": 4,         # <-- change if you want different on Sat/Sun
-        "WARN_MIN": 2,
-        "POMODORO_START": 50,
-        "BLOCK_START": dtime(20, 0),
-        "BLOCK_END": dtime(7, 0),
-    },
-}
+def load_config(path="config.json"):
+    base_dir = os.path.dirname(os.path.abspath(__file__))
+    full_path = os.path.join(base_dir, path)
+    notify(f"Config file is read from {full_path}")
+    with open(full_path, "r", encoding="utf-8") as f:
+        config = json.load(f)
 
-def _profile_for(now: datetime | None = None) -> str:
-    now = now or datetime.now()
-    # Monday=0 ... Sunday=6; weekend is 5,6
-    return "weekend" if now.weekday() >= 5 else "weekday"
+    # "HH:MM" → datetime.time
+    for key in ["weekday", "weekend"]:
+        for tkey in ["BLOCK_START", "BLOCK_END"]:
+            hh, mm = map(int, config[key][tkey].split(":"))
+            config[key][tkey] = dtime(hh, mm)
+    return config
 
-def _cfg(now: datetime | None = None) -> dict:
-    return CONFIG[_profile_for(now)]
+def get_now_from_api(timezone: str = "Etc/UTC") -> datetime:
+    """
+    WorldTimeAPI 
+    Example: "Europe/Berlin", "Asia/Tokyo", "Etc/UTC"
+    """
+    url = f"http://worldtimeapi.org/api/timezone/{timezone}"
+    try:
+        resp = requests.get(url, timeout=5)
+        resp.raise_for_status()
+        data = resp.json()
+        # "datetime" is ISO 8601 format
+        return datetime.fromisoformat(data["datetime"].replace("Z", "+00:00"))
+    except Exception as e:
+        notify(f"Failed to fetch time from API: {e}")
+        return None
 
-def daily_limit_sec(now: datetime | None = None) -> int:
-    return _cfg(now)["DAILY_LIMIT_HOURS"] * HOUR
 
-def warn_sec(now: datetime | None = None) -> int:
-    return _cfg(now)["WARN_MIN"] * MINUTE
-
-def pomodoro_start_minute(now: datetime | None = None) -> int:
-    return _cfg(now)["POMODORO_START"]
-
-def block_window(now: datetime | None = None) -> tuple[dtime, dtime]:
-    c = _cfg(now)
-    return c["BLOCK_START"], c["BLOCK_END"]
-
-# 時間情報を管理するクラス
 class UsageManager:
     def __init__(self):
-        protect_usage_file(self._today())
-
-    def _today(self):
-        return datetime.now().strftime("%Y-%m-%d")
+        self.config = load_config()
+        self.profile = self._load_profile()
+        protect_usage_file(self._get_now().date())
 
     def _load(self):
         try:
             data = read_usage_file() 
             if "date" not in data:
-                data["date"] = self._today()
+                data["date"] = self._get_now().date()
                 data["seconds"] = data.get("seconds", 0)
-                self._save(data)
-            return data
+                update_usage_file(data)
+            if data["date"] != self._get_now().date():
+                protect_usage_file(self._get_now().date())
+                return 0
+            return data.get("seconds", 0)
         except Exception as e:
             notify(f"Because of an error, usage file is reset: {str(e)}")
-            data = {"date": self._today(), "seconds": 0}
-            self._save(data)
-            return data
+            protect_usage_file(self._get_now().date())
+            return 0
+    
+    def _get_now(self) -> datetime:
+        tz_name = self.config["timezone"]
+        # Busy wait
+        while get_now_from_api(tz_name) is None:
+            time.sleep(60)
+        return get_now_from_api(tz_name)
 
+    def _load_profile(self):
+        try:
+            now = self._get_now()
+            if now.weekday() < 5:  # 0=Monday, 4=Friday
+                return self.config["weekday"]
+            else:
+                return self.config["weekend"]
+        except Exception as e:
+            notify(f"Unknown error at load_profile: {str(e)}")
+    
+    def _daily_limit_sec(self):
+        hours = self.profile["DAILY_LIMIT_HOURS"]
+        return hours * UNIT * UNIT
+    
+    def _pomodoro_start(self):
+        start_minute = self.profile["POMODORO_START"]
+        return start_minute
 
-    def _save(self, data):
-        update_usage_file(data)
+    def _night_block_time(self):
+        start_hour = self.profile["BLOCK_START"]
+        end_hour = self.profile["BLOCK_END"]
+        return start_hour, end_hour
 
-    def add_second(self):
-        data = self._load()
-        if data["date"] != self._today():
-            data = {"date": self._today(), "seconds": 0}
-        data["seconds"] = data.get("seconds", 0) + 1
-        self._save(data)
+    def is_limit_exceeded(self) -> bool:
+        return self._daily_limit_sec() - self._load() <= 0
 
-    # Check if the usage limit is exceeded
-    def is_limit_exceeded(self):
-        data = self._load()
-        if data["date"] != self._today():
-            protect_usage_file(self._today())
-            return False
-        return max(0, daily_limit_sec() - data.get("seconds", 0)) <= 0
+    def is_pomodoro_block_time(self) -> bool:
+        return self._get_now().minute > self._pomodoro_start()
+
+    def is_night_block_time(self) -> bool:
+        start, end = self._night_block_time()
+        return start <= self._get_now().time() <= end
+
+    def is_notified(self) -> bool:
+        return self._get_now().minute % 10 == 0
 
     def notify_remaining_time(self):
-        data = self._load()
-        if data["date"] != self._today():
-            notify("Usage file is reset, no data available.")
-            return daily_limit_sec()
-        remaining = max(0, daily_limit_sec() - data.get("seconds", 0))
-        if remaining <= warn_sec():
-            notify(f"⚠️残り時間: {remaining // MINUTE}分")
-        return remaining
+        used = self._load()
+        remain = self._daily_limit_sec() - used
+        minutes = max(remain // 60, 0)
+        notify(f"Remaining: {minutes} minutes")
 
 
+    def add_minutes(self):
+        seconds = self._load()
+        new_data = {}
+        new_data["date"] = self._get_now().date()
+        new_data["seconds"] = seconds + UNIT
+        update_usage_file(new_data)
+        time.sleep(UNIT)
 
-# Pomodoro like block
-def is_pomodoro_block_time():
-    now_minute = datetime.now().minute
-    return now_minute >= pomodoro_start_minute()
-
-# Check if the current time is within the blocking duration
-def is_block_time():
-    now = datetime.now().time()
-    start, end = block_window()
-    if start < end:
-        return start <= now < end
-    else:
-        return now >= start or now < end
-
-def is_notified():
-    current_minute = datetime.now().minute
-    current_second = datetime.now().second
-    return current_minute % 5 == 0 and current_second in (0, 1)
-
-def start_combined_loop():
+def start_loop():
     usage = UsageManager()
     while True:
         try:
             # Night blocking time check
-            if is_block_time() or usage.is_limit_exceeded():
-                bs, be = block_window()
-                if is_notified():
-                    notify(f"Now in {bs.strftime('%H:%M')}~{be.strftime('%H:%M')}")
+            if usage.is_night_block_time() or usage.is_limit_exceeded():
                 try:
-                    shutdown_all_as_admin()
+                    shutdown_all()
                 except Exception as e:
-                    notify(f"❌Shutdown failed {str(e)}")
-                time.sleep(1)
-                return
+                    notify(f"Shutdown failed {str(e)}")
+                    return
 
             # Pomodoro block time check
-            if is_pomodoro_block_time():
-                if is_notified():
-                    notify("⏰Pomodoro block time detected, blocking now")
+            if usage.is_pomodoro_block_time():
                 try:
-                    suspend_all_as_admin()
+                    suspend_all()
                 except Exception as e:
-                    notify(f"❌Suspend failed {str(e)}")
-                time.sleep(1)
-                return
-
-            usage.add_second()
-
-            if is_notified():
+                    notify(f"Suspend failed {str(e)}")
+                    return
+            
+            if usage.is_notified():
                 usage.notify_remaining_time()
-            time.sleep(1)
+            
+            usage.add_minutes()
+
         except Exception as e:
-            notify(f"⚠️Error happens: {str(e)}")
-            time.sleep(1)
-            continue
+            notify(f"Error happens: {str(e)}")
+            return

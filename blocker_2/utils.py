@@ -5,163 +5,91 @@ import json
 from datetime import datetime
 import shlex # a Python standard library module for safely splitting and quoting command-line strings.
 
-
-
-
-
 # Get home dir for ADMIN_USERNAME
 USAGE_FILE = "/root/shutdown_cui/usage_file.json"  # root専用ディレクトリに保存
 
-
-def get_env_for_user(user, var):
-    try:
-        # ユーザーのGUIセッションのPIDを探す
-        pid = subprocess.check_output(
-            ["pgrep", "-u", user, "gnome-session"], text=True
-        ).splitlines()[0]
-    except subprocess.CalledProcessError:
-        # GNOME以外のセッションなら fallback
-        try:
-            pid = subprocess.check_output(
-                ["pgrep", "-u", user, "startplasma-x11"], text=True
-            ).splitlines()[0]
-        except subprocess.CalledProcessError:
-            return None  # 見つからなければ None
-
-    # /proc/<pid>/environ から環境変数を読む
-    try:
-        with open(f"/proc/{pid}/environ", "rb") as f:
-            env_data = f.read().decode().split("\0")
-        for item in env_data:
-            if item.startswith(f"{var}="):
-                return item.split("=", 1)[1]
-    except Exception:
-        return None
-
-    return None
-
-
-
-def get_active_user():
+def get_logged_in_users():
     """
-    Detect the user of the currently active session.
-    Works with systemd-logind (loginctl).
-    Returns: username (str) or None
+    Returns a list of usernames currently logged in (systemd-logind).
     """
     try:
-        # 1. Get the active session ID on seat0 (the main local seat)
-        session_id = subprocess.check_output(
-            ["loginctl", "show-seat", "seat0", "--property=ActiveSession", "--value"],
+        out = subprocess.check_output(
+            ["loginctl", "list-users", "--no-legend"],
             text=True
-        ).strip()
+        ).strip().splitlines()
 
-        if not session_id:
-            return None
-
-        # 2. Get the username for that session
-        username = subprocess.check_output(
-            ["loginctl", "show-session", session_id, "--property=Name", "--value"],
-            text=True
-        ).strip()
-
-        return username if username else None
-
+        users = []
+        for line in out:
+            parts = line.split()
+            if len(parts) >= 2:
+                users.append(parts[1])  # username
+        return users
     except subprocess.CalledProcessError:
-        return None
+        return []
+
 def notify(content):
-    timestamp = datetime.now().strftime("%H:%M:%S")
-    print(f"[{timestamp}]: 🔔 {content}\n")
+    timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    message = f"[{timestamp}] {content}"
 
+    print(message, flush=True)  
+
+    for user in get_logged_in_users():
+        try:
+            home = pwd.getpwnam(user).pw_dir
+            log_file = os.path.join(home, "notify.log")
+            with open(log_file, "a") as f:
+                f.write(message + "\n")
+            os.chmod(log_file, 0o744)
+
+        except KeyError:
+            print(f"[ERROR] User {user} not found in passwd database")
+        except Exception as e:
+            print(f"[ERROR] Failed to write log for {user}: {e}")
+
+def shutdown_all():
     try:
-        user = get_active_user()
-        if not user:
-            print(f"[{timestamp}] [ERROR] Active user detection failed")
-            return
-
-        display = get_env_for_user(user, "DISPLAY")
-        dbus_addr = get_env_for_user(user, "DBUS_SESSION_BUS_ADDRESS")
-
-        if not display or not dbus_addr:
-            print(f"[{timestamp}] [ERROR] Could not get DISPLAY/DBUS for {user}")
-            return
-
-        # Send notification using the detected environment
-        subprocess.run(
-            ["sudo", "-u", user, "env",
-             f"DISPLAY={display}",
-             f"DBUS_SESSION_BUS_ADDRESS={dbus_addr}",
-             "notify-send", content],
-            check=True
-        )
-
+        subprocess.run(["systemctl", "poweroff", "-i"], check=True)# --force --force
     except Exception as e:
-        print(f"[{timestamp}] [ERROR] notify-send失敗: {e}")
+        notify(f"Failed shutdown_all: {e}")
 
-
-
-
-def disconnect_wifi():
+def suspend_all():
     try:
-        # Use nmcli to disconnect Wi-Fi
-        subprocess.run(
-            ["nmcli", "radio", "wifi", "off"],
-            check=True
-        )
-        print("Wi-Fi disconnected.")
-    except subprocess.CalledProcessError as e:
-        print(f"Failed to disconnect Wi-Fi: {e}")
-
-def run_as_admin(command):
-    return subprocess.run(command, shell=True).returncode == 0
-
-def run_as_admin_output(command):
-    return subprocess.check_output(command, shell=True, text=True)
-
-
-def shutdown_all_as_admin():
-    # Force shutdown, ignore inhibitors
-    return run_as_admin("systemctl poweroff -i --force --force")
-"""
-# for rusberry pi
-def suspend_all_as_admin():
-    shutdown_all_as_admin()
-"""
-def suspend_all_as_admin():
-    try:
-        # Force suspend, ignore inhibitors
-        run_as_admin("systemctl suspend -i")
+        subprocess.run(["systemctl", "suspend", "-i"], check=True)
     except subprocess.CalledProcessError:
-        print("Suspend failed, falling back to shutdown.")
-        shutdown_all_as_admin()
-
+        notify("Suspend failed, falling back to shutdown.")
+        shutdown_all()
 
 def cancel_shutdown():
-    """Cancel any pending shutdown jobs"""
     try:
-        subprocess.run(["shutdown", "-c"], check=False)
-        print("Pending shutdowns cancelled.")
+        subprocess.run(["shutdown", "-c"], check=False) # check = False(Ignore command failule message)
+        notify("Pending shutdowns cancelled.")
     except Exception as e:
-        print(f"Failed to cancel shutdown: {e}")
-
-
-def run_as_admin(command):
-    """rootとしてコマンド実行"""
-    return subprocess.run(command, shell=True).returncode == 0
+        notify(f"Failed to cancel shutdown: {e}")
 
 
 def protect_usage_file(today):
-    if not os.path.exists(USAGE_FILE):
-        os.makedirs(os.path.dirname(USAGE_FILE), exist_ok=True)
-        with open(USAGE_FILE, "w") as f:
-            json.dump({"date": today, "seconds": 0}, f)
-    run_as_admin(f"chown root:root {USAGE_FILE}")
-    run_as_admin(f"chmod 600 {USAGE_FILE}")
+    try:
+        if not os.path.exists(USAGE_FILE):
+            os.makedirs(os.path.dirname(USAGE_FILE), exist_ok=True)
+            with open(USAGE_FILE, "w") as f:
+                json.dump({"date": str(today), "seconds": 0}, f)
+        subprocess.run(["chown", "root:root", USAGE_FILE])
+        subprocess.run(["chmod", "600", USAGE_FILE])
+    except Exception as e:
+        notify(f"Failed protect_usage_file: {e}")
 
 def update_usage_file(update_data):
-    with open(USAGE_FILE, "w") as f:
-        json.dump(update_data, f)
-
+    try: 
+        with open(USAGE_FILE, "w") as f:
+            json.dump(update_data, f)
+    except Exception as e:
+        notify(f"Failed update_usage_file.: {e}")
 
 def read_usage_file():
-    content = run_as_admin_output(f"cat {USAGE_FILE}")
-    return json.loads(content)
+    try:
+        with open(USAGE_FILE) as f:
+            return json.load(f)
+    except (FileNotFoundError, json.JSONDecodeError):
+        notify("Unknown error happened ad read_usage_file()")
+        return {"date": None, "seconds": 0}
+

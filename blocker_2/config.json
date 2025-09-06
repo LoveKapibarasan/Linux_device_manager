@@ -1,0 +1,15 @@
+{
+  "timezone": "Europe/Berlin",
+  "weekday": {
+    "DAILY_LIMIT_HOURS": 9,
+    "POMODORO_START": 55,
+    "BLOCK_START": "20:00",
+    "BLOCK_END": "07:00"
+  },
+  "weekend": {
+    "DAILY_LIMIT_HOURS": 4,
+    "POMODORO_START": 55,
+    "BLOCK_START": "20:00",
+    "BLOCK_END": "07:00"
+  }
+}
