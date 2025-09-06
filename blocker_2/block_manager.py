@@ -145,9 +145,9 @@ class UsageManager:
         seconds = self._load()
         new_data = {}
         new_data["date"] = self._get_now().date().isoformat() # iso format
-        new_data["seconds"] = seconds + UNIT
+        new_data["seconds"] = seconds + 5
         update_usage_file(new_data)
-        time.sleep(UNIT)
+        time.sleep(5)
 
 def start_loop():
     usage = UsageManager()

@@ -78,3 +78,5 @@
 .*docker.*
 .*microsoft.*
 .*office.*
+.*ubuntu.*
+.*raspberrypi.*

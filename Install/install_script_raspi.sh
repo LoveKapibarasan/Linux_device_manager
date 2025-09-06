@@ -1,4 +1,5 @@
-#!/usr/bin/env bash
+#!/bin/bash
+
 
 # 0. 
 # Wifi
@@ -69,9 +70,6 @@ EOF'
 
 # 7. Graphics
 sudo apt install -y mesa-utils mesa-vulkan-drivers vulkan-tools
-<<<<<<< HEAD
-=======
 
-# 8 Others
-sudo apt install -y chromium
->>>>>>> decb6955ff906212bbd886b853767bf02e468121
+# Audio tools are installed
+alsamixer
