@@ -41,6 +41,14 @@ sudo apt install fcitx5 fcitx5-config-qt fcitx5-frontend-gtk3 fcitx5-frontend-gt
 fcitx5-configtool
 
 ## 1. /etc/environment
+sudo bash -c 'cat >> /etc/environment << "EOF"
+GTK_IM_MODULE=fcitx
+QT_IM_MODULE=fcitx
+XMODIFIERS=@im=fcitx
+SDL_IM_MODULE=fcitx
+GLFW_IM_MODULE=fcitx
+EOF'
+
 ## 2. ~/.zprofile
 
 # 5. Dev tools
