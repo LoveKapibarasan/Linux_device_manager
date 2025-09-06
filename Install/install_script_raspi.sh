@@ -47,6 +47,7 @@ fcitx5-configtool
 sudo apt install -y python3 python3-pip python3-venv
 sudo apt install -y nodejs npm
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/master/install.sh | bash
+node -v
 
 # 6. NordVPN FortClient
 sh <(curl -sSf https://downloads.nordcdn.com/apps/linux/install.sh)
