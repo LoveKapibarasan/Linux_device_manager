@@ -64,9 +64,9 @@
 (^|\.)example\.com$
 (^|\.)neverssl.com$
 [0-9.]+\.in-addr\.arpa
-(^|\.)worldtimeapi\.org$
 
 # Keywords
+.*timeapi.*
 .*mirror.*
 .*bluehost.*
 .*shogi.*

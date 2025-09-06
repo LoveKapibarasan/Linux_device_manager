@@ -39,7 +39,7 @@
 (^|\.)example\.com$
 (^|\.)neverssl.com$
 [0-9.]+\.in-addr\.arpa
-(^|\.)worldtimeapi\.org$
+.*timeapi.*
 .*mirror.*
 .*bluehost.*
 .*shogi.*

@@ -2,7 +2,9 @@
 set -e
 
 DEVICE="/dev/sda"   # lsblk で確認したmicroSDのデバイス
-IMG_URL="https://downloads.raspberrypi.com/raspios_lite_armhf_latest"
+
+# !!=== This is 32 bit ===
+# IMG_URL="https://downloads.raspberrypi.com/raspios_lite_armhf_latest"
 
 WORKDIR=$(mktemp -d)
 cd "$WORKDIR"
