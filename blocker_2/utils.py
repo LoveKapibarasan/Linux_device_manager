@@ -4,6 +4,9 @@ import os
 import json
 from datetime import datetime
 import shlex # a Python standard library module for safely splitting and quoting command-line strings.
+import platform
+from typing import TypedDict
+from datetime import date, datetime
 
 # Get home dir for ADMIN_USERNAME
 USAGE_FILE = "/root/shutdown_cui/usage_file.json"  # root専用ディレクトリに保存
@@ -67,18 +70,22 @@ def cancel_shutdown():
         notify(f"Failed to cancel shutdown: {e}")
 
 
-def protect_usage_file(today):
+def protect_usage_file(today: date | datetime) -> None:
     try:
         if not os.path.exists(USAGE_FILE):
             os.makedirs(os.path.dirname(USAGE_FILE), exist_ok=True)
             with open(USAGE_FILE, "w") as f:
-                json.dump({"date": str(today), "seconds": 0}, f)
+                json.dump({"date": today.isoformat(), "seconds": 0}, f)
         subprocess.run(["chown", "root:root", USAGE_FILE])
         subprocess.run(["chmod", "600", USAGE_FILE])
     except Exception as e:
         notify(f"Failed protect_usage_file: {e}")
 
-def update_usage_file(update_data):
+class UsageData(TypedDict):
+    date: str
+    seconds: int
+
+def update_usage_file(update_data: UsageData) -> None:
     try: 
         with open(USAGE_FILE, "w") as f:
             json.dump(update_data, f)
@@ -92,4 +99,32 @@ def read_usage_file():
     except (FileNotFoundError, json.JSONDecodeError):
         notify("Unknown error happened ad read_usage_file()")
         return {"date": None, "seconds": 0}
+
+def is_raspi() -> bool:
+    # 1. /proc/device-tree/model
+    for path in ["/proc/device-tree/model", "/sys/firmware/devicetree/base/model"]:
+        try:
+            with open(path, "r") as f:
+                model = f.read().strip()
+            if model.startswith("Raspberry Pi"):
+                return True
+        except FileNotFoundError:
+            pass
+
+    # 2. /proc/cpuinfo
+    try:
+        with open("/proc/cpuinfo", "r") as f:
+            cpuinfo = f.read()
+        if "Raspberry Pi" in cpuinfo or "BCM" in cpuinfo:
+            return True
+    except FileNotFoundError:
+        pass
+
+    # 3. uname fallback
+    uname = platform.uname()
+    if "raspberrypi" in uname.node.lower():
+        return True
+    
+    notify("device is not rasberry pi.")
+    return False
 

@@ -5,7 +5,7 @@ import requests
 import os
 from datetime import datetime
 from datetime import time as dtime
-from utils import notify, shutdown_all, suspend_all, protect_usage_file, read_usage_file, update_usage_file
+from utils import notify, shutdown_all, suspend_all, protect_usage_file, read_usage_file, update_usage_file, is_raspi
 
 # === Time Unit Constants ===
 UNIT = 60
@@ -25,37 +25,59 @@ def load_config(path="config.json"):
             config[key][tkey] = dtime(hh, mm)
     return config
 
-def get_now_from_api(timezone: str = "Etc/UTC") -> datetime:
+def get_now_from_api(is_pi, timezone: str = "Etc/UTC") -> datetime | None:
     """
-    WorldTimeAPI 
-    Example: "Europe/Berlin", "Asia/Tokyo", "Etc/UTC"
+    Try multiple public time APIs and return the current datetime.
+    Supports:
+      - worldtimeapi.org
+      - timeapi.io
+      - worldclockapi.com
     """
-    url = f"http://worldtimeapi.org/api/timezone/{timezone}"
-    try:
-        resp = requests.get(url, timeout=5)
-        resp.raise_for_status()
-        data = resp.json()
-        # "datetime" is ISO 8601 format
-        return datetime.fromisoformat(data["datetime"].replace("Z", "+00:00"))
-    except Exception as e:
-        notify(f"Failed to fetch time from API: {e}")
-        return None
+    if not is_pi:
+        return datetime.now()
+    endpoints = [
+        # WorldTimeAPI (https, recommended over http)
+        f"https://worldtimeapi.org/api/timezone/{timezone}",
+        # TimeAPI.io
+        f"https://timeapi.io/api/Time/current/zone?timeZone={timezone}",
+    ]
+
+    for url in endpoints:
+        try:
+            resp = requests.get(url, timeout=5)
+            resp.raise_for_status()
+            data = resp.json()
+
+            if "datetime" in data:  # worldtimeapi.org
+                return datetime.fromisoformat(data["datetime"].replace("Z", "+00:00"))
+
+            elif "dateTime" in data:  # timeapi.io
+                return datetime.fromisoformat(data["dateTime"].replace("Z", "+00:00"))
+
+        except Exception as e:
+            notify(f"Failed to fetch time from {url}: {e}")
+            continue
+    # If all APIs fail
+    notify("All external time APIs failed, falling back to None.")
+    return None
 
 
 class UsageManager:
     def __init__(self):
+        self.is_pi = is_raspi()
         self.config = load_config()
         self.profile = self._load_profile()
+        
         protect_usage_file(self._get_now().date())
 
     def _load(self):
         try:
             data = read_usage_file() 
             if "date" not in data:
-                data["date"] = self._get_now().date()
+                data["date"] = self._get_now().date().isoformat()
                 data["seconds"] = data.get("seconds", 0)
                 update_usage_file(data)
-            if data["date"] != self._get_now().date():
+            if data["date"] != self._get_now().date().isoformat():
                 protect_usage_file(self._get_now().date())
                 return 0
             return data.get("seconds", 0)
@@ -66,10 +88,15 @@ class UsageManager:
     
     def _get_now(self) -> datetime:
         tz_name = self.config["timezone"]
+        if tz_name is None:
+            notify("timezone is none")
         # Busy wait
-        while get_now_from_api(tz_name) is None:
-            time.sleep(60)
-        return get_now_from_api(tz_name)
+        now = None
+        while now is None:
+            now = get_now_from_api(self.is_pi, tz_name)
+            if now is None:
+                time.sleep(60)
+        return now
 
     def _load_profile(self):
         try:
@@ -117,7 +144,7 @@ class UsageManager:
     def add_minutes(self):
         seconds = self._load()
         new_data = {}
-        new_data["date"] = self._get_now().date()
+        new_data["date"] = self._get_now().date().isoformat() # iso format
         new_data["seconds"] = seconds + UNIT
         update_usage_file(new_data)
         time.sleep(UNIT)

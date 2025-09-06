@@ -1,6 +1,9 @@
 # NSS (Name Service Switch)
 
-`_nss_<module_name>_gethostbyname2_r(...)`
+* xxx <-> libness_xxx.so.2
+
+
+* `_nss_<module_name>_gethostbyname2_r(...)`
 
 
 * `gethostbyname2_r()` -> `_nss_regex_gethostbyname2_r()`
