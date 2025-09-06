@@ -1,5 +1,17 @@
 #!/bin/bash
 
+# 0. Basic Group
+getent group
+
+sudo visudo -f /etc/sudoers.d/ops # See ops
+sudo groupadd ops
+
+sudo usermod -aG systemd-journal ${USER}
+sudo usermod -aG postgres ${USER}
+sudo usermod -aG rabbitmq ${USER}
+sudo usermod -aG ops ${USER}
+sudo usermod -aG nordvpn ${USER}
+
 # 1. Add sudo
 su -
 
