@@ -16,18 +16,21 @@ reset_system "${SERVICE_NAME}"
 # Reset /root/shutdown_cui/usage_file.json
 sudo rm -f "/root/shutdown_cui/usage_file.json"
 
-sudo cat > ${SERVICE_PATH} <<  'EOF'
-[Unit]
-Description=Blocker_2
+# Clean log files
+for user in $(loginctl list-users --no-legend | awk '{print $2}'); do
+    home=$(getent passwd "$user" | cut -d: -f6)
+    logfile="$home/notify.log"
 
-[Service]
-ExecStart=/bin/bash -c 'source /opt/shutdown_cui/venv/bin/activate && exec /usr/bin/python3 /opt/shutdown_cui/shutdown_cui.py'
-Restart=always
-RestartSec=1
+    if [ -f "$logfile" ]; then
+        rm -f "$logfile"
+        echo "Deleted $logfile"
+    else
+        echo "No notify.log for $user"
+    fi
+done
 
-[Install]
-WantedBy=multi-user.target
-EOF
+
+sudo cp ${SERVICE_NAME} ${SERVICE_PATH}
 
 copy_files "$APP_DIR"
 

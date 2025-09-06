@@ -22,6 +22,8 @@
 ^(.+\.)?openai\.com$
 (^|\.)cdn\.oaistatic\.com$
 (^|\.)lh3\.googleusercontent\.com$
+(^|\.)oaiusercontent\.com$
+
 
 # oth
 ^(.+\.)?elearning\.oth-regensburg\.de$
@@ -103,7 +105,7 @@
 (^|\.)neverssl.com$
 (^|\.)redirect.archlinux\.org$
 [0-9.]+\.in-addr\.arpa
-
+(^|\.)worldtimeapi\.org$
 
 # Arch
 .*mirror.*

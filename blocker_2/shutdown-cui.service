@@ -1,0 +1,11 @@
+[Unit]
+Description=shutdown-cui
+
+[Service]
+ExecStart=/opt/shutdown_cui/venv/bin/python /opt/shutdown_cui/shutdown_cui.py
+Restart=always
+RestartSec=1
+User=root
+
+[Install]
+WantedBy=multi-user.target
