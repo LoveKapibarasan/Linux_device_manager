@@ -56,6 +56,8 @@ sudo apt install -y python3 python3-pip python3-venv
 sudo apt install -y nodejs npm
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/master/install.sh | bash
 node -v
+nvm install x 
+nvm use x
 
 # 6. NordVPN FortClient
 sh <(curl -sSf https://downloads.nordcdn.com/apps/linux/install.sh)
@@ -82,3 +84,6 @@ sudo apt install -y mesa-utils mesa-vulkan-drivers vulkan-tools
 
 # Audio tools are installed
 alsamixer
+
+# 8 Others
+sudo apt install -y libfuse2
