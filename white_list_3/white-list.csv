@@ -15,7 +15,6 @@
 ^(.+\.)?hs\-regensburg\.de$
 (^|\.)login\.live\.com$
 (^|\.)aadcdn\.(msftauth|msauth)\.net$
-(^|\.)accounts\.google\.com\/?.*$
 (^|\.)debian\.org$
 (^|\.)raspbian\.raspberrypi\.com$
 (^|\.)archive\.raspberrypi\.com$
@@ -53,3 +52,6 @@
 .*office.*
 .*ubuntu.*
 .*raspberrypi.*
+.*aicharge.*
+.*account.*
+.*flathub.*

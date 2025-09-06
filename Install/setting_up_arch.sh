@@ -168,3 +168,9 @@ sudo pacman -Syu mesa lib32-mesa vulkan-intel vulkan-radeon lib32-vulkan-intel l
 
 # 12. PDF
 sudo pacman -S okular qpdf
+
+# 13. Authenticator
+sudo pacman -S flatpak
+sudo flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
+flatpak install flathub com.belmoussaoui.Authenticator
+

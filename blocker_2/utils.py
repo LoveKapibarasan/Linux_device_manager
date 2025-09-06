@@ -128,3 +128,17 @@ def is_raspi() -> bool:
     notify("device is not rasberry pi.")
     return False
 
+def wait_for_ping(host="raspberrypi.com", max_wait=60, interval=2) -> bool:
+    start = time.time()
+    while True:
+        result = subprocess.run(
+            ["ping", "-c", "1", "-W", "1", host],
+            stdout=subprocess.DEVNULL,
+            stderr=subprocess.DEVNULL
+        )
+        if result.returncode == 0:
+            print("ping OK")
+            return True
+        if time.time() - start > max_wait:
+            notify("Unreachable")
+        time.sleep(interval)

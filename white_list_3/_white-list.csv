@@ -25,9 +25,6 @@
 (^|\.)aadcdn\.(msftauth|msauth)\.net$
 
 
-# google account
-(^|\.)accounts\.google\.com\/?.*$
-
 # rasberrypi
 (^|\.)debian\.org$
 (^|\.)raspbian\.raspberrypi\.com$
@@ -80,3 +77,6 @@
 .*office.*
 .*ubuntu.*
 .*raspberrypi.*
+.*aicharge.*
+.*account.*
+.*flathub.*

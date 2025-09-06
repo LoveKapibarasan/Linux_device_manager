@@ -87,3 +87,7 @@ alsamixer
 
 # 8 Others
 sudo apt install -y libfuse2
+sudo apt install flatpak
+sudo flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
+flatpak install flathub com.belmoussaoui.Authenticator
+
