@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# 0. Set root password
+sudo passwd root
+
 # 1. Add
 adduser username
 
