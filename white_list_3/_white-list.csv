@@ -1,59 +1,15 @@
-# Shogi
-^(.+\.)?cloudfront\.net$
-^(.+\.)?gstatic\.com$
-^(.+\.)?unity3d\.com$
-^(.+\.)?googleapis\.com$
-^(.+\.)?heroz\.jp$
-(^|\.)doubleclick\.net$ 
-(^|\.)challenges\.cloudflare\.com$ 
-.*shogi.*
-
+# Restricted
+# @@@
 # Chatgpt
 ^(.+\.)?chatgpt\.com$
 ^(.+\.)?openai\.com$
 (^|\.)cdn\.oaistatic\.com$
 (^|\.)lh3\.googleusercontent\.com$
 (^|\.)oaiusercontent\.com$
-
 # oth
 ^(.+\.)?elearning\.oth-regensburg\.de$
 ^(.+\.)?oth-regensburg\.de$
 ^(.+\.)?hs\-regensburg\.de$
-
-
-# microsoft
-.*microsoft.*
-.*office.*
-(^|\.)aadcdn\.(msftauth|msauth)\.net$
-
-# rasberrypi
-(^|\.)debian\.org$
-(^|\.)raspbian\.raspberrypi\.com$
-(^|\.)archive\.raspberrypi\.com$
-
-# Python
-(^|\.)pypi\.org$
-.*python.*
-
-# Gmail
-(^|\.)mail\.google\.com$
-(^|\.)googleusercontent\.com$
-(^|\.)gstatic\.com$
-(^|\.)googleapis\.com$
-
-# npm
-(^|\.)npmjs\.org$
-(^|\.)npmjs\.com$
-(^|\.)registry\.npmjs\.org$
-(^|\.)nodejs\.org$
-
-# Captive Portal
-(^|\.)hotspot\.vodafone\.de$
-(^|\.)impervadns\.net$
-(^|\.)detectportal\.firefox\.com$
-
-# VSCode
-(^|\.)open\-vsx\.org$
 
 # System
 (^|\.)ipv4only\.arpa$
@@ -68,9 +24,60 @@
 .*ubuntu.*
 .*raspberrypi.*
 
+
+# Captive Portal
+(^|\.)hotspot\.vodafone\.de$
+(^|\.)impervadns\.net$
+(^|\.)detectportal\.firefox\.com$
+
+# Others
+.*account.*
+.*login.*
+
+# @@@
+
+# rasberrypi
+(^|\.)debian\.org$
+(^|\.)raspbian\.raspberrypi\.com$
+(^|\.)archive\.raspberrypi\.com$
+
+# Python
+(^|\.)pypi\.org$
+.*python.*
+
+# microsoft
+.*microsoft.*
+.*office.*
+(^|\.)aadcdn\.(msftauth|msauth)\.net$
+
+# Shogi
+^(.+\.)?cloudfront\.net$
+^(.+\.)?gstatic\.com$
+^(.+\.)?unity3d\.com$
+^(.+\.)?googleapis\.com$
+^(.+\.)?heroz\.jp$
+(^|\.)doubleclick\.net$ 
+(^|\.)challenges\.cloudflare\.com$ 
+.*shogi.*
+
+# Gmail
+(^|\.)mail\.google\.com$
+(^|\.)googleusercontent\.com$
+(^|\.)gstatic\.com$
+(^|\.)googleapis\.com$
+
+# npm
+(^|\.)npmjs\.org$
+(^|\.)npmjs\.com$
+(^|\.)registry\.npmjs\.org$
+(^|\.)nodejs\.org$
+
+
+# VSCode
+(^|\.)open\-vsx\.org$
+
 # Bluehost
 .*bluehost.*
-
 
 # firefox
 .*mozilla.*
@@ -94,7 +101,7 @@
 
 # Others
 .*aicharge.*
-.*account.*
-.*login.*
 .*flathub.*
 .*lycamobile.*
+.*recochoku.*
+.*yamahamusic.*

@@ -3,6 +3,7 @@
 
 # .so = .dll
 
+
 gcc -fPIC -shared -o libnss_regex.so.2 nss_regex.c -ldl -Wall
 sudo cp libnss_regex.so.2 /usr/lib/   # or /lib/x86_64-linux-gnu/
 
@@ -14,4 +15,5 @@ cat /etc/regexhosts
 
 sudo sed -i '/^hosts:/c\hosts: files regex dns mymachines resolve [!UNAVAIL=return] myhostname' /etc/nsswitch.conf
 cat /etc/nsswitch.conf
+journalctl -t regexhosts -f
 

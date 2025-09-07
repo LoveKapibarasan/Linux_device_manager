@@ -87,7 +87,7 @@ sudo apt install -y mesa-utils mesa-vulkan-drivers vulkan-tools
 alsamixer
 
 # 8 Others
-sudo apt install -y libfuse2 flatpak bpftrace
+sudo apt install -y libfuse2 flatpak
 sudo flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
 flatpak install flathub com.belmoussaoui.Authenticator
 

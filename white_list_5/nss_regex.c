@@ -5,6 +5,7 @@
 #include <regex.h>
 #include <stdio.h>
 #include <string.h>
+#include <syslog.h>
 
 enum nss_status
 _nss_regex_gethostbyname2_r(const char *name, int af,
@@ -31,6 +32,10 @@ _nss_regex_gethostbyname2_r(const char *name, int af,
 
     if (matched) {
         // Match -> NotFound -> VPN(DNS)
+        // I/O latency
+        openlog("regexhosts", LOG_PID | LOG_NDELAY, LOG_DAEMON);
+        syslog(LOG_INFO, "A: %s", name);
+        closelog();
         return NSS_STATUS_NOTFOUND;
     } else {
         // Loop back block
@@ -51,6 +56,10 @@ _nss_regex_gethostbyname2_r(const char *name, int af,
         result->h_length = sizeof(addr);
         result->h_addr_list = addr_list;
         result->h_name = (char *) name;
+        // Match -> NotFound -> VPN(DNS)
+        openlog("regexhosts", LOG_PID | LOG_NDELAY, LOG_DAEMON);
+        syslog(LOG_INFO, "B: %s", name);
+        closelog();
 
         return NSS_STATUS_SUCCESS;
     }
