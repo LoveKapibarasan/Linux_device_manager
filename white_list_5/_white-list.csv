@@ -1,5 +1,5 @@
 # Restricted
-# @@@
+#@@@
 # Chatgpt
 ^(.+\.)?chatgpt\.com$
 ^(.+\.)?openai\.com$
@@ -22,8 +22,6 @@
 .*ntp\.org.*
 .*arch.*
 .*ubuntu.*
-.*raspberrypi.*
-
 
 # Captive Portal
 (^|\.)hotspot\.vodafone\.de$
@@ -34,16 +32,43 @@
 .*account.*
 .*login.*
 
-# @@@
+# VSCode
+.*vscode.*
+(^|\.)open\-vsx\.org$
 
 # rasberrypi
-(^|\.)debian\.org$
-(^|\.)raspbian\.raspberrypi\.com$
-(^|\.)archive\.raspberrypi\.com$
+.*debian.*
+.*piwheels.*
+.*raspberrypi.*
 
 # Python
 (^|\.)pypi\.org$
 .*python.*
+
+# Nordvpn
+.*nordvpn.*
+.*nordcdn.*
+
+# Docker
+.*docker.*
+
+# Github
+.*git.*
+# @@@
+
+# npm
+(^|\.)npmjs\.org$
+(^|\.)npmjs\.com$
+(^|\.)registry\.npmjs\.org$
+(^|\.)nodejs\.org$
+
+# firefox
+.*mozilla.*
+.*firefox.*
+
+##############################################
+
+
 
 # microsoft
 .*microsoft.*
@@ -66,31 +91,8 @@
 (^|\.)gstatic\.com$
 (^|\.)googleapis\.com$
 
-# npm
-(^|\.)npmjs\.org$
-(^|\.)npmjs\.com$
-(^|\.)registry\.npmjs\.org$
-(^|\.)nodejs\.org$
-
-
-# VSCode
-(^|\.)open\-vsx\.org$
-
 # Bluehost
 .*bluehost.*
-
-# firefox
-.*mozilla.*
-.*firefox.*
-
-# Github
-.*git.*
-
-# Nordvpn
-.*nordvpn.*
-
-# Docker
-.*docker.*
 
 # Payments
 .*expatrio.*

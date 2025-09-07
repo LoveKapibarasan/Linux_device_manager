@@ -7,8 +7,7 @@ APP_PATH=${APP_DIR}/shutdown_cui.py
 SERVICE_PATH=/etc/systemd/system/${SERVICE_NAME}
 
 # Import functions
-. ../reset_system.sh
-. ../copy_files.sh
+. ../util.sh
 
 # Reset the service
 reset_system "${SERVICE_NAME}"
@@ -17,17 +16,7 @@ reset_system "${SERVICE_NAME}"
 sudo rm -f "/root/shutdown_cui/usage_file.json"
 
 # Clean log files
-for user in $(loginctl list-users --no-legend | awk '{print $2}'); do
-    home=$(getent passwd "$user" | cut -d: -f6)
-    logfile="$home/notify.log"
-
-    if [ -f "$logfile" ]; then
-        rm -f "$logfile"
-        echo "Deleted $logfile"
-    else
-        echo "No notify.log for $user"
-    fi
-done
+clean_logs "notify.log"
 
 
 sudo cp ${SERVICE_NAME} ${SERVICE_PATH}
@@ -37,3 +26,5 @@ copy_files "$APP_DIR"
 create_venv "$APP_DIR"
 
 start_service "$SERVICE_NAME"
+
+sudo chmod 700 "$APP_DIR"

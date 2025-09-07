@@ -31,6 +31,7 @@ gcc -fPIC -shared -o libnss_regex.so.2 nss_regex.c -ldl -Wall
   Specifies the output file name.
   → Produces a shared library named `libnss_regex.so.2`.
   * `.so.2`
+        * so = dril in windows
         * The .2 is the version number of the shared library’s ABI (Application Binary Interface).
 
 * **`nss_regex.c`**

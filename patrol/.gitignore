@@ -1,2 +1,4 @@
-patrol.service
-.env
+tmp
+patrol
+profile.csv
+profile_restricted.csv
