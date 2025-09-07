@@ -7,7 +7,7 @@
 gcc -fPIC -shared -o libnss_regex.so.2 nss_regex.c -ldl -Wall
 sudo cp libnss_regex.so.2 /usr/lib/   # or /lib/x86_64-linux-gnu/
 
-filter_hash ../white-list/white-list.csv  white-list.csv        
+filter_hash ../white-list/_white-list.csv  white-list.csv        
 sudo cp white-list.csv /etc/regexhosts
 cat /etc/regexhosts
 

@@ -1,0 +1,51 @@
+#@@@
+# Chatgpt
+^(.+\.)?chatgpt\.com$
+^(.+\.)?openai\.com$
+(^|\.)cdn\.oaistatic\.com$
+(^|\.)lh3\.googleusercontent\.com$
+(^|\.)oaiusercontent\.com$
+# oth
+^(.+\.)?elearning\.oth-regensburg\.de$
+^(.+\.)?oth-regensburg\.de$
+^(.+\.)?hs\-regensburg\.de$
+
+# System
+(^|\.)ipv4only\.arpa$
+(^|\.)example\.org$
+(^|\.)example\.com$
+(^|\.)neverssl.com$
+(^|\.)timeapi.*
+(^|\.)ntp\.org$
+
+# Captive Portal
+(^|\.)hotspot\.vodafone\.de$
+(^|\.)impervadns\.net$
+(^|\.)detectportal\.firefox\.com$
+
+# VSCode
+(^|\.)open\-vsx\.org$
+
+# Python
+(^|\.)pypi\.org$
+(^|\.)files.pythonhosted\.org$
+(^|\.)python\.org$
+(^|\.)docs\.python.org$
+
+# Nordvpn
+(^|\.)\.pi-hole\.net$
+# Pihole
+(^|\.)\.pi-hole\.net$
+
+# Github
+^(.+\.)?github\.com$
+
+
+# npm
+(^|\.)npmjs\.org$
+(^|\.)npmjs\.com$
+(^|\.)registry\.npmjs\.org$
+(^|\.)nodejs\.org$
+
+
+# @@@
