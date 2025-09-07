@@ -5,7 +5,7 @@ import requests
 import os
 from datetime import datetime
 from datetime import time as dtime
-from utils import notify, shutdown_all, suspend_all, protect_usage_file, read_usage_file, update_usage_file, is_ntp_synced
+from utils import notify, shutdown_all, suspend_all, protect_usage_file, read_usage_file, update_usage_file
 
 # === Time Unit Constants ===
 UNIT = 60
@@ -25,8 +25,7 @@ def load_config(path="config.json"):
             config[key][tkey] = dtime(hh, mm)
     return config
 
-
-def get_now_from_api(timezone: str = "Etc/UTC") -> datetime | None:
+def get_now_from_api(is_p, timezone: str = "Etc/UTC") -> datetime | None:
     """
     Try multiple public time APIs and return the current datetime.
     Supports:
@@ -34,7 +33,7 @@ def get_now_from_api(timezone: str = "Etc/UTC") -> datetime | None:
       - timeapi.io
       - worldclockapi.com
     """
-    if is_ntp_synced():
+    if not is_p:
         return datetime.now()
     endpoints = [
         # WorldTimeAPI (https, recommended over http)
@@ -63,9 +62,9 @@ def get_now_from_api(timezone: str = "Etc/UTC") -> datetime | None:
     return None
 
 
-
 class UsageManager:
     def __init__(self):
+        self.is_p = is_raspi() or wait_for_ping()
         self.config = load_config()
         self.profile = self._load_profile()
         
@@ -94,7 +93,7 @@ class UsageManager:
         # Busy wait
         now = None
         while now is None:
-            now = get_now_from_api(tz_name)
+            now = get_now_from_api(self.is_p, tz_name)
             if now is None:
                 time.sleep(60)
         return now
