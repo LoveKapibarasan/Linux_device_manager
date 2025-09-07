@@ -10,7 +10,7 @@ adduser username
 # ユーザーアカウントとホームディレクトリを削除
 deluser --remove-home username
 
-#=== Arch Linux
+#=== Arch Linux ===
 # 1.
 sudo useradd -m -G wheel -s /bin/bash username
 sudo passwd username

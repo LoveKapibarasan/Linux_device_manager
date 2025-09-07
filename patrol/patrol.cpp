@@ -61,41 +61,17 @@ std::string readFile(const std::string &path) {
                        std::istreambuf_iterator<char>());
 }
 
-// Execute a command and log its output + exit code
-void execAndLog(const std::string &exePath) {
-    std::string cmd = "sudo " + exePath + " 2>&1"; // redirect stderr to stdout
-    writeUserLogs("Executing: " + cmd);
-
-    std::array<char, 256> buffer{};
-    std::string result;
-
-    FILE* pipe = popen(cmd.c_str(), "r");
-    if (!pipe) {
-        writeUserLogs("popen() failed for: " + cmd);
-        return;
-    }
-
-    while (fgets(buffer.data(), buffer.size(), pipe) != nullptr) {
-        result += buffer.data();
-    }
-
-    int ret = pclose(pipe);
-
-    if (!result.empty()) {
-        writeUserLogs("Command output:\n" + result);
-    }
-    writeUserLogs("Command finished: " + cmd + " (exit=" + std::to_string(ret) + ")");
-}
 
 int main() {
+     writeUserLogs("Starting..");
     std::string path1 = "/opt/patrol/profile_restricted.csv";
     std::string path2 = "/opt/patrol/profile.csv";
 
     std::string content1 = readFile(path1); // restricted profile
     std::string content2 = readFile(path2); // non-restricted profile
 
-    std::string exePath = "/opt/patrol/patrol.sh";
-
+    // First set restricted profile
+    updateRegexHosts(content1, "restricted");
     bool lastState = false; // remember last state of inRange()
     while (true) {
         bool nowState = inRange();
@@ -104,7 +80,6 @@ int main() {
                 updateRegexHosts(content2, "non-restricted");
             } else {
                 updateRegexHosts(content1, "restricted");
-                execAndLog(exePath); // run patrol.sh and log output
             }
             lastState = nowState;
         }

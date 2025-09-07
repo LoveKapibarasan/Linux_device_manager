@@ -2,7 +2,7 @@
 
 ZSHRC="$HOME/.zshrc"
 
-# 関数が既に定義されているか確認
+# Already defined ?
 if ! grep -q "function venvup()" "$ZSHRC"; then
     cat << 'EOF' >> "$ZSHRC"
 

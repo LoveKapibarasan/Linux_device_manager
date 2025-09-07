@@ -1,10 +1,10 @@
+# Basic Commands
+
+```bash
 #!/bin/bash
 
-# 0. Basic Group
+# 0. Basic Groups
 getent group
-
-sudo visudo -f /etc/sudoers.d/ops # See ops
-sudo groupadd ops
 
 sudo usermod -aG systemd-journal ${USER}
 sudo usermod -aG postgres ${USER}
@@ -24,14 +24,8 @@ gpasswd -d <username> sudo
 gpasswd -d <username> wheel
 gpasswd -d <username> docker
 
-# for raspi
-for f in /etc/sudoers* /etc/sudoers.d/*; do
-  sudo sed -i -E '/takanori/ {/sudo/ s/^/#/}' "$f"
-done
-sudo visudo -c
-
-
 # 3 Check
 groups <username>
 id <username>
 getent group wheel sudo
+```
