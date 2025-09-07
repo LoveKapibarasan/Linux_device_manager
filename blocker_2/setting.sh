@@ -6,8 +6,11 @@ APP_DIR=/opt/shutdown_cui
 APP_PATH=${APP_DIR}/shutdown_cui.py
 SERVICE_PATH=/etc/systemd/system/${SERVICE_NAME}
 
+
 # Import functions
 . ../util.sh
+
+root_check
 
 # Reset the service
 reset_system "${SERVICE_NAME}"
@@ -26,5 +29,3 @@ copy_files "$APP_DIR"
 create_venv "$APP_DIR"
 
 start_service "$SERVICE_NAME"
-
-sudo chmod 700 "$APP_DIR"

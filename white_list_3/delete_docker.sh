@@ -1,4 +1,9 @@
 #!/bin/bash
+# Import functions
+. ../util.sh
+
+root_check
+
 sudo docker rm -f pihole
 
 sudo rm -rf /etc/systemd/system/pihole.service
@@ -8,7 +13,7 @@ sudo systemctl stop pihole.service
 
 
 
-# NetworkManager
+#=== NetworkManager ===
 sudo sed -i '/^\s*dns=none\s*$/d' /etc/NetworkManager/NetworkManager.conf
 cat /etc/NetworkManager/NetworkManager.conf
 
@@ -16,7 +21,7 @@ sudo chattr -i /etc/resolv.conf
 sudo rm -f /etc/resolv.conf
 cat /etc/resolv.conf
 
-# systemd-resolved
+#=== systemd-resolved ===
 sudo systemctl enable systemd-resolved
 sudo systemctl start systemd-resolved
 

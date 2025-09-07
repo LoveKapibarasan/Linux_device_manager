@@ -18,7 +18,7 @@ clean_logs "patrol.log"
 
 
 # Create profiles
-cp ../white_list_5/_white-list.csv tmp
+cp ../white_list/_white-list.csv tmp
 MARKER="/^#[[:space:]]*@[[:space:]]*@[[:space:]]*@/"
 sed -n "$MARKER,$MARKER p" tmp > tmp2
 

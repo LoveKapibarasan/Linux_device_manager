@@ -67,7 +67,10 @@ nordvpn login --token <token>
 sudo systemctl unmask nordvpnd
 sudo systemctl enable nordvpnd
 sudo systemctl start nordvpnd
-nordvpn set autoconnect on
+sudo nordvpn set dns off
+sudo nordvpn set autoconnect on
+sudo gpasswd -d $USER nordvpn
+
 
 sudo apt install openfortivpn -y
 sudo sh -c 'cat >> /etc/openfortivpn/config <<EOF
@@ -91,3 +94,7 @@ sudo apt install -y libfuse2 flatpak
 sudo flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
 flatpak install flathub com.belmoussaoui.Authenticator
 
+
+# For Dolphin(DBUS problem)
+sudo apt install qdbus-qt6 qt6-tools-dev-tools qt6-base-dev
+/usr/lib/qt6/bin/qdbus org.kde.dolphin

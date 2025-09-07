@@ -62,3 +62,10 @@ filter_hash() {
     local outfile="$2"
     grep -vE '^\s*#|^\s*$' "$infile" > "$outfile"
 }
+
+root_check(){
+    if [ "$(id -u)" -ne 0 ]; then
+        echo "This script must be run as root" >&2
+        exit 1
+    fi
+}

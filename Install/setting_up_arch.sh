@@ -161,6 +161,8 @@ yay -S nkf
 # 10. FortClient nordvpn
 # the full GUI client
 yay -S forticlient nordvpn-bin nordvpn-gui
+yay -Rns nordvpn-bin nordvpn-gui
+
 
 # 11. Graphic Drivers
 # Intel => Vulkan, mesa 
