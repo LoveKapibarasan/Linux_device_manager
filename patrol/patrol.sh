@@ -3,8 +3,6 @@
 # このスクリプトがあるディレクトリを取得
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 
-find ~ -type f -name \"*.sh\" -exec sudo chmod +x {} \;
-
 # import
 chmod +x "$SCRIPT_DIR/patrol_service.sh"
 source "$SCRIPT_DIR/patrol_service.sh"
@@ -16,8 +14,9 @@ patrol_service "patrol" "$SCRIPT_DIR/setting.sh"
 # 2 sudo, 700
 cd "$SCRIPT_DIR" || exit 1
 chmod +x rm_sudo.sh
-./rm_sudo.sh
-./700.sh
+sudo ./rm_sudo.sh
+chmod +x 700.sh
+sudo ./700.sh
 
 # 3 gp
 cd "$SCRIPT_DIR/git" || exit 1
