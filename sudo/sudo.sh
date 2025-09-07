@@ -24,6 +24,13 @@ gpasswd -d <username> sudo
 gpasswd -d <username> wheel
 gpasswd -d <username> docker
 
+# for raspi
+for f in /etc/sudoers* /etc/sudoers.d/*; do
+  sudo sed -i -E '/takanori/ {/sudo/ s/^/#/}' "$f"
+done
+sudo visudo -c
+
+
 # 3 Check
 groups <username>
 id <username>

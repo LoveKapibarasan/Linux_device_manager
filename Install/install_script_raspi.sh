@@ -5,7 +5,8 @@
 # Wifi
 # keyboard
 # username, password
-# hostname
+# hostname=pc
+sudo hostnamectl set-hostname pc
 # localization settings
 ## Country
 ## Timezone
@@ -15,7 +16,7 @@ sudo raspi-config
 sudo apt update & sudo apt upgrade
 sudo apt purge nano
 sudo apt autoremove
-sudo apt install sway git git-lfs firefox zsh code pcmanfm vim xwayland -y
+sudo apt install sway git git-lfs firefox zsh code dolphin vim xwayland -y
 git lfs install
 git config --global user.name "<name>"
 git config --global user.email "<email_address>"
@@ -86,8 +87,7 @@ sudo apt install -y mesa-utils mesa-vulkan-drivers vulkan-tools
 alsamixer
 
 # 8 Others
-sudo apt install -y libfuse2
-sudo apt install flatpak
+sudo apt install -y libfuse2 flatpak bpftrace
 sudo flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
 flatpak install flathub com.belmoussaoui.Authenticator
 

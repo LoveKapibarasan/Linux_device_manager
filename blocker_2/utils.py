@@ -50,17 +50,19 @@ def notify(content):
             print(f"[ERROR] Failed to write log for {user}: {e}")
 
 def shutdown_all():
-    try:
-        subprocess.run(["systemctl", "poweroff", "-i"], check=True)# --force --force
-    except Exception as e:
-        notify(f"Failed shutdown_all: {e}")
+    if is_ntp_synced():
+        try:
+            subprocess.run(["systemctl", "poweroff", "-i"], check=True)# --force --force
+        except Exception as e:
+            notify(f"Failed shutdown_all: {e}")
 
 def suspend_all():
-    try:
-        subprocess.run(["systemctl", "suspend", "-i"], check=True)
-    except subprocess.CalledProcessError:
-        notify("Suspend failed, falling back to shutdown.")
-        shutdown_all()
+    if is_ntp_synced():
+        try:
+            subprocess.run(["systemctl", "suspend", "-i"], check=True)
+        except subprocess.CalledProcessError:
+            notify("Suspend failed, falling back to shutdown.")
+            shutdown_all()
 
 def cancel_shutdown():
     try:
@@ -100,45 +102,16 @@ def read_usage_file():
         notify("Unknown error happened ad read_usage_file()")
         return {"date": None, "seconds": 0}
 
-def is_raspi() -> bool:
-    # 1. /proc/device-tree/model
-    for path in ["/proc/device-tree/model", "/sys/firmware/devicetree/base/model"]:
-        try:
-            with open(path, "r") as f:
-                model = f.read().strip()
-            if model.startswith("Raspberry Pi"):
-                return True
-        except FileNotFoundError:
-            pass
 
-    # 2. /proc/cpuinfo
+def is_ntp_synced() -> bool:
+    # timedatectl show --property=NTPSynchronized --value
+    # date
     try:
-        with open("/proc/cpuinfo", "r") as f:
-            cpuinfo = f.read()
-        if "Raspberry Pi" in cpuinfo or "BCM" in cpuinfo:
-            return True
-    except FileNotFoundError:
-        pass
-
-    # 3. uname fallback
-    uname = platform.uname()
-    if "raspberrypi" in uname.node.lower():
-        return True
-    
-    notify("device is not rasberry pi.")
-    return False
-
-def wait_for_ping(host="raspberrypi.com", max_wait=60, interval=2) -> bool:
-    start = time.time()
-    while True:
-        result = subprocess.run(
-            ["ping", "-c", "1", "-W", "1", host],
-            stdout=subprocess.DEVNULL,
-            stderr=subprocess.DEVNULL
-        )
-        if result.returncode == 0:
-            print("ping OK")
-            return True
-        if time.time() - start > max_wait:
-            notify("Unreachable")
-        time.sleep(interval)
+        out = subprocess.check_output(
+            ["timedatectl", "show", "--property=NTPSynchronized", "--value"],
+            text=True
+        ).strip()
+        return "y" in out.lower()
+    except Exception as e:
+        notify(f"Error at is_ntp_synced{e}")
+        return False

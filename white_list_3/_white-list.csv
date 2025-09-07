@@ -1,4 +1,4 @@
-# Shogi wars
+# Shogi
 ^(.+\.)?cloudfront\.net$
 ^(.+\.)?gstatic\.com$
 ^(.+\.)?unity3d\.com$
@@ -6,8 +6,9 @@
 ^(.+\.)?heroz\.jp$
 (^|\.)doubleclick\.net$ 
 (^|\.)challenges\.cloudflare\.com$ 
+.*shogi.*
 
-# chatgpt
+# Chatgpt
 ^(.+\.)?chatgpt\.com$
 ^(.+\.)?openai\.com$
 (^|\.)cdn\.oaistatic\.com$
@@ -21,19 +22,18 @@
 
 
 # microsoft
-(^|\.)login\.live\.com$
+.*microsoft.*
+.*office.*
 (^|\.)aadcdn\.(msftauth|msauth)\.net$
-
 
 # rasberrypi
 (^|\.)debian\.org$
 (^|\.)raspbian\.raspberrypi\.com$
 (^|\.)archive\.raspberrypi\.com$
 
-# python
+# Python
 (^|\.)pypi\.org$
-(^|\.)pythonhosted\.org$
-(^|\.)files\.pythonhosted\.org$
+.*python.*
 
 # Gmail
 (^|\.)mail\.google\.com$
@@ -55,28 +55,46 @@
 # VSCode
 (^|\.)open\-vsx\.org$
 
-# Others
+# System
 (^|\.)ipv4only\.arpa$
 (^|\.)example\.org$
 (^|\.)example\.com$
 (^|\.)neverssl.com$
-[0-9.]+\.in-addr\.arpa
-
-# Keywords
+.*in-addr\.arpa.*
 .*timeapi.*
 .*mirror.*
-.*bluehost.*
-.*shogi.*
-.*git.*
+.*ntp\.org.*
 .*arch.*
-.*mozilla.*
-.*firefox.*
-.*nordvpn.*
-.*docker.*
-.*microsoft.*
-.*office.*
 .*ubuntu.*
 .*raspberrypi.*
+
+# Bluehost
+.*bluehost.*
+
+
+# firefox
+.*mozilla.*
+.*firefox.*
+
+# Github
+.*git.*
+
+# Nordvpn
+.*nordvpn.*
+
+# Docker
+.*docker.*
+
+# Payments
+.*expatrio.*
+.*paypal.*
+
+# dropbox
+.*dropbox.*
+
+# Others
 .*aicharge.*
 .*account.*
+.*login.*
 .*flathub.*
+.*lycamobile.*
