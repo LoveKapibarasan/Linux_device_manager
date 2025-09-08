@@ -8,8 +8,8 @@ import platform
 from typing import TypedDict
 from datetime import date, datetime
 
-# Get home dir for ADMIN_USERNAME
-USAGE_FILE = "/root/shutdown_cui/usage_file.json"  # root専用ディレクトリに保存
+
+USAGE_FILE = "/opt/shutdown_cui/usage_file.json"
 
 def get_logged_in_users():
     """
@@ -62,7 +62,7 @@ def suspend_all():
             subprocess.run(["systemctl", "suspend", "-i"], check=True)
         except subprocess.CalledProcessError:
             notify("Suspend failed, falling back to shutdown.")
-            shutdown_all()
+            # shutdown_all()
 
 def cancel_shutdown():
     try:

@@ -15,8 +15,9 @@ root_check
 # Reset the service
 reset_system "${SERVICE_NAME}"
 
-# Reset /root/shutdown_cui/usage_file.json
+# Remove old version file
 sudo rm -f "/root/shutdown_cui/usage_file.json"
+
 
 # Clean log files
 clean_logs "notify.log"

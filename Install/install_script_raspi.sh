@@ -16,7 +16,7 @@ sudo raspi-config
 sudo apt update & sudo apt upgrade
 sudo apt purge nano
 sudo apt autoremove
-sudo apt install sway git git-lfs firefox zsh code dolphin vim xwayland -y
+sudo apt install sway git git-lfs ssh-askpass firefox zsh code dolphin vim xwayland -y
 git lfs install
 git config --global user.name "<name>"
 git config --global user.email "<email_address>"
