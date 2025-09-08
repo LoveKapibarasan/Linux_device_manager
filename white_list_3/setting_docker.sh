@@ -9,6 +9,8 @@ SERVICE_PATH=/etc/systemd/system/${SERVICE_NAME}
 
 root_check
 
+sudo ./delete_docker.sh
+
 # Reset the service
 reset_system "${SERVICE_NAME}"
 
@@ -23,3 +25,4 @@ sudo ./generate_pass.sh
 
 start_service "$SERVICE_NAME"
 
+sudo ./pihole_protect.sh

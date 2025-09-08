@@ -18,12 +18,11 @@ clean_logs "patrol.log"
 
 
 # Create profiles
-cp ../white_list/_white-list.csv tmp
+cp ../white-list/_white-list.csv tmp
 MARKER="/^#[[:space:]]*@[[:space:]]*@[[:space:]]*@/"
 sed -n "$MARKER,$MARKER p" tmp > tmp2
 
 filter_hash tmp2  profile_restricted.csv
-rm -f tmp2
 filter_hash tmp  profile.csv
 
 # compile
