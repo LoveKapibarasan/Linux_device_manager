@@ -91,8 +91,11 @@ alsamixer
 
 # 8 Others
 sudo apt install -y libfuse2 flatpak
-sudo flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
-flatpak install flathub com.belmoussaoui.Authenticator
+
+
+# 9 2FA
+sudo apt install -y oathtool
+oathtool --totp -b "<secret_key>"
 
 
 # For Dolphin(DBUS problem)
