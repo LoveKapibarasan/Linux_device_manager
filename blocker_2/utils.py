@@ -62,7 +62,7 @@ def suspend_all():
             subprocess.run(["systemctl", "suspend", "-i"], check=True)
         except subprocess.CalledProcessError:
             notify("Suspend failed, falling back to shutdown.")
-            # shutdown_all()
+            shutdown_all()
 
 def cancel_shutdown():
     try:

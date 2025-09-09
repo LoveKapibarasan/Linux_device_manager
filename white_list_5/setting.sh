@@ -18,3 +18,6 @@ sudo sed -i "s|$BEFORE.*|$AFTER|" /etc/nsswitch.conf
 cat /etc/nsswitch.conf
 journalctl -t regexhosts -f
 
+
+
+

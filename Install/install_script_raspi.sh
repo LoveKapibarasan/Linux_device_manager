@@ -81,7 +81,7 @@ trusted-cert = 364fb4fa107e591626b3919f0e7f8169e9d2097974f3e3d55e56c7c756a1f94a
 username = abc12345
 password = meinpasswort
 EOF'
-
+sudo openfortivpn
 
 # 7. Graphics
 sudo apt install -y mesa-utils mesa-vulkan-drivers vulkan-tools

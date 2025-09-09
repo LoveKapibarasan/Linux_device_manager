@@ -1,3 +1,5 @@
+########################################
+
 # Restricted Profiles
 #@@@
 # Chatgpt
@@ -6,6 +8,7 @@
 (^|\.)cdn\.oaistatic\.com$
 (^|\.)lh3\.googleusercontent\.com$
 (^|\.)oaiusercontent\.com$
+
 # oth
 ^(.+\.)?elearning\.oth-regensburg\.de$
 ^(.+\.)?oth-regensburg\.de$
@@ -25,22 +28,26 @@
 (^|\.)detectportal\.firefox\.com$
 
 # VSCode
+(^|\.)vscode-unpkg\.net$
 (^|\.)open\-vsx\.org$
+vscode\-cdn\.net$
+(^|\.)visualstudio\.com$
 
 # Python
 (^|\.)pypi\.org$
-(^|\.)files.pythonhosted\.org$
+(^|\.)pythonhosted\.org$
 (^|\.)python\.org$
-(^|\.)docs\.python.org$
+
 
 # Nordvpn
-(^|\.)\.pi-hole\.net$
+(^|\.)nordvpn\.com$
+(^|\.)nordcdn\.com$
+
 # Pihole
-(^|\.)\.pi-hole\.net$
+(^|\.)\.pi\-hole\.net$
 
 # Github
 ^(.+\.)?github\.com$
-
 
 # npm
 (^|\.)npmjs\.org$
@@ -53,10 +60,15 @@
 
 ##############################################
 
-
+# firefox
+(^|\.)mozilla\.org$
+(^|\.)mozilla\.com$
+(^|\.)mozilla\.net$
+(^|\.)fastly-edge.com$
 
 # microsoft
 (^|\.)aadcdn\.(msftauth|msauth)\.net$
+(^|\.)microsoft\.com$
 
 # Shogi
 ^(.+\.)?cloudfront\.net$
@@ -68,8 +80,27 @@
 (^|\.)challenges\.cloudflare\.com$ 
 (^|\.)shogi-extend\.com$ 
 
-# Gmail
-(^|\.)mail\.google\.com$
+# Google
+(^|\.)accounts\.google.com$
 (^|\.)googleusercontent\.com$
 (^|\.)gstatic\.com$
 (^|\.)googleapis\.com$
+
+# Gmail
+(^|\.)mail\.google\.com$
+
+# Google Map
+(^|\.)maps.google\.com$
+(^|\.)ogs\.google\.com$
+(^|\.)clients\d+\.google\.com$
+(^|\.)apis\.google.com$
+(^|\.)mozgcp\.net$
+(^|\.)google\.com/maps(/.*)?$
+(^|\.)google\.com$
+
+
+# Bluehost
+(^|\.)bluehost\.com$
+
+# rasberrypi
+(^|\.)piwheels\.org$

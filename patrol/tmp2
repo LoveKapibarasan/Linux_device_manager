@@ -5,6 +5,7 @@
 (^|\.)cdn\.oaistatic\.com$
 (^|\.)lh3\.googleusercontent\.com$
 (^|\.)oaiusercontent\.com$
+
 # oth
 ^(.+\.)?elearning\.oth-regensburg\.de$
 ^(.+\.)?oth-regensburg\.de$
@@ -24,22 +25,26 @@
 (^|\.)detectportal\.firefox\.com$
 
 # VSCode
+(^|\.)vscode-unpkg\.net$
 (^|\.)open\-vsx\.org$
+vscode\-cdn\.net$
+(^|\.)visualstudio\.com$
 
 # Python
 (^|\.)pypi\.org$
-(^|\.)files.pythonhosted\.org$
+(^|\.)pythonhosted\.org$
 (^|\.)python\.org$
-(^|\.)docs\.python.org$
+
 
 # Nordvpn
-(^|\.)\.pi-hole\.net$
+(^|\.)nordvpn\.com$
+(^|\.)nordcdn\.com$
+
 # Pihole
-(^|\.)\.pi-hole\.net$
+(^|\.)\.pi\-hole\.net$
 
 # Github
 ^(.+\.)?github\.com$
-
 
 # npm
 (^|\.)npmjs\.org$
