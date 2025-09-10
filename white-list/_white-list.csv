@@ -44,10 +44,12 @@ vscode\-cdn\.net$
 (^|\.)nordcdn\.com$
 
 # Pihole
-(^|\.)\.pi\-hole\.net$
+(^|\.)pi\-hole\.net$
 
 # Github
-^(.+\.)?github\.com$
+(^|\.)github\.com$
+(^|\.)githubusercontent\.com$
+(^|\.)githubassets\.com$
 
 # npm
 (^|\.)npmjs\.org$
@@ -96,7 +98,7 @@ vscode\-cdn\.net$
 (^|\.)apis\.google.com$
 (^|\.)mozgcp\.net$
 (^|\.)google\.com/maps(/.*)?$
-(^|\.)google\.com$
+
 
 
 # Bluehost

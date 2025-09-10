@@ -61,8 +61,8 @@ def suspend_all():
         try:
             subprocess.run(["systemctl", "suspend", "-i"], check=True)
         except subprocess.CalledProcessError:
-            notify("Suspend failed, falling back to shutdown.")
-            shutdown_all()
+            notify("Suspend failed, falling back to kill_sway.")
+            kill_sway()
 
 def cancel_shutdown():
     try:
@@ -115,3 +115,17 @@ def is_ntp_synced() -> bool:
     except Exception as e:
         notify(f"Error at is_ntp_synced{e}")
         return False
+
+def kill_sway():
+    try:
+        result = subprocess.run(
+            ["pgrep", "sway"],
+            stdout=subprocess.PIPE,
+            stderr=subprocess.DEVNULL,
+            text=True
+        )
+        if result.returncode == 0:
+            subprocess.run(["pkill", "-9", "sway"])
+            notify("sway is killed")
+    except Exception as e:
+        notify(f"Error: {e}")

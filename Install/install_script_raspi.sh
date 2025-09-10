@@ -4,12 +4,24 @@
 # 0. 
 # Wifi
 # keyboard
+sudo sed -i 's/^XKBLAYOUT=.*/XKBLAYOUT="de"/' /etc/default/keyboard
+sudo setupcon
 # username, password
 # hostname=pc
 sudo hostnamectl set-hostname pc
 # localization settings
-## Country
+sudo sed -i 's/^# *\(de_DE.UTF-8 UTF-8\)/\1/' /etc/locale.gen
+sudo sed -i 's/^# *\(ja_JP.UTF-8 UTF-8\)/\1/' /etc/locale.gen
+sudo locale-gen
+sudo update-locale LANG=en_GB.UTF-8
+locale -a
+## Country for Wifi
+echo -e "[device]\nwifi.country=DE" | sudo tee /etc/NetworkManager/conf.d/wifi-country.conf
+cat /etc/NetworkManager/conf.d/wifi-country.conf
+sudo systemctl restart NetworkManager
+sudo iw reg set DE
 ## Timezone
+sudo timedatectl set-timezone Europe/Berlin
 sudo raspi-config
 
 # 1. Install
@@ -38,7 +50,7 @@ curl -sSL https://install.pi-hole.net | bash
 
 
 # 4. fcitx5
-sudo apt install fcitx5 fcitx5-config-qt fcitx5-frontend-gtk3 fcitx5-frontend-gtk4 fcitx5-frontend-qt5 fcitx5-mozc
+sudo apt install fcitx5 fcitx5-config-qt fcitx5-frontend-gtk3 fcitx5-frontend-gtk4 fcitx5-frontend-qt5 fcitx5-modules fcitx5-mozc 
 fcitx5-configtool
 
 ## 1. /etc/environment
@@ -59,34 +71,3 @@ curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/master/install.sh | bash
 node -v
 nvm install x 
 nvm use x
-
-# 6. FortClient
-sudo apt install openfortivpn -y
-sudo sh -c 'cat >> /etc/openfortivpn/config <<EOF
-host = sslvpn.oth-regensburg.de
-port = 443
-realm = vpn-default
-trusted-cert = 364fb4fa107e591626b3919f0e7f8169e9d2097974f3e3d55e56c7c756a1f94a
-username = abc12345
-password = meinpasswort
-EOF'
-sudo openfortivpn
-
-# 7. Graphics
-sudo apt install -y mesa-utils mesa-vulkan-drivers vulkan-tools
-
-# Audio tools are installed
-alsamixer
-
-# 8 Others
-sudo apt install -y libfuse2 flatpak
-
-
-# 9 2FA
-sudo apt install -y oathtool
-oathtool --totp -b "<secret_key>"
-
-
-# For Dolphin(DBUS problem)
-sudo apt install qdbus-qt6 qt6-tools-dev-tools qt6-base-dev
-/usr/lib/qt6/bin/qdbus org.kde.dolphin
