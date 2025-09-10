@@ -60,18 +60,7 @@ node -v
 nvm install x 
 nvm use x
 
-# 6. NordVPN FortClient
-sh <(curl -sSf https://downloads.nordcdn.com/apps/linux/install.sh)
-sudo usermod -aG nordvpn $USER
-nordvpn login --token <token>
-sudo systemctl unmask nordvpnd
-sudo systemctl enable nordvpnd
-sudo systemctl start nordvpnd
-sudo nordvpn set dns off
-sudo nordvpn set autoconnect on
-sudo gpasswd -d $USER nordvpn
-
-
+# 6. FortClient
 sudo apt install openfortivpn -y
 sudo sh -c 'cat >> /etc/openfortivpn/config <<EOF
 host = sslvpn.oth-regensburg.de
