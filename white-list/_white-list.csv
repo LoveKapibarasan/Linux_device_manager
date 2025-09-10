@@ -3,16 +3,16 @@
 # Restricted Profiles
 #@@@
 # Chatgpt
-^(.+\.)?chatgpt\.com$
-^(.+\.)?openai\.com$
+(^|\.)chatgpt\.com$
+(^|\.)openai\.com$
 (^|\.)cdn\.oaistatic\.com$
 (^|\.)lh3\.googleusercontent\.com$
 (^|\.)oaiusercontent\.com$
 
 # oth
-^(.+\.)?elearning\.oth-regensburg\.de$
-^(.+\.)?oth-regensburg\.de$
-^(.+\.)?hs\-regensburg\.de$
+(^|\.)elearning\.oth-regensburg\.de$
+(^|\.)oth-regensburg\.de$
+(^|\.)hs\-regensburg\.de$
 
 # System
 (^|\.)ipv4only\.arpa$
@@ -30,8 +30,9 @@
 # VSCode
 (^|\.)vscode-unpkg\.net$
 (^|\.)open\-vsx\.org$
-vscode\-cdn\.net$
+(^|\.)vscode\-cdn\.net$
 (^|\.)visualstudio\.com$
+(^|\.)exp-tas\.com$
 
 # Python
 (^|\.)pypi\.org$
@@ -66,18 +67,26 @@ vscode\-cdn\.net$
 (^|\.)mozilla\.org$
 (^|\.)mozilla\.com$
 (^|\.)mozilla\.net$
-(^|\.)fastly-edge.com$
+(^|\.)fastly-edge\.com$
+(^|\.)firefox\.com$
+
 
 # microsoft
 (^|\.)aadcdn\.(msftauth|msauth)\.net$
 (^|\.)microsoft\.com$
+(^|\.)office\.com$
+(^|\.)office\.net$
+(^|\.)msn\.com$
+# Outlook
+(^|\.)outlook\.live\.com$
+(^|\.)outlook\.com$
 
 # Shogi
-^(.+\.)?cloudfront\.net$
-^(.+\.)?gstatic\.com$
-^(.+\.)?unity3d\.com$
-^(.+\.)?googleapis\.com$
-^(.+\.)?heroz\.jp$
+(^|\.)cloudfront\.net$
+(^|\.)gstatic\.com$
+(^|\.)unity3d\.com$
+(^|\.)googleapis\.com$
+(^|\.)heroz\.jp$
 (^|\.)doubleclick\.net$ 
 (^|\.)challenges\.cloudflare\.com$ 
 (^|\.)shogi-extend\.com$ 
