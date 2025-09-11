@@ -1,6 +1,9 @@
 #!/usr/bin/env bash
 set -e
 
+cd ~/.pyenv
+git pull
+
 # Get the latest stable version (x.y.z) from pyenv install list
 latest=$(pyenv install --list | grep -E "^\s*[0-9]+\.[0-9]+\.[0-9]+$" | tail -1 | tr -d ' ')
 

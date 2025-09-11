@@ -27,3 +27,18 @@ oathtool --totp -b "<secret_key>"
 
 # pyenv
 curl https://pyenv.run | bash
+
+sudo apt install -y \
+    build-essential \
+    libbz2-dev \
+    libncurses5-dev libncursesw5-dev \
+    libffi-dev \
+    libreadline-dev \
+    libsqlite3-dev \
+    tk-dev \
+    liblzma-dev \
+    zlib1g-dev \
+    libgdbm-dev \
+    uuid-dev \
+    libssl-dev
+
