@@ -18,12 +18,5 @@ sudo ./rm_sudo.sh
 # 700
 chmod +x 700.sh
 sudo ./700.sh
-# update
-chmod +x update.sh
-sudo ./update.sh
 
-# 3 gp
-cd "$SCRIPT_DIR/git" || exit 1
-chmod +x gp.sh
-./gp.sh
 

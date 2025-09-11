@@ -28,7 +28,7 @@ oathtool --totp -b "<secret_key>"
 
 
 # For Dolphin(DBUS problem)
-sudo apt install qdbus-qt6 qt6-tools-dev-tools qt6-base-dev
+sudo apt install -y qdbus-qt6 qt6-tools-dev-tools qt6-base-dev
 /usr/lib/qt6/bin/qdbus org.kde.dolphin
 
 # pyenv
