@@ -26,10 +26,10 @@ sudo raspi-config
 # 1. Install
 dpkg -l
 sudo apt update & sudo apt upgrade
-sudo apt purge nano dmenu vim vim-common vim-runtime vim-tiny
+sudo apt purge nano dmenu vim vim-common vim-runtime vim-tiny -y
 
 sudo apt autoremove
-sudo apt install sway git git-lfs ssh-askpass firefox zsh code dolphin vim-gtk3 xwayland -y
+sudo apt install sway git git-lfs ssh-askpass firefox zsh code pcmanfm vim-gtk3 xwayland -y
 git lfs install
 git config --global user.name "<name>"
 git config --global user.email "<email_address>"

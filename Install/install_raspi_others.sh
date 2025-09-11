@@ -1,6 +1,5 @@
 #!/bin/bash
 
-
 #  FortClient
 sudo apt install openfortivpn -y
 sudo sh -c 'cat >> /etc/openfortivpn/config <<EOF
@@ -25,11 +24,6 @@ sudo apt install -y libfuse2
 #  2FA
 sudo apt install -y oathtool
 oathtool --totp -b "<secret_key>"
-
-
-# For Dolphin(DBUS problem)
-sudo apt install -y qdbus-qt6 qt6-tools-dev-tools qt6-base-dev
-/usr/lib/qt6/bin/qdbus org.kde.dolphin
 
 # pyenv
 curl https://pyenv.run | bash
