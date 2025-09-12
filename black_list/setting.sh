@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# hostname is pc(pc is pc)
+# hostname is pc (pc is pc)
 
 # Import functions
 . ../util.sh

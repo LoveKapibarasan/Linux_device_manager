@@ -41,7 +41,8 @@ int main() {
     hosts << "\n# Blacklist entries\n";
     while (std::getline(csv, line)) {
         if (!line.empty()) {
-            hosts << "0.0.0.0 " << line << "\n";
+            hosts << "127.0.0.1 " << line << "\n";
+            hosts << "::1 "       << line << "\n";   // IPv6 
         }
     }
 
