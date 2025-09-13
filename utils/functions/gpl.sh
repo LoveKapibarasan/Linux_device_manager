@@ -1,11 +1,12 @@
 gpl() {
-  if [ -z "$1" ]; then
-    echo "Usage: gpl \"commit message\""
-    
+  local msg="$1"
+  if [ -z "$msg" ]; then
+    echo "Usage: gpl \"commit message\" (default: Auto Commit)"
+    msg="Auto Commit"
   fi
 
   git add .
-  git commit -m "$1"
+  git commit -m "$msg"
 
   # Run pull without rebase
   if git pull --no-rebase; then
