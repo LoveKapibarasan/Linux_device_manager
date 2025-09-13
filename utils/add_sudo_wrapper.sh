@@ -4,9 +4,9 @@
 . ../util.sh
 
 root_check
-
+ZSHRC="$HOME/.zshrc"
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
-FUNCTIONS_DIR="$SCRIPT_DIR/scripts"
+FUNCTIONS_DIR="$SCRIPT_DIR/sudo_scripts"
 INSTALL_DIR="/usr/local/bin/sudo_scripts"
 
 # Check if scripts directory exists
@@ -32,4 +32,40 @@ for file in "$FUNCTIONS_DIR"/*.sh; do
   echo "Installed $name -> $INSTALL_DIR/$name"
 done
 
-echo "Scripts installed. Run them as: sudo <scriptname>"
+# Add to PATH if not already there
+if grep -q "$INSTALL_DIR" "$ZSHRC"; then
+  echo "$INSTALL_DIR is already in PATH."
+else
+  echo "export PATH=\"$INSTALL_DIR:\$PATH\"" >> "$ZSHRC"
+  echo "Added $INSTALL_DIR to PATH in $ZSHRC"
+fi
+
+
+# Ensure /usr/local/bin/sudo_scripts is in sudo secure_path
+SUDOERS_FILE="/etc/sudoers"
+TARGET_DIR="/usr/local/bin/sudo_scripts"
+
+# Extract current secure_path line
+current_path=$(sudo grep -E "^Defaults\s+secure_path=" "$SUDOERS_FILE" | sed -E 's/^Defaults\s+secure_path="([^"]+)"/\1/')
+
+if echo "$current_path" | grep -q "$TARGET_DIR"; then
+  echo "secure_path already contains $TARGET_DIR"
+else
+  echo "Adding $TARGET_DIR to secure_path ..."
+  new_path="${current_path}:${TARGET_DIR}"
+
+  # Backup first
+  sudo cp "$SUDOERS_FILE" "$SUDOERS_FILE.bak"
+
+  # Replace line
+  sudo sed -i "s|^Defaults\s\+secure_path=.*|Defaults    secure_path=\"$new_path\"|" "$SUDOERS_FILE"
+
+  # Validate syntax
+  if sudo visudo -c >/dev/null 2>&1; then
+    echo "secure_path updated successfully."
+  else
+    echo "Error in sudoers file, restoring backup!"
+    sudo cp "$SUDOERS_FILE.bak" "$SUDOERS_FILE"
+  fi
+fi
+
