@@ -1,7 +1,7 @@
 gpl() {
   if [ -z "$1" ]; then
     echo "Usage: gpl \"commit message\""
-    return 1
+    
   fi
 
   git add .

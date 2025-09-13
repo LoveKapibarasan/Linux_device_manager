@@ -1,5 +1,6 @@
 #!/bin/bash
 
+
 ZSHRC="$HOME/.zshrc"
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 FUNCTIONS_DIR="$SCRIPT_DIR/scripts"
@@ -9,16 +10,13 @@ if [ ! -d "$FUNCTIONS_DIR" ]; then
   exit 1
 fi
 
-for file in "$FUNCTIONS_DIR"/*.sh; do
-  [ -e "$file" ] || continue   # skip if no .sh files
-  name="$(basename "$file" .sh)"
+# Add to PATH if not already there
+if grep -q "$FUNCTIONS_DIR" "$ZSHRC"; then
+  echo "$FUNCTIONS_DIR is already in PATH."
+else
+  echo "export PATH=\"$FUNCTIONS_DIR:\$PATH\"" >> "$ZSHRC"
+  echo "Added $FUNCTIONS_DIR to PATH in $ZSHRC"
+fi
 
-  if grep -q "alias $name=" "$ZSHRC"; then
-    echo "Alias '$name' already exists in $ZSHRC."
-  else
-    echo "alias $name='$file'" >> "$ZSHRC"
-    echo "Added alias '$name' for $file"
-  fi
-done
+echo "Run 'source ~/.zshrc' to reload your shell."
 
-echo "Run 'source ~/.zshrc' to reload aliases."
