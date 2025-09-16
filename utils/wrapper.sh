@@ -1,4 +1,8 @@
 #!/bin/bash
+
+
+
+
 # Get the home directory of the user who invoked sudo
 if [ -n "$SUDO_USER" ]; then
     USER_HOME=$(eval echo "~$SUDO_USER")

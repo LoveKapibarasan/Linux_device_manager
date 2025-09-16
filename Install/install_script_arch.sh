@@ -1,12 +1,16 @@
+#!/bin/bash
 # Link: 公式インストールガイド(https://wiki.archlinux.jp/index.php)
 # https://qiita.com/Hayatann/items/09c2fee81fcb88d365c8
 
 # 0. create liveUSB using ventoy
 
 # 1. change keyboard layout
-loadkeys jp106
+read -p "Enter keyboard layout you want to use" keyboard
+echo "Japanese = jp106"
+loadkeys keyboard
 
-# 2.Ensure it returns 64 t use GRUB
+# 2.
+echo "Ensure it returns 64t use GRUB"
 cat /sys/firmware/efi/fw_platform_size
 
 # 3. Network setting using iwctl
@@ -20,8 +24,8 @@ station <device> connect <SSID>
 exit
 
 # 4. partition
-fdisk -l
-# or lsblk
+
+lsblk
 # Memo:
 # dev = device file 
 # NVMe=Non-Volatile Memory Express 
@@ -51,7 +55,7 @@ pacstrap -K /mnt base linux linux-firmware vim
 # 7. create fstab
 genfstab -U /mnt >> /mnt/etc/fstab
 # -U=use UUID
-# Alternative -L=use label
+# Alternative -L = use label
 # Memo:
 # fstab=file system tables
 
@@ -59,24 +63,24 @@ genfstab -U /mnt >> /mnt/etc/fstab
 arch-chroot /mnt
 
 # 8-1. locale
-# use UTC
+## Timezone
+
+## Locale(Candidates)
 vim /etc/locale.gen
-# Uncomment en_US.UTF-8 UTF-8, ja_JP.UTF-8 UTF-8, de_DE.UTF-8 UTF-8
+sed -i 's/^# *\(de_DE.UTF-8 UTF-8\)/\1/' /etc/locale.gen
+sed -i 's/^# *\(ja_JP.UTF-8 UTF-8\)/\1/' /etc/locale.gen
 locale-gen
-# Memo:
-# This creates candidates.
+## Default
+cat >> /etc/environment << "LANG=en_US.UTF-8"
 
-vim /etc/locale.conf
-# Add LANG=en_US.UTF-8
-# Memo: default locale
-
-# Keyboard
+## Keyboard
 vim /etc/vconsole.conf
 # Add 
 # KEYMAP=jp106
 
 # 8-2. Hostname
-vim /etc/hostname # write only name (pc)
+# hostname = pc
+vim /etc/hostname # write only name
 vim /etc/hosts
 
 # 127.0.0.1	localhost
@@ -85,7 +89,7 @@ vim /etc/hosts
 
 # 9. GRUB setting
 pacman -S grub efibootmgr dosfstools os-prober mtools
-# GRUB=GRand Unified Bootloader
+# GRUB = GRand Unified Bootloader
 
 grub-install --target=x86_64-efi --efi-directory=/boot --bootloader-id=<name>
 # i386-pc for UEFI(GPT)
@@ -97,13 +101,13 @@ grub-mkconfig -o /boot/grub/grub.cfg
 
 # 10. Networking setting
 pacman -S networkmanager iwd dialog
-# iwd=for wpa authentication by Intel
-# dialog=nmtui
+# iwd = wpa authentication by Intel
+# dialog = nmtui
 systemctl enable NetworkManager
 
 # 11. Never forget to set root password
-passwd # asdf1234
+passwd
 
-# 12.
+# 12. Exit and reboot
 exit
 reboot

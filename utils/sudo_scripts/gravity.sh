@@ -1,13 +1,21 @@
 #!/bin/bash
 
+if [ -n "$SUDO_USER" ]; then
+    USER_HOME=$(eval echo "~$SUDO_USER")
+else
+    USER_HOME="$HOME"
+fi
+echo "Using home directory: $USER_HOME"
+
+# Check if script is run with sudo/root privileges
+if [ "$EUID" -ne 0 ]; then
+    echo "Error: This script must be run with sudo/root privileges."
+    exit 1
+fi
+
 MODE="$1"
-DB_DIR="$HOME/Linux_device_manager/white_list_3/db"
+DB_DIR="$USER_HOME/Linux_device_manager/white_list_3/db"
 PIHOLE_DB="/etc/pihole/gravity.db"
-
-# Import functions
-. ../util.sh
-
-root_check
 
 if [ ! -f "$DB_DIR/gravity_black.db" ]; then
   echo "Error: $DB_DIR/gravity_black.db not found."

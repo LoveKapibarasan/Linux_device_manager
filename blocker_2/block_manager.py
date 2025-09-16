@@ -128,7 +128,14 @@ class UsageManager:
 
     def is_night_block_time(self) -> bool:
         start, end = self._night_block_time()
-        return start <= self._get_now().time() <= end
+        now = self._get_now().time()
+
+        if start < end:
+            # 例: 20:00 → 23:00
+            return start <= now <= end
+        else:
+            # 例: 20:00 → 翌07:00
+            return now >= start or now <= end
 
     def is_notified(self) -> bool:
         return self._get_now().minute % 10 == 0

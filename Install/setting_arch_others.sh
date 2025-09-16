@@ -1,3 +1,5 @@
+#!/bin/bash
+
 # After installation
 
 # 0. Network Setting
@@ -21,11 +23,6 @@ pacman -Sy archlinux-keyring
 # 3. Install
 # 3-1. sudo
 pacman -S sudo
-# Memo:
-# pacman=package manager
-# -S=Sync
-# -Sy=update package database
-# -u=update all package
 (EDITOR=vim) visudo
 # visudo=special command to edit /etc/sudoers
 # uncomment %wheel ALL=(ALL:ALL) ((NOPASSWD:)) ALL to allow wheel group to use sudo 
@@ -40,22 +37,10 @@ sudo pacman -S base-devel
 sudo pacman -S git openssh git-lfs vi less git-filter-repo github-cli
 git --version
 
-
-chmod 700 ~/.ssh              # ディレクトリは自分だけアクセス
-chmod 600 ~/.ssh/id_rsa       # 秘密鍵は自分だけ読める
-chmod 644 ~/.ssh/id_rsa.pub   # 公開鍵は誰でも読めてOK
-
-
-
 # 3-5. Install node.js
 sudo pacman -S nodejs npm nvm
 node -v
 npm -v
-
-sudo vim ~/.zshrc
-# export NVM_DIR="$HOME/.nvm"
-# [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
-
 
 # 3-6. For Electron
 sudo pacman -Syu atk at-spi2-core at-spi2-atk gtk3 nss alsa-lib libdrm libgbm libxkbcommon libcups
@@ -170,9 +155,3 @@ sudo pacman -Syu mesa lib32-mesa vulkan-intel vulkan-radeon lib32-vulkan-intel l
 
 # 12. PDF
 sudo pacman -S okular qpdf
-
-# 13. Authenticator
-sudo pacman -S flatpak
-sudo flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
-flatpak install flathub com.belmoussaoui.Authenticator
-

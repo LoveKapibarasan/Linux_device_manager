@@ -1,5 +1,8 @@
 #!/bin/bash
+# Import functions
+. ../util.sh
 
+root_check
 
 ZSHRC="$HOME/.zshrc"
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"

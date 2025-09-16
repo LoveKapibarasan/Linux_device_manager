@@ -1,7 +1,6 @@
 ########################################
 
 # Restricted Profiles
-#@@@
 # Chatgpt
 (^|\.)chatgpt\.com$
 (^|\.)openai\.com$
@@ -21,6 +20,7 @@
 (^|\.)neverssl.com$
 (^|\.)timeapi.*
 (^|\.)ntp\.org$
+workgroup
 
 # Captive Portal
 (^|\.)hotspot\.vodafone\.de$
@@ -59,7 +59,6 @@
 (^|\.)nodejs\.org$
 
 
-# @@@
 
 ##############################################
 
@@ -80,6 +79,9 @@
 # Outlook
 (^|\.)outlook\.live\.com$
 (^|\.)outlook\.com$
+(^|\.)microsoftonline\.com$
+(^|\.)static\.microsoft$
+(^|\.)dropboxstatic\.com$
 
 # Shogi
 (^|\.)cloudfront\.net$
@@ -117,3 +119,6 @@
 (^|\.)piwheels\.org$
 (^|\.)raspberrypi\.com$
 (^|\.)debian\.org$
+
+# Others
+^.*aicharge.*com.*$
