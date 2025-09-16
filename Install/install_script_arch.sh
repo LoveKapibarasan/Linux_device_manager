@@ -14,18 +14,36 @@ echo "Ensure it returns 64t use GRUB"
 cat /sys/firmware/efi/fw_platform_size
 
 # 3. Network setting using iwctl
-iwctl
+
+read -p "Do you want to use Wi-Fi now? (y/n): " USE_WIFI
+if [[ ! "$USE_WIFI" =~ ^[Yy]$ ]]; then
+    echo "Skipping Wi-Fi setup."
+    exit 0
+fi
+
+read -p "Enter Wi-Fi device (例: wlan0): " DEVICE
+read -p "Enter SSID: " SSID
+read -sp "Enter Wi-Fi password: " PASSWORD
+echo
+
+iwctl --passphrase "$PASSWORD" <<EOF
 device list
-# scan network
-station <device> scan
-station <device> get-networks
-station <device> connect <SSID> 
-# Then enter password
+station $DEVICE scan
+station $DEVICE get-networks
+station $DEVICE connect $SSID
 exit
+EOF
 
 # 4. partition
 
 lsblk
+cgdisk /dev/nvme0n1
+# EFI パーティション
+read -p "Enter EFI partition device (例: /dev/nvme0n1p1): " EFI_DEV
+# Root パーティション
+read -p "Enter Root partition device (例: /dev/nvme0n1p2): " ROOT_DEV
+echo "EFI partition:  $EFI_DEV"
+echo "Root partition: $ROOT_DEV"
 # Memo:
 # dev = device file 
 # NVMe=Non-Volatile Memory Express 
@@ -35,19 +53,18 @@ lsblk
 cgdisk /dev/nvme0n1
 # skip "First sector"
 # (ef00, root-8300)=(512M,-3G)
-mkfs.fat -F32 /dev/nvme0n1p<x> # EFI
+
+mkfs.fat -F32 "$EFI_DEV"
+mkfs.btrfs "$ROOT_DEV"
 # Memo:
-# 1. EFI = Extensible Firmware Interface
-# BIOS(Basic I/O System) の後継
-# OS とハードウェアのあいだを仲介するファームウェア
+# 1. EFI = Extensible Firmware Interface, BIOS(Basic I/O System) の後継, OS とハードウェアのあいだを仲介するファームウェア
 # 2. mkfs=make file system
-mkfs.btrfs /dev/nvme0n1p<y> # root
-# Btrfs=B-tree file system
+# 3. Btrfs=B-tree file system
 
 # 5. mount 
-mount /dev/nvme0n1p<y> /mnt
+mount "$ROOT_DEV" /mnt
 mkdir -p /mnt/boot
-munt /dev/nvme0n1p<x> /mnt/boot
+mount "$EFI_DEV" /mnt/boot
 
 # 6. Install all necessary packages(with vim)
 pacstrap -K /mnt base linux linux-firmware vim 
@@ -64,38 +81,50 @@ arch-chroot /mnt
 
 # 8-1. locale
 ## Timezone
+echo "Select timezone:"
+echo "1) Tokyo"
+echo "2) Berlin"
+read -p "Enter number [1-2]: " TZ_CHOICE
+
+case "$TZ_CHOICE" in
+  1) TIMEZONE="Asia/Tokyo" ;;
+  2) TIMEZONE="Europe/Berlin" ;;
+  *) echo "Invalid choice, defaulting to Tokyo"; TIMEZONE="Asia/Tokyo" ;;
+esac
+
+ln -sf /usr/share/zoneinfo/$TIMEZONE /etc/localtime
+echo "Timezone set to $TIMEZONE"
 
 ## Locale(Candidates)
-vim /etc/locale.gen
 sed -i 's/^# *\(de_DE.UTF-8 UTF-8\)/\1/' /etc/locale.gen
 sed -i 's/^# *\(ja_JP.UTF-8 UTF-8\)/\1/' /etc/locale.gen
 locale-gen
 ## Default
-cat >> /etc/environment << "LANG=en_US.UTF-8"
+echo 'LANG=en_US.UTF-8' | tee -a /etc/environment
+
 
 ## Keyboard
-vim /etc/vconsole.conf
-# Add 
-# KEYMAP=jp106
+read -p "Enter keyboard layout (ex: jp106, us): " KEYMAP
+echo "KEYMAP=${KEYMAP}" > /etc/vconsole.conf
 
 # 8-2. Hostname
 # hostname = pc
-vim /etc/hostname # write only name
-vim /etc/hosts
+# ===== Hostname =====
+read -p "Enter hostname: " HOSTNAME
+echo "${HOSTNAME}" > /etc/hostname
 
-# 127.0.0.1	localhost
-# ::1		localhost
-# 127.0.1.1	<hostname>.localdomain	<hostname>
+# ===== Hosts =====
+cat > /etc/hosts <<EOF
+127.0.0.1   localhost
+::1         localhost
+127.0.1.1   ${HOSTNAME}.localdomain ${HOSTNAME}
+EOF
 
 # 9. GRUB setting
 pacman -S grub efibootmgr dosfstools os-prober mtools
 # GRUB = GRand Unified Bootloader
+grub-install --target=x86_64-efi --efi-directory=/boot --bootloader-id=ArchLinux
 
-grub-install --target=x86_64-efi --efi-directory=/boot --bootloader-id=<name>
-# i386-pc for UEFI(GPT)
-# GPT=GUID Partition Table
-# GPT=Gnerative Pre-trained Transformer
-# See #2.
 # Update
 grub-mkconfig -o /boot/grub/grub.cfg
 
