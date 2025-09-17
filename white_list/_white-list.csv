@@ -76,6 +76,10 @@ workgroup
 (^|\.)office\.com$
 (^|\.)office\.net$
 (^|\.)msn\.com$
+(^|\.)cloud\.microsoft$
+(^|\.)pushnp\.svc\.ms$
+(^|\.)officeapps\.live\.com$
+
 # Outlook
 (^|\.)outlook\.live\.com$
 (^|\.)outlook\.com$

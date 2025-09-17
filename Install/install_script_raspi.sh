@@ -7,6 +7,11 @@
 # keyboard
 sudo sed -i 's/^XKBLAYOUT=.*/XKBLAYOUT="de"/' /etc/default/keyboard
 sudo setupcon
+## Check
+localectl status
+setxkbmap -query
+cat /etc/default/keyboard
+
 
 # hostname=pc
 sudo hostnamectl set-hostname pc
