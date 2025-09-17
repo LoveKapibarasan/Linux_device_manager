@@ -1,2 +1,2 @@
 chmodsh,find ~ -type f -name "*.sh" -exec chmod +x {} \;
-firefox,firefox --kiosk &
+firefox,env MOZ_ENABLE_WAYLAND=1 firefox --kiosk &
