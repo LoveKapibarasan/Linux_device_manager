@@ -45,8 +45,6 @@ read -p "Enter Root partition device (例: /dev/nvme0n1p2): " ROOT_DEV
 echo "EFI partition:  $EFI_DEV"
 echo "Root partition: $ROOT_DEV"
 # Memo:
-# dev = device file 
-# NVMe=Non-Volatile Memory Express 
 # n = name space
 # p = partition
 # lsblk = list block devices
@@ -94,6 +92,7 @@ esac
 
 ln -sf /usr/share/zoneinfo/$TIMEZONE /etc/localtime
 echo "Timezone set to $TIMEZONE"
+timedatectl set-timezone Europe/Berlin
 
 ## Locale(Candidates)
 sed -i 's/^# *\(de_DE.UTF-8 UTF-8\)/\1/' /etc/locale.gen
