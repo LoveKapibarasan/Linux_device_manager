@@ -1,7 +1,8 @@
+
 SSH_ENV="$HOME/.ssh/agent_env"
 
 function start_agent {
-    eval "$(ssh-agent -s)" > "$SSH_ENV"
+    ssh-agent -s > "$SSH_ENV"
     chmod 600 "$SSH_ENV"
     . "$SSH_ENV" > /dev/null
 }
@@ -16,6 +17,12 @@ else
     start_agent
 fi
 
-ssh-add -q ~/.ssh/id_rsa < /dev/null
+# 秘密鍵をまだ追加していない場合だけ追加
+for key in ~/.ssh/id_rsa ~/.ssh/id_ed25519; do
+    if [ -f "$key" ]; then
+        ssh-add -l 2>/dev/null | grep -q "$(ssh-keygen -lf "$key" | awk '{print $2}')" || ssh-add "$key"
+    fi
+done
+
 
 
