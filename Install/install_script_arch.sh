@@ -105,9 +105,10 @@ echo 'LANG=en_US.UTF-8' | tee -a /etc/environment
 ## Keyboard
 read -p "Enter keyboard layout (ex: jp106, us): " KEYMAP
 echo "KEYMAP=${KEYMAP}" > /etc/vconsole.conf
-## Check
-localectl status
-setxkbmap -query
+## Reload
+sudo localectl set-keymap de
+sudo localectl status
+
 
 
 # 8-2. Hostname

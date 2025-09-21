@@ -43,7 +43,7 @@ sudo apt autoremove
 sudo apt install sway -y
 
 ## git
-sudo apt install git git-lfs ssh-askpass 
+sudo apt install git git-lfs openssh 
 git lfs install
 
 ## firefox
