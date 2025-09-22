@@ -8,7 +8,7 @@ copy_files() {
 }
 
 
-reset_system() {
+reset_service() {
     SERVICE_NAME="$1"
     sudo systemctl stop "$SERVICE_NAME"
     sudo systemctl disable "$SERVICE_NAME"
@@ -69,3 +69,16 @@ root_check(){
         exit 1
     fi
 }
+
+# Function to get the home directory of the user who invoked sudo
+get_user_home() {
+    if [ -n "$SUDO_USER" ]; then
+        eval echo "~$SUDO_USER"
+    else
+        echo "$HOME"
+    fi
+}
+
+# Example usage
+USER_HOME=$(get_user_home)
+echo "Using home directory: $USER_HOME"

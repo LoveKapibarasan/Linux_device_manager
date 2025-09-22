@@ -12,7 +12,7 @@ root_check
 sudo ./delete_docker.sh
 
 # Reset the service
-reset_system "${SERVICE_NAME}"
+reset_service "${SERVICE_NAME}"
 
 sudo cp ${SERVICE_NAME} ${SERVICE_PATH}
 

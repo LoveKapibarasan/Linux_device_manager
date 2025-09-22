@@ -1,14 +1,10 @@
 #!/bin/bash
 
+# Import functions
+. ../util.sh
+root_check
 
-
-
-# Get the home directory of the user who invoked sudo
-if [ -n "$SUDO_USER" ]; then
-    USER_HOME=$(eval echo "~$SUDO_USER")
-else
-    USER_HOME="$HOME"
-fi
+USER_HOME=$(get_user_home)
 echo "Using home directory: $USER_HOME"
 
 

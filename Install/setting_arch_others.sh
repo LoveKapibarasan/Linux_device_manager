@@ -13,12 +13,7 @@ useradd -m -G wheel <username>
 # “big wheel” = 大物・偉い人
 passwd <username>
 
-# 2. pacman setting
-pacman -Syu
-pacman -Sy archlinux-keyring 
-# Memo:
-# PGP=Pretty Good Privacy
-# 1.暗号化　2.署名　3.鍵管理
+
 
 # 3. Install
 # 3-1. sudo

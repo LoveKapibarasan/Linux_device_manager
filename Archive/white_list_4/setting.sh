@@ -7,11 +7,11 @@ APP_PATH=${APP_DIR}/regexdns.py
 SERVICE_PATH=/etc/systemd/system/${SERVICE_NAME}
 
 # Import functions
-. ../reset_system.sh
+. ../reset_service.sh
 . ../copy_files.sh
 
 # Reset the service
-reset_system "${SERVICE_NAME}"
+reset_service "${SERVICE_NAME}"
 
 sudo cp ${SERVICE_NAME} ${SERVICE_PATH}
 
