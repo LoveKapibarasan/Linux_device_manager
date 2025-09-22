@@ -38,7 +38,7 @@ node -v
 npm -v
 
 # 3-6. For Electron
-sudo pacman -Syu atk at-spi2-core at-spi2-atk gtk3 nss alsa-lib libdrm libgbm libxkbcommon libcups
+sudo pacman -S atk at-spi2-core at-spi2-atk gtk3 nss alsa-lib libdrm libgbm libxkbcommon libcups
 sudo pacman -S fuse2 fuse3
 
 # 3-7. Japanese setting
@@ -53,7 +53,7 @@ sudo pacman -S fcitx5 fcitx5-configtool fcitx5-mozc fcitx5-gtk fcitx5-qt
 # Then setting up shutdown-cui
 
 # 1. Python core
-sudo pacman -Syu python
+sudo pacman -S python
 
 # 2. Essential packaging tools
 sudo pacman -S python-pip python-setuptools python-wheel
@@ -64,6 +64,8 @@ sudo pacman -S python-virtualenv python-tox python-pytest
 # 4. Documentation
 sudo pacman -S python-docs
 
+# 5. Pyenv
+yay -S pyenv pyenv-virtualenv
 
 # 3-9. Purge vim and install gvim
 sudo pacman -R vim
@@ -90,7 +92,7 @@ sudo pacman -S dolphin
 # 2. enable autosave
 
 # 3-12. clang
-sudo pacman -Syu clang llvm lld
+sudo pacman -S clang llvm lld
 
 # 4. WM
 sudo pacman -S kitty wl-clipboard xdg-desktop-portal-hyprland xdg-desktop-portal xdg-desktop-portal-wlr zsh
@@ -104,33 +106,25 @@ sudo pacman -S  dunst waybar grim slurp wtype
 # grim/slurp → screenshot
 # xdg-desktop-portal-hyprland → for Electron/Flatpak
 # wtype → for python-util, screenshot
-
+hyprctl reload
+hyprland
 
 # Make zsh as default
 chsh -s $(which zsh)
-
-vim  ~/.zprofile
-#if [[ -z $DISPLAY ]] && [[ $(tty) == /dev/tty1 ]]; then
-#  exec Hyprland
-#fi
-
 # kitty automatically care system shell default
 
 # 5 Network settings
 sudo pacman -Syu bind wget
 
-# 6 time zone
-sudo timedatectl set-timezone Europe/Berlin
-
-# 7 Audio
+# 6 Audio
 sudo pacman -S pipewire pipewire-alsa pipewire-pulse pipewire-jack wireplumber pavucontrol helvum easyeffects sof-firmware
 
-# 8 Fingerprint
+# 7 Fingerprint
 sudo pacman -S fprintd
 fprintd-enroll $USER -f right-index-finger
 sudo -E vim /etc/pam.d/system-local-login
 
-# 9 yay
+# 8 yay
 cd ~
 git clone https://aur.archlinux.org/yay.git
 cd yay
@@ -138,15 +132,26 @@ makepkg -si
 yay -S nkf
 
 
-# 10. FortClient nordvpn
+# 9. FortClient nordvpn
 # the full GUI client
 yay -S forticlient nordvpn-bin nordvpn-gui
 yay -Rns nordvpn-bin nordvpn-gui
 
 
 # 11. Graphic Drivers
+
+# sudo /etc/pacman.conf
+#[multilib]
+#Include = /etc/pacman.d/mirrorlist
+
 # Intel => Vulkan, mesa 
-sudo pacman -Syu mesa lib32-mesa vulkan-intel vulkan-radeon lib32-vulkan-intel lib32-vulkan-radeon
+sudo pacman -S mesa lib32-mesa vulkan-intel vulkan-radeon lib32-vulkan-intel lib32-vulkan-radeon
+
+# Ryzen
+sudo pacman -S mesa lib32-mesa vulkan-radeon lib32-vulkan-radeon
 
 # 12. PDF
 sudo pacman -S okular qpdf
+
+# 13. Btop
+sudo pacman -S btop
