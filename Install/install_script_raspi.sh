@@ -69,6 +69,10 @@ sudo apt install fonts-noto-cjk fonts-noto-cjk-extra -y
 
 # 3. Pihole
 curl -sSL https://install.pi-hole.net | bash
+# choose wlp3s0 interface
+# choose cloudflare or google
+# show everything for ETL
+# sudo setpassword
 sudo apt install sqlite3 libsqlite3-dev -y
 
 # 4. fcitx5

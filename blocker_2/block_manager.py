@@ -5,7 +5,7 @@ import requests
 import os
 from datetime import datetime
 from datetime import time as dtime
-from utils import notify, shutdown_all, suspend_all, protect_usage_file, read_usage_file, update_usage_file, is_ntp_synced
+from utils import notify, shutdown_all, suspend_all, protect_usage_file, read_usage_file, update_usage_file, is_ntp_synced, toggle_eth
 
 # === Time Unit Constants ===
 UNIT = 60
@@ -162,6 +162,7 @@ def start_loop():
             # Night blocking time check
             if usage.is_night_block_time() or usage.is_limit_exceeded():
                 try:
+                    toggle_eth(False)
                     shutdown_all()
                 except Exception as e:
                     notify(f"Shutdown failed {str(e)}")
@@ -170,6 +171,7 @@ def start_loop():
             # Pomodoro block time check
             if usage.is_pomodoro_block_time():
                 try:
+                    toggle_eth(False)
                     suspend_all()
                 except Exception as e:
                     notify(f"Suspend failed {str(e)}")
@@ -179,6 +181,7 @@ def start_loop():
                 usage.notify_remaining_time()
             
             usage.add_minutes()
+            toggle_eth(True)
 
         except Exception as e:
             notify(f"Error happens: {str(e)}")

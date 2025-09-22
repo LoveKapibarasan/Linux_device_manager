@@ -10,6 +10,9 @@ SERVICE_PATH=/etc/systemd/system/${SERVICE_NAME}
 . ../util.sh
 root_check
 
+
+
+
 # Reset the service
 reset_service "${SERVICE_NAME}"
 
@@ -21,5 +24,19 @@ sudo cp ${SERVICE_NAME} ${SERVICE_PATH}
 copy_files "$APP_DIR"
 
 create_venv "$APP_DIR"
+
+
+
+cd "$APP_DIR"
+
+read -p "Do you want to shutdown at night? (y/N) " answer
+if [[ "$answer" == "y" || "$answer" == "Y" ]]; then
+    # Delete 'shutdown_all()', 'suspend_all()'  in block_manager.py
+    sed -i '/shutdown_all()/d' block_manager.py
+    sed -i '/suspend_all()/d' block_manager.py
+    echo "Updated block_manager.py"
+else
+    echo "No changes made."
+fi
 
 start_service "$SERVICE_NAME"

@@ -1,5 +1,9 @@
 #!/bin/bash
 
+# Global Variables
+SERVICE_DIR=$HOME/.config/systemd/user
+
+# Functions
 copy_files() {
     APP_DIR="$1"
     sudo rm -rf "$APP_DIR"
@@ -7,6 +11,15 @@ copy_files() {
     sudo cp -r . "$APP_DIR/"
 }
 
+copy_user_service_files(){
+    BASE_NAME="$1"
+    SERVICE_DIR="$2"
+    mkdir -p "$SERVICE_DIR"
+    cp "${BASE_NAME}.service" "$SERVICE_DIR"
+    if [[ ! -f "${BASE_NAME}.timer" ]]; then
+        cp "${BASE_NAME}.timer" "$SERVICE_DIR"
+    fi
+}
 
 reset_service() {
     SERVICE_NAME="$1"
@@ -19,12 +32,6 @@ reset_service() {
     sudo systemctl daemon-reexec
 }
 
-create_venv() {
-    APP_DIR="$1"
-    /usr/bin/python3 -m venv "$APP_DIR/venv"
-    sudo "$APP_DIR/venv/bin/pip" install -r "$APP_DIR/requirements.txt"
-}
-
 start_service() {
     SERVICE_NAME="$1"
     sudo systemctl start "$SERVICE_NAME"
@@ -32,8 +39,52 @@ start_service() {
     journalctl -u "$SERVICE_NAME" -f
 }
 
+reset_user_service() {
+    SERVICE_NAME="$1"
+    systemctl --user stop "$SERVICE_NAME"
+    systemctl --user disable "$SERVICE_NAME"
+    rm -f "$HOME/.config/systemd/user/$SERVICE_NAME"
+    rm -f "$HOME/.config/systemd/user/multi-user.target.wants/$SERVICE_NAME"
+    systemctl --user reset-failed "$SERVICE_NAME"
+    systemctl --user daemon-reload
+    systemctl --user daemon-reexec
+}
 
-#!/bin/bash
+start_user_service() {
+    SERVICE_NAME="$1"
+    systemctl --user enable --now "$SERVICE_NAME"
+    systemctl --user status "$SERVICE_NAME" --no-pager
+    echo "logs (follow mode):"
+    journalctl --user -u "$SERVICE_NAME" -n 20 -f
+}
+
+
+reset_user_timer() {
+    TIMER_NAME="$1" 
+    systemctl --user stop "$TIMER_NAME"
+    systemctl --user disable "$TIMER_NAME"
+    rm -f "$HOME/.config/systemd/user/$TIMER_NAME"
+    rm -f "$HOME/.config/systemd/user/timers.target.wants/$TIMER_NAME"
+    systemctl --user reset-failed "$TIMER_NAME"
+    systemctl --user daemon-reload
+    systemctl --user daemon-reexec
+}
+
+
+
+start_user_timer() {
+    TIMER_NAME="$1"
+    systemctl --user enable --now "$TIMER_NAME"
+    systemctl --user list-timers --all | grep "$TIMER_NAME"
+    echo "📌 logs:"
+    journalctl --user -u "${TIMER_NAME%.timer}.service" -n 20 -f
+}
+
+create_venv() {
+    APP_DIR="$1"
+    /usr/bin/python3 -m venv "$APP_DIR/venv"
+    sudo "$APP_DIR/venv/bin/pip" install -r "$APP_DIR/requirements.txt"
+}
 
 clean_logs() {
     if [ -z "$1" ]; then
@@ -82,3 +133,10 @@ get_user_home() {
 # Example usage
 USER_HOME=$(get_user_home)
 echo "Using home directory: $USER_HOME"
+
+
+replace_vars() {
+    local basename=$1
+    local username=$2
+    sed "s|<USER>|$username|g" "${basename}.example" > "$basename"
+}
