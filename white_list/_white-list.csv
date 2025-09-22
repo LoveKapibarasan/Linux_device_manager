@@ -20,6 +20,7 @@
 (^|\.)neverssl.com$
 (^|\.)timeapi.*
 (^|\.)ntp\.org$
+(^|\.)archlinux\.org$
 workgroup
 
 # Captive Portal

@@ -9,7 +9,7 @@ APP_PATH=${APP_DIR}/white_list_2.py
 SERVICE_PATH=/etc/systemd/system/${SERVICE_NAME}
 
 # Import functions
-. ../reset_system.sh
+. ../reset_service.sh
 . ../copy_files.sh
 . ../available_journal.sh
 . ../disable_time.sh
@@ -21,7 +21,7 @@ sudo apt-get install -y dnsmasq ipset
 
 
 # Reset the service
-reset_system "${SERVICE_NAME}"
+reset_service "${SERVICE_NAME}"
 
 sudo cat > ${SERVICE_PATH} <<  'EOF'
 [Unit]

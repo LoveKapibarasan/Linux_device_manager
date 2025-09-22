@@ -13,12 +13,7 @@ useradd -m -G wheel <username>
 # “big wheel” = 大物・偉い人
 passwd <username>
 
-# 2. pacman setting
-pacman -Syu
-pacman -Sy archlinux-keyring 
-# Memo:
-# PGP=Pretty Good Privacy
-# 1.暗号化　2.署名　3.鍵管理
+
 
 # 3. Install
 # 3-1. sudo
@@ -161,15 +156,35 @@ sudo pacman -S okular qpdf
 # 13. Btop
 sudo pacman -S btop
 
-# 14. Server
-sudo pacman -S wayvnc ttailscale tigervnc
-mkdir -p ~/.vnc
-echo "<password>" | vncpasswd -f > ~/.vnc/passwd
-chmod 600 ~/.vnc/passwd
-
-wayvnc 0.0.0.0 5900
-
+# 14. Tailscale Wayvnc
+sudo pacman -S wayvnc
+vncpasswd ~/.vncpasswd
+chmod 600 ~/.vncpasswd
+wayvnc 0.0.0.0 5900 -p ~/.vncpasswd
+ss -tlnp | grep 5900 # This should not be 127.0.0.1
 
 
+sudo pacman -S tailscale
+sudo systemctl enable --now tailscaled
+sudo tailscale up
+tailscale ip -4
+tailscale ping xx.xx.xx.xx # It should return "pong"
+sudo systemctl enable --now sshd
 
+# 15. SELinux
+# Check
+zgrep SELINUX /proc/config.gz # CONFIG_SECURITY_SELINUX=y
+sudo pacman -S selinux-utils selinux-policy
 
+sudo sed -i 's/GRUB_CMDLINE_LINUX_DEFAULT="/GRUB_CMDLINE_LINUX_DEFAULT="selinux=1 security=selinux enforcing=0 /' /etc/default/grub
+
+sudo grub-mkconfig -o /boot/grub/grub.cfg
+
+# Apply SELinux context to files
+sudo setfiles -F /etc/selinux/targeted/contexts/files/file_contexts /
+
+# SELinux 設定ファイル
+sudo tee /etc/selinux/config <<'EOF'
+SELINUX=permissive
+SELINUXTYPE=targeted
+EOF

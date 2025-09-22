@@ -1,13 +1,13 @@
 #!/bin/bash
 
-mkdir -p ~/.config/systemd/user
-cp wayvnc.service ~/.config/systemd/user/wayvnc.service
 
-systemctl --user daemon-reload
-systemctl --user enable --now wayvnc.service
+# Import functions
+. ../util.sh
 
-systemctl --user status wayvnc.service
+BASE_NAME=wayvnc
+SERVICE_NAME="${BASE_NAME}.service"
 
-tailscale ip -4 # IP
-tailscale status # Magic Name
+copy_user_service_files "$BASE_NAME" "$SERViCE_DIR"
 
+reset_user_service "$SERVICE_NAME"
+start_user_service "$SERVICE_NAME"
