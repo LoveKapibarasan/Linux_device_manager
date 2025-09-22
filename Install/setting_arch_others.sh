@@ -160,3 +160,16 @@ sudo pacman -S okular qpdf
 
 # 13. Btop
 sudo pacman -S btop
+
+# 14. Server
+sudo pacman -S wayvnc ttailscale tigervnc
+mkdir -p ~/.vnc
+echo "<password>" | vncpasswd -f > ~/.vnc/passwd
+chmod 600 ~/.vnc/passwd
+
+wayvnc 0.0.0.0 5900
+
+
+
+
+

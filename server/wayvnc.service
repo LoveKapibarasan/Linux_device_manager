@@ -1,0 +1,11 @@
+[Unit]
+Description=WayVNC server
+After=graphical.target
+
+[Service]
+ExecStart=/usr/bin/wayvnc 0.0.0.0 5900 --password-file ~/.vnc/passwd
+Restart=on-failure
+Environment=WAYLAND_DISPLAY=wayland-1
+
+[Install]
+WantedBy=graphical.target
