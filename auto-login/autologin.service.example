@@ -3,4 +3,4 @@ Description=Enable autologin before nightly job
 
 [Service]
 Type=oneshot
-ExecStart=/home/<USER>/toggle-autologin.sh
+ExecStart=/usr/bin/sudo /home/<USER>/toggle-autologin.sh
