@@ -1,11 +1,7 @@
 #!/bin/bash
 
-ls -l /etc/resolv.conf 
-
-sudo rm /etc/resolv.conf
-sudo touch /etc/resolv.conf
-# only 'nameserver 127.0.0.1' is best
-sudo echo 'nameserver 127.0.0.1' | sudo tee /etc/resolv.conf
+# Import functions
+. ../util.sh
 
 #=== NetworkManager ===
 # 1.
@@ -24,13 +20,4 @@ fi
 
 sudo cat /etc/NetworkManager/NetworkManager.conf
 
-# 2. make file immutable
-sudo chattr +i /etc/resolv.conf
-
-#=== resolved ===
-sudo systemctl stop systemd-resolved
-sudo systemctl disable systemd-resolved
-
-
-cd /opt/pihole
-
+enable_resolved

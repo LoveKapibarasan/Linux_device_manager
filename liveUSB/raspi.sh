@@ -1,24 +1,9 @@
 #!/bin/bash
 set -e
 
-# ==== デバイス確認 ====
-echo "[*] 接続中のブロックデバイス一覧:"
-lsblk -o NAME,SIZE,TYPE,MOUNTPOINT
+source ../util.sh
 
-# ==== 入力を促す ====
-read -rp "書き込み先デバイス (例: /dev/sdX): " DEVICE
-
-# 入力が存在しない場合は中断
-if [[ -z "$DEVICE" ]]; then
-    echo "エラー: デバイスが指定されていません"
-    exit 1
-fi
-
-# /dev/sda のようなブロックデバイスかどうか簡易チェック
-if [[ ! -b "$DEVICE" ]]; then
-    echo "エラー: $DEVICE はブロックデバイスではありません"
-    exit 1
-fi
+select_device || exit 1
 
 WORKDIR=$(mktemp -d -p /tmp)
 cd "$WORKDIR"

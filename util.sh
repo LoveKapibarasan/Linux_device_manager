@@ -3,6 +3,10 @@
 # Global Variables
 SERVICE_DIR=$HOME/.config/systemd/user
 
+
+is_command() {
+  command -v "$1" >/dev/null 2>&1
+}
 # Functions
 copy_files() {
     APP_DIR="$1"
@@ -148,4 +152,145 @@ allow_nopass() {
     USER_HOME=$(get_user_home)
     mkdir -p "$USER_HOME/service_scripts"
     cp "${basename}.sh" "$USER_HOME/service_scripts/${SCRIPT_NAME}.sh"
+}
+
+
+enable_resolved() {
+  echo "[*] Enabling systemd-resolved..."
+  sudo chattr -i /etc/resolv.conf 2>/dev/null
+  sudo rm -f /etc/resolv.conf
+  sudo systemctl enable systemd-resolved --now
+  echo "[*] systemd-resolved enabled. Pi-hole setup can run now."
+sudo tee /etc/resolv.conf >/dev/null <<EOF
+nameserver 1.1.1.1
+nameserver 8.8.8.8
+EOF
+    if ! is_command pihole; then
+        docker exec -it pihole bash -c "echo -e 'nameserver 1.1.1.1\nnameserver 8.8.8.8' > /etc/resolv.conf"
+    fi
+  sudo cat /etc/resolv.conf
+}
+
+disable_resolved() {
+  echo "[*] Disabling systemd-resolved and locking resolv.conf..."
+  sudo systemctl disable systemd-resolved --now
+  sudo rm -f /etc/resolv.conf
+  echo "nameserver 127.0.0.1" | sudo tee /etc/resolv.conf >/dev/null
+  sudo chattr +i /etc/resolv.conf
+  echo "[*] resolv.conf set to 127.0.0.1 and locked."
+  sudo cat /etc/resolv.conf
+}
+
+# ==== デバイス入力 & 確認関数 ====
+select_device() {
+    echo "[*] 接続中のブロックデバイス一覧:"
+    lsblk -o NAME,SIZE,TYPE,MOUNTPOINT
+
+    read -rp "書き込み先デバイス (例: /dev/sdX): " DEVICE
+
+    # 入力が空なら中断
+    if [[ -z "$DEVICE" ]]; then
+        echo "エラー: デバイスが指定されていません"
+        return 1
+    fi
+
+    # ブロックデバイスか確認
+    if [[ ! -b "$DEVICE" ]]; then
+        echo "エラー: $DEVICE はブロックデバイスではありません"
+        return 1
+    fi
+
+    export DEVICE
+    echo "[OK] 使用するデバイス: $DEVICE"
+}
+
+# ==== デバイス選択 & マウント抽象関数 ====
+mount_device() {
+    # デバイス選択
+    select_device || return 1
+
+    read -rp "一時マウント先を入力してください (例: /mnt/usb): " usbpath
+
+    # デフォルト値
+    if [[ -z "$usbpath" ]]; then
+        usbpath="/mnt/usb"
+    fi
+
+    # 既にマウントされているか確認
+    already_mounted=$(lsblk -o NAME,MOUNTPOINT -n | grep "$(basename "$DEVICE")" | awk '{print $2}')
+
+    if [[ -n "$already_mounted" ]]; then
+        echo "[INFO] $DEVICE は既に $already_mounted にマウントされています"
+        final_mount="$already_mounted"
+    else
+        # マウントポイントが存在しなければ作成
+        if [[ ! -d "$usbpath" ]]; then
+            echo "[INFO] マウントポイント $usbpath を作成します"
+            sudo mkdir -p "$usbpath"
+        fi
+
+        echo "[INFO] $DEVICE を $usbpath にマウントします..."
+        sudo mount "$DEVICE" "$usbpath" || {
+            echo "エラー: マウントに失敗しました"
+            return 1
+        }
+        final_mount="$usbpath"
+    fi
+
+    export final_mount
+    echo "[OK] マウントパス: $final_mount"
+}
+
+# ==== バックアップユーティリティ (引数対応版) ====
+backup_to_usb() {
+    # 第1引数: コピー元
+    local src="$1"
+
+    # デバイス選択とマウント
+    mount_device || return 1
+
+    # USB 内ディレクトリ指定
+    read -rp "USB 内の保存ディレクトリ名を入力してください : " usbdir
+    if [[ -z "$usbdir" ]]; then
+        usbdir="backup_$(date +%Y%m%d_%H%M%S)"
+        echo "[INFO] デフォルトディレクトリ $usbdir を使用します"
+    fi
+    fullpath="$final_mount/$usbdir"
+
+    # ディレクトリ作成
+    if [[ ! -d "$fullpath" ]]; then
+        echo "[INFO] $fullpath を作成します ..."
+        sudo mkdir -p "$fullpath"
+    fi
+
+    # コピー元が引数で未指定なら対話式で入力
+    if [[ -z "$src" ]]; then
+        read -rp "バックアップするファイルまたはディレクトリのパスを入力してください: " src
+    fi
+
+    # 入力チェック
+    if [[ -z "$src" || ! -e "$src" ]]; then
+        echo "エラー: コピー元 $src が存在しません"
+        return 1
+    fi
+
+    # コピー先ファイル名（任意でリネーム可能）
+    read -rp "保存するファイル名（空 Enter で元の名前を使用）: " newname
+    if [[ -z "$newname" ]]; then
+        newname="$(basename "$src")"
+    fi
+
+    # コピー実行
+    echo "[INFO] $src を $fullpath/$newname にコピーします ..."
+    sudo cp -r "$src" "$fullpath/$newname" || {
+        echo "エラー: コピーに失敗しました"
+        return 1
+    }
+
+    echo "[OK] バックアップ保存完了: $fullpath/$newname"
+
+    # 自動アンマウント
+    sudo umount "$usbpath"
+    echo "[OK] USB をアンマウントしました ($usbpath)"
+    
 }

@@ -1,4 +1,5 @@
 #!/bin/bash
+
 # Import functions
 . ../util.sh
 

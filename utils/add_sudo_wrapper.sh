@@ -15,12 +15,11 @@ if [ ! -d "$FUNCTIONS_DIR" ]; then
   exit 1
 fi
 
-# Create install directory if it doesn't exist
-if [ ! -d "$INSTALL_DIR" ]; then
-  echo "Creating $INSTALL_DIR ..."
-  sudo mkdir -p "$INSTALL_DIR"
-  sudo chmod 755 "$INSTALL_DIR"
-fi
+# Create install directory
+sudo rm -rf "$INSTALL_DIR"
+sudo mkdir -p "$INSTALL_DIR"
+sudo chmod 755 "$INSTALL_DIR"
+
 
 # Copy scripts into /usr/local/bin/sudo_scripts
 for file in "$FUNCTIONS_DIR"/*.sh; do

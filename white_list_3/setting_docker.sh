@@ -18,11 +18,12 @@ sudo cp ${SERVICE_NAME} ${SERVICE_PATH}
 
 copy_files "$APP_DIR"
 
-sudo ./pihole_protect.sh
 
 start_service "$SERVICE_NAME"
 
-sudo ./generate_pass.sh
+# --- After setting up Pihole, change /etc/resolv.conf
+sudo ./pihole_protect.sh
 
+sudo ./generate_pass.sh
 
 sudo docker logs -f pihole 

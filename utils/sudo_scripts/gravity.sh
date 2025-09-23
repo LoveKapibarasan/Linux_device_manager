@@ -7,40 +7,67 @@ else
 fi
 echo "Using home directory: $USER_HOME"
 
-# Check if script is run with sudo/root privileges
-if [ "$EUID" -ne 0 ]; then
-    echo "Error: This script must be run with sudo/root privileges."
+# import
+source ${USER_HOME}/Linux_device_manager/util.sh
+
+# Check root
+root_check
+
+MODE="$1"
+if [ -z "$MODE" ]; then
+    echo "Usage: $0 {middle|strict}"
     exit 1
 fi
 
-MODE="$1"
+# 共通パス
 DB_DIR="$USER_HOME/Linux_device_manager/white_list_3/db"
 PIHOLE_DB="/etc/pihole/gravity.db"
+CONTAINER_NAME="pihole"
 
-if [ ! -f "$DB_DIR/gravity_black.db" ]; then
-  echo "Error: $DB_DIR/gravity_black.db not found."
-  exit 1
-fi
-if [ ! -f "$DB_DIR/gravity_current.db" ]; then
-  echo "Error: $DB_DIR/gravity_current.db not found."
-  exit 1
-fi
+# DB存在チェック
+for f in gravity_black.db gravity_current.db; do
+    if [ ! -f "$DB_DIR/$f" ]; then
+        echo "Error: $DB_DIR/$f not found."
+        exit 1
+    fi
+done
 
+# === 実行環境を判定 ===
+if is_command pihole; then
+    ENVIRONMENT="local"
+else
+    ENVIRONMENT="docker"
+fi
+echo "[*] Detected environment: $ENVIRONMENT"
+
+enable_resolved
+
+# === 処理 ===
 case "$MODE" in
   middle)
     echo "[*] Switching to middle mode..."
-    sudo mv "$PIHOLE_DB" "$DB_DIR/gravity_current.db"
-    sudo cp "$DB_DIR/gravity_black.db" "$PIHOLE_DB"
-    sudo pihole -g
+    if [ "$ENVIRONMENT" = "local" ]; then
+        cp "$DB_DIR/gravity_black.db" "$PIHOLE_DB"
+        pihole -g
+    else
+        docker cp "$DB_DIR/gravity_black.db" "$CONTAINER_NAME:$PIHOLE_DB"
+        docker exec "$CONTAINER_NAME" pihole -g
+    fi
     ;;
   strict)
     echo "[*] Switching to strict mode..."
-    sudo mv "$PIHOLE_DB" "$DB_DIR/gravity_black.db"
-    sudo cp "$DB_DIR/gravity_current.db" "$PIHOLE_DB"
-    sudo pihole -g
+    if [ "$ENVIRONMENT" = "local" ]; then
+        cp "$DB_DIR/gravity_current.db" "$PIHOLE_DB"
+        pihole -g
+    else
+        docker cp "$DB_DIR/gravity_current.db" "$CONTAINER_NAME:$PIHOLE_DB"
+        docker exec "$CONTAINER_NAME" pihole -g
+    fi
     ;;
   *)
     echo "Usage: $0 {middle|strict}"
     exit 1
     ;;
 esac
+
+disable_resolved
