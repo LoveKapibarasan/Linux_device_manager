@@ -2,15 +2,23 @@
 
 #  FortClient
 sudo apt install openfortivpn -y
-sudo sh -c 'cat >> /etc/openfortivpn/config <<EOF
+
+echo "openfortivpn"
+read -p "Username: " username
+echo
+read -p "Password: " password
+echo
+
+cat <<EOF | sudo tee -a /etc/openfortivpn/config > /dev/null
 host = sslvpn.oth-regensburg.de
 port = 443
 realm = vpn-default
 trusted-cert = 364fb4fa107e591626b3919f0e7f8169e9d2097974f3e3d55e56c7c756a1f94a
-username = abc12345
-password = meinpasswort
-EOF'
-sudo openfortivpn
+username = $username
+password = $password
+EOF
+
+
 
 # Graphics
 sudo apt install -y mesa-utils mesa-vulkan-drivers vulkan-tools
@@ -21,8 +29,7 @@ sudo apt install -y mesa-utils mesa-vulkan-drivers vulkan-tools
 sudo apt install -y libfuse2 
 
 #  2FA
-sudo apt install -y oathtool
-oathtool --totp -b "<secret_key>"
+# sudo apt install -y oathtool
 
 # pyenv
 curl https://pyenv.run | bash
@@ -44,13 +51,11 @@ sudo apt install -y \
 # NVM
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/master/install.sh | bash
 node -v
-nvm install x 
-nvm use x
+
 
 
 # OOM ZRAM
 sudo apt install earlyoom zram-tools -y
-sudo systemctl status earlyoom
 
 # stop swap 
 sudo dphys-swapfile swapoff 
@@ -83,13 +88,35 @@ curl -fsSL https://tailscale.com/install.sh | sh
 sudo systemctl enable tailscaled
 sudo systemctl start tailscaled
 sudo tailscale up
-sudo tailscale up --accept-dns=falseo
+sudo tailscale up --accept-dns=false
 
 sudo apt install tigervnc-viewer
-vncviewer xx.xx.xx.xx:5900
-## SSH Authentication
-ssh-keygen -t ed25519
-ssh-copy-id takanori@xx.xx.xx.xx
+
+# Show current Tailscale connections
+tailscale status
+
+# Prompt for IP and port
+read -rp "Enter IP: " ip
+read -rp "Enter port: " port
+
+# Open VNC viewer
+vncviewer "$ip:$port"
+
+# --- SSH Key Authentication Setup ---
+# Generate an ed25519 key if not already present
+if [ ! -f "$HOME/.ssh/id_ed25519" ]; then
+    ssh-keygen -t ed25519 -f "$HOME/.ssh/id_ed25519" -N ""
+fi
+
+# Prompt for username and server
+read -rp "Enter SSH username: " username
+read -rp "Enter server IP or hostname: " server
+
+# Copy SSH key to server
+ssh-copy-id -i "$HOME/.ssh/id_ed25519.pub" "$username@$server"
+
+# Open SSH session
+ssh "$username@$server"
 
 
 

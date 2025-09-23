@@ -1,8 +1,16 @@
 #!/bin/bash
 
 git lfs install
-git config --global user.name "<name>"
-git config --global user.email "<email_address>"
+
+read -p "Enter username" username
+echo
+read -p "Enter email" email
+echo
+
+cd 
+
+git config --global user.name ""$username""
+git config --global user.email ""$email""
 git config --list
 
 git clone git@github.com:LoveKapibarasan/shogihome.git

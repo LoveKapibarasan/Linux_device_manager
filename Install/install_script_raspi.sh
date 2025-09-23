@@ -9,7 +9,7 @@ sudo sed -i 's/^XKBLAYOUT=.*/XKBLAYOUT="de"/' /etc/default/keyboard
 sudo setupcon
 ## Check
 localectl status
-setxkbmap -query
+# setxkbmap -query
 cat /etc/default/keyboard
 
 
@@ -33,11 +33,9 @@ sudo raspi-config
 ## alsamixer
 
 # 1. Install
-dpkg -l
-sudo apt update & sudo apt upgrade
-## Delete nano vim 
-sudo apt purge nano dmenu vim vim-common vim-runtime vim-tiny -y
-sudo apt autoremove
+sudo apt update -y 
+sudo apt upgrade -y
+
 
 ## sway
 sudo apt install sway -y

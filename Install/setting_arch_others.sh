@@ -5,13 +5,14 @@
 # 0. Network Setting
 nmtui
 
+read -p username
 # 1. Create user(root is dangerous)
-useradd -m -G wheel <username>
+useradd -m -G wheel $username
 # Memo:
 # -m=create home directory
 # -G=join wheel(typically used for sudo)
 # “big wheel” = 大物・偉い人
-passwd <username>
+passwd $username
 
 pacman -Syyu
 
@@ -19,11 +20,12 @@ pacman -Syyu
 # 3-1. sudo
 pacman -S sudo
 (EDITOR=vim) visudo
+echo "uncomment '%wheel ALL=(ALL:ALL) ((NOPASSWD:)) ALL' to allow wheel group to use sudo "
 # visudo=special command to edit /etc/sudoers
-# uncomment %wheel ALL=(ALL:ALL) ((NOPASSWD:)) ALL to allow wheel group to use sudo 
+
 
 # Change user
-su - <username>
+su - $username
 
 # 3-3. Basic Packages
 sudo pacman -S base-devel
@@ -46,8 +48,14 @@ sudo pacman -S noto-fonts noto-fonts-cjk noto-fonts-emoji
 sudo pacman -S fcitx5 fcitx5-configtool fcitx5-mozc fcitx5-gtk fcitx5-qt
 
 # 1. /etc/environment
-# 2. ~/.zprofile
-# 3. ~/.config/hypr/hyprland.conf
+sudo bash -c 'cat >> /etc/environment << "EOF"
+GTK_IM_MODULE=fcitx
+QT_IM_MODULE=fcitx
+XMODIFIERS=@im=fcitx
+SDL_IM_MODULE=fcitx
+GLFW_IM_MODULE=fcitx
+EOF'
+# 2. ~/.zprofile, ~/.config/hypr/hyprland.conf
 
 # 3-8. Install Python
 # Then setting up shutdown-cui
