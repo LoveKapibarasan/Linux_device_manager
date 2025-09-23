@@ -2,9 +2,9 @@
 
 git lfs install
 
-read -p "Enter username" username
+read -p "Enter username: " username
 echo
-read -p "Enter email" email
+read -p "Enter email: " email
 echo
 
 cd 
