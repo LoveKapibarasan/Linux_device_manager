@@ -2,8 +2,8 @@
 Description=Toggle autologin for nightly jobs
 
 [Timer]
+OnCalendar=*-*-* 20:30:00
 OnCalendar=*-*-* 00:30:00
-OnCalendar=*-*-* 08:30:00
 Persistent=true
 
 [Install]

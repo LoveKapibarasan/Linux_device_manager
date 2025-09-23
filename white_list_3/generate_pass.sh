@@ -56,8 +56,8 @@ fi
 if [[ "$use_docker" =~ ^[Nn]$ ]]; then
     sudo rm -f /opt/pihole/.env
     sudo pihole setpassword "$pw"
-    echo "[OK] .env removed (non-Docker installation)"
+    echo "[OK] .env removed (Docker installation)"
 else
-    echo "[INFO] .env kept (Docker installation)"
+    echo "[INFO] .env kept (non-Docker installation)"
 fi
 

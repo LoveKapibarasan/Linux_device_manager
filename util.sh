@@ -130,13 +130,22 @@ get_user_home() {
     fi
 }
 
-# Example usage
-USER_HOME=$(get_user_home)
-echo "Using home directory: $USER_HOME"
-
-
 replace_vars() {
     local basename=$1
     local username=$2
     sed "s|<USER>|$username|g" "${basename}.example" > "$basename"
+}
+
+allow_nopass() {
+    local basename=$1
+    local username=$2
+
+    sudo mkdir -p /etc/sudoers.d
+    if [ ! -f /etc/sudoers.d/toggle-autologin ]; then
+        echo "${username} ALL=(ALL) NOPASSWD: /home/${username}/${basename}.sh" | sudo tee "/etc/sudoers.d/${basename}" > /dev/null
+        sudo chmod 440 "/etc/sudoers.d/${basename}"
+    fi
+    USER_HOME=$(get_user_home)
+    mkdir -p "$USER_HOME/service_scripts"
+    cp "${basename}.sh" "$USER_HOME/service_scripts/${SCRIPT_NAME}.sh"
 }

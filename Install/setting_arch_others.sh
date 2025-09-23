@@ -95,6 +95,7 @@ sudo pacman -S dolphin
 sudo pacman -S clang llvm lld
 
 # 4. WM
+## Hyprland
 sudo pacman -S kitty wl-clipboard xdg-desktop-portal-hyprland xdg-desktop-portal xdg-desktop-portal-wlr zsh
  
 systemctl --user status xdg-desktop-portal-hyprland
@@ -108,6 +109,10 @@ sudo pacman -S  dunst waybar grim slurp wtype
 # wtype → for python-util, screenshot
 hyprctl reload
 hyprland
+
+## Sway
+sudo pacman -S sway swaybg swayidle swaylock xorg-xwayland
+
 
 # Make zsh as default
 chsh -s $(which zsh)
@@ -156,13 +161,19 @@ sudo pacman -S okular qpdf
 # 13. Btop
 sudo pacman -S btop
 
-# 14. Tailscale Wayvnc
+# 14. Tailscale Wayvnc openssh
 sudo pacman -S wayvnc
 vncpasswd ~/.vncpasswd
 chmod 600 ~/.vncpasswd
 wayvnc 0.0.0.0 5900 -p ~/.vncpasswd
 ss -tlnp | grep 5900 # This should not be 127.0.0.1
 
+sudo pacman -S openssh
+sudo systemctl enable --now sshd
+systemctl status sshd
+sudo iptables -A INPUT -p tcp --dport 22 -j ACCEPT
+
+# From user, ssh <username>@xx.xx.xx.xx
 
 sudo pacman -S tailscale
 sudo systemctl enable --now tailscaled
@@ -171,19 +182,31 @@ tailscale ip -4
 tailscale ping xx.xx.xx.xx # It should return "pong"
 sudo systemctl enable --now sshd
 
-# 15. SELinux
-# Check
+sudo pacman -S openssh
+
+sudo vim /etc/ssh/sshd_config
+# PasswordAuthentication no
+sudo systemctl restart sshd
+
+
+# 15. SELinux or AppArmor
+# Apparmor
+sudo pacman -S apparmor
+sudo systemctl enable --now apparmor
+
+# SELinux
+## Check
 zgrep SELINUX /proc/config.gz # CONFIG_SECURITY_SELINUX=y
-sudo pacman -S selinux-utils selinux-policy
+sudo yay -S selinux-utils selinux-policy
 
 sudo sed -i 's/GRUB_CMDLINE_LINUX_DEFAULT="/GRUB_CMDLINE_LINUX_DEFAULT="selinux=1 security=selinux enforcing=0 /' /etc/default/grub
 
 sudo grub-mkconfig -o /boot/grub/grub.cfg
 
-# Apply SELinux context to files
+## Apply SELinux context to files
 sudo setfiles -F /etc/selinux/targeted/contexts/files/file_contexts /
 
-# SELinux 設定ファイル
+## SELinux Config
 sudo tee /etc/selinux/config <<'EOF'
 SELINUX=permissive
 SELINUXTYPE=targeted

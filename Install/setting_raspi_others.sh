@@ -78,14 +78,18 @@ sudo dphys-swapfile setup
 sudo dphys-swapfile swapon
 
 
-# Tailscale
+# 6. Tailscale SSH TigerVNC viewer
 curl -fsSL https://tailscale.com/install.sh | sh
 sudo systemctl enable tailscaled
 sudo systemctl start tailscaled
 sudo tailscale up
 sudo apt install tigervnc-viewer
 vncviewer xx.xx.xx.xx:5900
+## SSH Authentication
+ssh-keygen -t ed25519
+ssh-copy-id takanori@xx.xx.xx.xx
 
 
-# PDF
+
+# 7. PDF
 sudo apt install qpdf -y

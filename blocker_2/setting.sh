@@ -30,7 +30,7 @@ create_venv "$APP_DIR"
 cd "$APP_DIR"
 
 read -p "Do you want to shutdown at night? (y/N) " answer
-if [[ "$answer" == "y" || "$answer" == "Y" ]]; then
+if [[ "$answer" == "n" || "$answer" == "N" ]]; then
     # Delete 'shutdown_all()', 'suspend_all()'  in block_manager.py
     sed -i '/shutdown_all()/d' block_manager.py
     sed -i '/suspend_all()/d' block_manager.py
@@ -38,5 +38,7 @@ if [[ "$answer" == "y" || "$answer" == "Y" ]]; then
 else
     echo "No changes made."
 fi
+
+sudo systemctl enable systemd-timesyncd --now   
 
 start_service "$SERVICE_NAME"
