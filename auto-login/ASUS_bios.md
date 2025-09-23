@@ -7,4 +7,4 @@ Advanced Mode -> APM Configuration -> **Auto Power On**
 * Power On By RTC（RTC Alarm Power On）
 * Power On By PCI-E / Wake on LAN
 
-on `8:00 am`.
+    Alarm Date x = Turn on day x(0=everyday)

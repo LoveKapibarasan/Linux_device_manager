@@ -5,6 +5,7 @@ Description=Toggle autologin for nightly jobs
 OnCalendar=*-*-* 20:30:00
 OnCalendar=*-*-* 00:30:00
 Persistent=true
+Unit=autologin.service
 
 [Install]
 WantedBy=timers.target
