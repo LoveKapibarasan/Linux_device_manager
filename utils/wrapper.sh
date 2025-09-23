@@ -13,8 +13,3 @@ HOME="$USER_HOME" ./add_aliase.sh
 HOME="$USER_HOME" ./add_wrapper_scripts.sh
 HOME="$USER_HOME" ./add_functions.sh
 HOME="$USER_HOME" ./add_sudo_wrapper.sh
-
-
-cd $USER_HOME/enc-private/enc-private/config
-
-HOME="$USER_HOME" ./config_bak.sh

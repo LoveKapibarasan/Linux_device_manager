@@ -83,6 +83,8 @@ curl -fsSL https://tailscale.com/install.sh | sh
 sudo systemctl enable tailscaled
 sudo systemctl start tailscaled
 sudo tailscale up
+sudo tailscale up --accept-dns=falseo
+
 sudo apt install tigervnc-viewer
 vncviewer xx.xx.xx.xx:5900
 ## SSH Authentication

@@ -5,7 +5,7 @@ ls -l /etc/resolv.conf
 sudo rm /etc/resolv.conf
 sudo touch /etc/resolv.conf
 # only 'nameserver 127.0.0.1' is best
-echo 'nameserver 127.0.0.1' | sudo tee /etc/resolv.conf
+sudo echo 'nameserver 127.0.0.1' | sudo tee /etc/resolv.conf
 
 #=== NetworkManager ===
 # 1.

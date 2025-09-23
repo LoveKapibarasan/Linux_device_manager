@@ -13,7 +13,7 @@ useradd -m -G wheel <username>
 # “big wheel” = 大物・偉い人
 passwd <username>
 
-
+pacman -Syyu
 
 # 3. Install
 # 3-1. sudo
@@ -181,7 +181,9 @@ sudo tailscale up
 tailscale ip -4
 tailscale ping xx.xx.xx.xx # It should return "pong"
 sudo systemctl enable --now sshd
+sudo tailscale up --accept-dns=falseo
 
+## openssh
 sudo pacman -S openssh
 
 sudo vim /etc/ssh/sshd_config
@@ -211,3 +213,6 @@ sudo tee /etc/selinux/config <<'EOF'
 SELINUX=permissive
 SELINUXTYPE=targeted
 EOF
+
+# 16. wget
+sudo pacman -S wget
