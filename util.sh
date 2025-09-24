@@ -171,6 +171,8 @@ EOF
 
 disable_resolved() {
   sudo systemctl disable systemd-resolved --now
+  sudo systemctl mask systemd-resolved
+  sudo chattr -i /etc/resolv.conf
   sudo rm -f /etc/resolv.conf
   echo "nameserver 127.0.0.1" | sudo tee /etc/resolv.conf >/dev/null
   sudo chattr +i /etc/resolv.conf
