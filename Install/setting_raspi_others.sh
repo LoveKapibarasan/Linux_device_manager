@@ -119,6 +119,5 @@ ssh-copy-id -i "$HOME/.ssh/id_ed25519.pub" "$username@$server"
 ssh "$username@$server"
 
 
-
 # 7. PDF
 sudo apt install qpdf -y

@@ -1,10 +1,12 @@
 #!/bin/bash
 
+read -p "Enter username: " username
+
 for f in /etc/sudoers /etc/sudoers.d/*; do
   [ -f "$f" ] || continue
 
   # Check
-  if grep -q "takanori" "$f"; then
+  if grep -q "$username" "$f"; then
     echo "=== File: $f ==="
     grep "takanori" "$f"
     read -p "Comment out these lines in $f? (y/n) " ans

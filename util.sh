@@ -204,6 +204,29 @@ select_device() {
     echo "[OK] 使用するデバイス: $DEVICE"
 }
 
+select_source_device() {
+    echo "[*] 接続中のブロックデバイス一覧:"
+    lsblk -o NAME,SIZE,TYPE,MOUNTPOINT
+
+    read -rp "バックアップ元デバイスを入力してください (例: /dev/mmcblk0): " SRC_DEV
+
+    # 入力が空なら中断
+    if [[ -z "$SRC_DEV" ]]; then
+        echo "エラー: デバイスが指定されていません"
+        return 1
+    fi
+
+    # ブロックデバイスか確認
+    if [[ ! -b "$SRC_DEV" ]]; then
+        echo "エラー: $SRC_DEV はブロックデバイスではありません"
+        return 1
+    fi
+
+    export SRC_DEV
+    echo "[OK] 使用するソースデバイス: $SRC_DEV"
+}
+
+
 # ==== デバイス選択 & マウント抽象関数 ====
 mount_device() {
     # デバイス選択

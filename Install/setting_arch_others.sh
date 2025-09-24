@@ -189,7 +189,7 @@ sudo tailscale up
 tailscale ip -4
 tailscale ping xx.xx.xx.xx # It should return "pong"
 sudo systemctl enable --now sshd
-sudo tailscale up --accept-dns=falseo
+sudo tailscale up --accept-dns=false
 
 ## openssh
 sudo pacman -S openssh

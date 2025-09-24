@@ -17,6 +17,9 @@
 
 ### 4. utils
 
+### 5. sudo
+* rm_sudo_raspi.sh
+
 ## 2. Others
 
 **VSCode** 
