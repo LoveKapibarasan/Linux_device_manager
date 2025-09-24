@@ -80,7 +80,7 @@ start_user_timer() {
     TIMER_NAME="$1"
     systemctl --user enable --now "$TIMER_NAME"
     systemctl --user list-timers --all | grep "$TIMER_NAME"
-    echo "📌 logs:"
+    echo " logs:"
     journalctl --user -u "${TIMER_NAME%.timer}.service" -n 20 -f
 }
 
@@ -156,11 +156,9 @@ allow_nopass() {
 
 
 enable_resolved() {
-  echo "[*] Enabling systemd-resolved..."
   sudo chattr -i /etc/resolv.conf 2>/dev/null
   sudo rm -f /etc/resolv.conf
   sudo systemctl enable systemd-resolved --now
-  echo "[*] systemd-resolved enabled. Pi-hole setup can run now."
 sudo tee /etc/resolv.conf >/dev/null <<EOF
 nameserver 1.1.1.1
 nameserver 8.8.8.8
@@ -172,12 +170,12 @@ EOF
 }
 
 disable_resolved() {
-  echo "[*] Disabling systemd-resolved and locking resolv.conf..."
   sudo systemctl disable systemd-resolved --now
+  sudo systemctl mask systemd-resolved
+  sudo chattr -i /etc/resolv.conf
   sudo rm -f /etc/resolv.conf
   echo "nameserver 127.0.0.1" | sudo tee /etc/resolv.conf >/dev/null
   sudo chattr +i /etc/resolv.conf
-  echo "[*] resolv.conf set to 127.0.0.1 and locked."
   sudo cat /etc/resolv.conf
 }
 

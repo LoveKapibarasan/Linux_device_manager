@@ -61,9 +61,9 @@ def suspend_all():
     if is_ntp_synced():
         try:
             subprocess.run(["systemctl", "suspend", "-i"], check=True)
-        except subprocess.CalledProcessError:
-            notify("Suspend failed, falling back to kill_sway.")
-            kill_sway()
+        except Exception as e:
+            notify(f"Suspend failed: {e}.")
+           
 
 def cancel_shutdown():
     try:
@@ -117,19 +117,22 @@ def is_ntp_synced() -> bool:
         notify(f"Error at is_ntp_synced{e}")
         return False
 
-def kill_sway():
-    try:
-        result = subprocess.run(
-            ["pgrep", "sway"],
-            stdout=subprocess.PIPE,
-            stderr=subprocess.DEVNULL,
-            text=True
-        )
-        if result.returncode == 0:
-            subprocess.run(["pkill", "-9", "sway"])
-            notify("sway is killed")
-    except Exception as e:
-        notify(f"Error: {e}")
+def kill_wms(wm_list: list[str]):
+    for wm_name in wm_list:
+        try:
+            result = subprocess.run(
+                ["pgrep", wm_name],
+                stdout=subprocess.PIPE,
+                stderr=subprocess.DEVNULL,
+                text=True
+            )
+            if result.returncode == 0:
+                subprocess.run(["pkill", "-9", wm_name])
+                notify(f"{wm_name} is killed")
+            else:
+                notify(f"{wm_name} is not running")
+        except Exception as e:
+            notify(f"Error killing {wm_name}: {e}")
 
 
 def get_default_interface():

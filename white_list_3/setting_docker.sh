@@ -26,4 +26,7 @@ sudo ./pihole_protect.sh
 
 sudo ./generate_pass.sh
 
+sudo chown -R 1000:1000 ./etc-pihole ./etc-dnsmasq.d
+
 sudo docker logs -f pihole 
+
