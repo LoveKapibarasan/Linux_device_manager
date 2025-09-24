@@ -5,7 +5,7 @@ import requests
 import os
 from datetime import datetime
 from datetime import time as dtime
-from utils import notify, shutdown_all, suspend_all, protect_usage_file, read_usage_file, update_usage_file, is_ntp_synced, toggle_eth
+from utils import notify, shutdown_all, suspend_all, kill_wms, protect_usage_file, read_usage_file, update_usage_file, is_ntp_synced, toggle_eth
 
 # === Time Unit Constants ===
 UNIT = 60
@@ -172,6 +172,7 @@ def start_loop():
             if usage.is_pomodoro_block_time():
                 try:
                     toggle_eth(False)
+                    kill_wms(["sway", "Hyprland"])
                     suspend_all()
                 except Exception as e:
                     notify(f"Suspend failed {str(e)}")
