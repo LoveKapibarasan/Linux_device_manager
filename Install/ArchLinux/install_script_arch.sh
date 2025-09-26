@@ -2,18 +2,16 @@
 # Link: 公式インストールガイド(https://wiki.archlinux.jp/index.php)
 # https://qiita.com/Hayatann/items/09c2fee81fcb88d365c8
 
-# 0. create liveUSB using ventoy
 
 # 1. change keyboard layout
+echo "Japanese = jp106" 
+echo "Deutsch = de"
 read -p "Enter keyboard layout you want to use" keyboard
-echo "Japanese = jp106 Deutsch = de"
+
 loadkeys keyboard
 
-# 2.
-echo "Ensure it returns 64t use GRUB"
-cat /sys/firmware/efi/fw_platform_size
 
-# 3. Network setting using iwctl
+# 2. Network setting using iwctl
 
 read -p "Do you want to use Wi-Fi now? (y/n): " USE_WIFI
 if [[ ! "$USE_WIFI" =~ ^[Yy]$ ]]; then
@@ -21,7 +19,7 @@ if [[ ! "$USE_WIFI" =~ ^[Yy]$ ]]; then
     exit 0
 fi
 
-read -p "Enter Wi-Fi device (例: wlan0): " DEVICE
+read -p "Enter Wi-Fi device (Example: wlan0): " DEVICE
 read -p "Enter SSID: " SSID
 read -sp "Enter Wi-Fi password: " PASSWORD
 echo
@@ -34,7 +32,7 @@ station $DEVICE connect $SSID
 exit
 EOF
 
-# 4. partition
+# 3. partition
 
 lsblk
 cgdisk /dev/nvme0n1
@@ -83,21 +81,15 @@ pacman -Sy archlinux-keyring
 pacman-key --init
 pacman-key --populate archlinux
 # Dangerous:
-vim /etc/pacman.conf
-[options]
-SigLevel = Never
-
-# Memo:
-# PGP=Pretty Good Privacy
-# 1.暗号化　2.署名　3.鍵管理
+sed -i 's/#SigLevel=Never.*/SigLevel=Never' /etc/pacman.conf
 
 
-# 8-1. locale
+# 8 locale
 ## Timezone
 echo "Select timezone:"
 echo "1) Tokyo"
 echo "2) Berlin"
-read -p "Enter number [1-2]: " TZ_CHOICE
+read -p "Enter number: " TZ_CHOICE
 
 case "$TZ_CHOICE" in
   1) TIMEZONE="Asia/Tokyo" ;;
@@ -111,42 +103,10 @@ hwclock --systohc # update RTC
 timedatectl set-ntp true
 
 
-## Locale(Candidates)
-sed -i 's/^# *\(de_DE.UTF-8 UTF-8\)/\1/' /etc/locale.gen
-sed -i 's/^# *\(ja_JP.UTF-8 UTF-8\)/\1/' /etc/locale.gen
-locale-gen
-## Default
-echo 'LANG=en_US.UTF-8' | tee -a /etc/environment
-
-
-## Keyboard
-read -p "Enter keyboard layout (ex: jp106, us): " KEYMAP
-echo "KEYMAP=${KEYMAP}" > /etc/vconsole.conf
-## Reload
-sudo localectl set-keymap de
-sudo localectl status
-
-
-
-# ★ 8-2. Hostname
-# hostname = pc
-# ===== Hostname =====
-read -p "Enter hostname: " HOSTNAME
-echo "${HOSTNAME}" > /etc/hostname
-
-# ★ ===== Hosts =====
-cat > /etc/hosts <<EOF
-127.0.0.1   localhost
-::1         localhost
-127.0.1.1   ${HOSTNAME}.localdomain ${HOSTNAME}
-EOF
-
 # ★ 9. GRUB setting(UEFI)
 pacman -S grub efibootmgr dosfstools os-prober mtools
 # GRUB = GRand Unified Bootloader
 grub-install --target=x86_64-efi --efi-directory=/boot --bootloader-id=<name_ArchLinux>
-
-# Update
 grub-mkconfig -o /boot/grub/grub.cfg
 
 # ★ 10. Networking setting

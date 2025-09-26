@@ -6,27 +6,28 @@
 root_check
 
 # Safer: sudo visudo -f /etc/sudoers.d/ops
-which nordvpn
-which openfortivpn
-
-
-sudo tee /etc/sudoers.d/ops > /dev/null <<'EOF'
-# ログ閲覧/サービス操作
+sudo tee /etc/sudoers.d/ops > /dev/null <<EOF
+# Log
 Cmnd_Alias SERVICE_OPS = /usr/bin/systemctl start *, /usr/bin/systemctl restart *
 
-# パッケージ管理 (Arch + Debian/Ubuntu)
+# Package management (Arch + Debian/Ubuntu)
 Cmnd_Alias PACKAGE_MGR = /usr/bin/pacman, /usr/bin/yay, /usr/bin/apt, /usr/bin/apt-get
 
-# VPN 接続/切断
-Cmnd_Alias VPN_OPS = /usr/bin/nordvpn connect jp, \
-                         /usr/bin/nordvpn connect de, \
-                         /usr/bin/nordvpn disconnect, \
-                         /usr/bin/openfortivpn
+# VPN (動的に取得したフルパスを埋め込む)
+Cmnd_Alias VPN_OPS =  $(which openfortivpn) # $(which nordvpn)
 
-# ops グループに適用
+# Apply to ops
 %ops ALL=(ALL:ALL) NOPASSWD: SERVICE_OPS, PACKAGE_MGR, VPN_OPS
 EOF
 
+
 # permission should be 440
 sudo chmod 0440 /etc/sudoers.d/ops
-sudo groupadd ops
+
+for u in $(awk -F: '$3 >= 1000 && $1 != "nobody" {print $1}' /etc/passwd); do
+    sudo usermod -aG systemd-journal "$u"
+done
+
+if [ -z "$(getent group ops)" ];then
+    sudo groupadd ops
+fi

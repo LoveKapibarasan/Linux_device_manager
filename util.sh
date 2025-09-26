@@ -4,6 +4,7 @@
 SERVICE_DIR=$HOME/.config/systemd/user
 
 
+
 is_command() {
   command -v "$1" >/dev/null 2>&1
 }
@@ -158,6 +159,7 @@ allow_nopass() {
 enable_resolved() {
   sudo chattr -i /etc/resolv.conf 2>/dev/null
   sudo rm -f /etc/resolv.conf
+   sudo systemctl unmask systemd-resolved
   sudo systemctl enable systemd-resolved --now
 sudo tee /etc/resolv.conf >/dev/null <<EOF
 nameserver 1.1.1.1
@@ -171,7 +173,7 @@ EOF
 
 disable_resolved() {
   sudo systemctl disable systemd-resolved --now
-  sudo systemctl mask systemd-resolved
+ 
   sudo chattr -i /etc/resolv.conf
   sudo rm -f /etc/resolv.conf
   echo "nameserver 127.0.0.1" | sudo tee /etc/resolv.conf >/dev/null

@@ -9,12 +9,12 @@ services:
       - "443:443/tcp"
     environment:
       TZ: 'Europe/Berlin'
-      FTLCONF_webserver_api_password: "${ADMIN_PASSWORD}"
+      FTLCONF_webserver_api_password: "${ADMIN_PASSWORD}" # use .env
       FTLCONF_dns_listeningMode: 'all'
-      FTLCONF_dns_upstreams: '1.1.1.1;8.8.8.8'
-      FTLCONF_dns_rateLimit_count: 0
+      FTLCONF_dns_upstreams: '1.1.1.1;8.8.8.8' # upstream DNS
+      FTLCONF_dns_rateLimit_count: 0 # FTL rate limit
       FTLCONF_dns_rateLimit_interval: 0
-      FTLCONF_dns_blockingMode: NXDOMAIN # to prevend TLS error
+      FTLCONF_dns_blocking_mode: NXDOMAIN # to prevend TLS error
 
     volumes:
       - './etc-pihole:/etc/pihole'

@@ -3,11 +3,11 @@
 # Define groups to remove
 REMOVE_GROUPS=("wheel" "docker" "sudo")
 
-# Check if script is run with sudo/root privileges
-if [ "$EUID" -ne 0 ]; then
-    echo "Error: This script must be run with sudo/root privileges."
-    exit 1
-fi
+# import
+source ${USER_HOME}/Linux_device_manager/util.sh
+
+# Check root
+root_check
 
 # Get all users except root
 USERS=$(awk -F: '{print $1}' /etc/passwd | grep -v '^root$')
