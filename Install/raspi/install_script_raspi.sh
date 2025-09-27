@@ -14,10 +14,10 @@ sudo apt update -y
 sudo apt upgrade -y
 
 ## WM git firefox code explorer terminal editor
-sudo apt install sway \
+sudo apt install sway wl-clipboard \
     git git-lfs openssh-client \
     firefox \
-    xwayland \
+    code xwayland \
     pcmanfm \
     vim-gtk3 \
     zsh

@@ -10,21 +10,23 @@ chsh -s $(which zsh)
 
 # fcitx 5
 # 1. /etc/environment
-sudo bash -c 'cat >> /etc/environment << "EOF"
-GTK_IM_MODULE=fcitx
-QT_IM_MODULE=fcitx
-XMODIFIERS=@im=fcitx
-SDL_IM_MODULE=fcitx
-GLFW_IM_MODULE=fcitx
-EOF'
+sudo cp config/environment /etc/environment
 
 # Vim
 echo 'set clipboard=unnamedplus' > ~/.vimrc
 ## Neovim
-git clone https://github.com/neovim/neovim
+git clone -o upstream https://github.com/neovim/neovim
 cd neovim
 make CMAKE_BUILD_TYPE=Release
 sudo make install
+git clone https://github.com/wbthomason/packer.nvim \
+  "$USER_HOME/.local/share/nvim/site/pack/packer/start/packer.nvim"
+
+# Delete Cache
+rm -rf "$USER_HOME/.local/share/nvim/site/pack/packer"
+rm -rf "$USER_HOME/.local/share/nvim/site/pack/packer_compiled.lua"
+mkdir -p "$USER_HOME/.config/nvim"
+cp config/init.lua "$USER_HOME/.config/nvim/init.lua"
 
 # .zsh
 cp config/.zprofile "$USER_HOME/.zprofile"
@@ -32,7 +34,12 @@ cp config/.zshrc "$USER_HOME/.zshrc"
 
 # WM
 cp config/hyprland.conf "$USER_HOME/.config/hypr/hyprland.conf"
-cp config/sway "$USER_HOME/.config/sway/config"
+cp config/config "$USER_HOME/.config/sway/config"
+
+# Firefox
+cp config/profiles.ini "$USER_HOME/.mozilla/firefox/profiles.ini"
+rm -rf "$USER_HOME/.mozilla/firefox/"*.default-release
+
 
 # FortVPN
 echo "openfortivpn"

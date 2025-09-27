@@ -26,6 +26,8 @@ sudo apt install -y \
 # NVM
 curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/master/install.sh | bash
 
+# Neovim
+sudo apt install -y cmake ninja-build gettext libtool libtool-bin autoconf automake cmake g++ pkg-config unzip curl doxygen
 
 # PDF JQ
 sudo apt install qpdf jq -y
