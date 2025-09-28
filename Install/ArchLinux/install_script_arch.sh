@@ -8,16 +8,13 @@ echo "Japanese = jp106"
 echo "Deutsch = de"
 read -p "Enter keyboard layout you want to use" keyboard
 
-loadkeys keyboard
+loadkeys "$keyboard"
 
 
 # 2. Network setting using iwctl
 
-read -p "Do you want to use Wi-Fi now? (y/n): " USE_WIFI
-if [[ ! "$USE_WIFI" =~ ^[Yy]$ ]]; then
-    echo "Skipping Wi-Fi setup."
-    exit 0
-fi
+read -p "Do you want to use Ethenet now? (y/n): " USE_ETH
+if [[ ! "$USE_ETH" =~ ^[Yy]$ ]]; then
 
 read -p "Enter Wi-Fi device (Example: wlan0): " DEVICE
 read -p "Enter SSID: " SSID
@@ -31,24 +28,29 @@ station $DEVICE get-networks
 station $DEVICE connect $SSID
 exit
 EOF
-
+fi
 # 3. partition
 
 lsblk
-cgdisk /dev/nvme0n1
-# EFI パーティション
-read -p "Enter EFI partition device (例: /dev/nvme0n1p1): " EFI_DEV
-# Root パーティション
-read -p "Enter Root partition device (例: /dev/nvme0n1p2): " ROOT_DEV
-echo "EFI partition:  $EFI_DEV"
-echo "Root partition: $ROOT_DEV"
-# Memo:
-# n = name space
-# p = partition
-# lsblk = list block devices
-cgdisk /dev/nvme0n1
+# Disk
+read -p "Enter disk to be cleaned (e.g.: /dev/nvme0n1): " DEV
+sgdisk --zap-all "$DEV"
+
+sgdisk -n 1:0:+512M -t 1:ef00 -c 1:"EFI System Partition" "$DEV"
+sgdisk -n 2:0:0 -t 2:8300 -c 2:"Linux root" "$DEV"
+sgdisk -p "$DEV"
+# cgdisk /dev/nvme0n1
 # skip "First sector"
 # (ef00, root-8300)=(512M,-3G)
+
+lsblk
+# EFI パーティション
+read -p "Enter EFI partition device (e.g.: /dev/nvme0n1p1): " EFI_DEV
+# Root パーティション
+read -p "Enter Root partition device (e.g.: /dev/nvme0n1p2): " ROOT_DEV
+echo "EFI partition:  $EFI_DEV"
+echo "Root partition: $ROOT_DEV"
+
 
 mkfs.fat -F32 "$EFI_DEV"
 mkfs.btrfs "$ROOT_DEV"
@@ -75,49 +77,3 @@ genfstab -U /mnt >> /mnt/etc/fstab
 # 8. chroot
 arch-chroot /mnt
 
-# ★ 8-0. pacman setting
-pacman -Syu
-pacman -Sy archlinux-keyring 
-pacman-key --init
-pacman-key --populate archlinux
-# Dangerous:
-sed -i 's/#SigLevel=Never.*/SigLevel=Never' /etc/pacman.conf
-
-
-# 8 locale
-## Timezone
-echo "Select timezone:"
-echo "1) Tokyo"
-echo "2) Berlin"
-read -p "Enter number: " TZ_CHOICE
-
-case "$TZ_CHOICE" in
-  1) TIMEZONE="Asia/Tokyo" ;;
-  2) TIMEZONE="Europe/Berlin" ;;
-  *) echo "Invalid choice, defaulting to Tokyo"; TIMEZONE="Asia/Tokyo" ;;
-esac
-
-ln -sf /usr/share/zoneinfo/$TIMEZONE /etc/localtime
-echo "Timezone set to $TIMEZONE"
-hwclock --systohc # update RTC
-timedatectl set-ntp true
-
-
-# ★ 9. GRUB setting(UEFI)
-pacman -S grub efibootmgr dosfstools os-prober mtools
-# GRUB = GRand Unified Bootloader
-grub-install --target=x86_64-efi --efi-directory=/boot --bootloader-id=<name_ArchLinux>
-grub-mkconfig -o /boot/grub/grub.cfg
-
-# ★ 10. Networking setting
-pacman -S networkmanager iwd dialog
-# iwd = wpa authentication by Intel
-# dialog = nmtui
-systemctl enable NetworkManager
-
-# ★ 11. Never forget to set root password(asdf1234)
-passwd
-
-# ★ 12. Exit and reboot
-exit
-reboot

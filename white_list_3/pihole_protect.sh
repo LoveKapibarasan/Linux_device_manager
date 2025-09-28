@@ -20,4 +20,4 @@ fi
 
 sudo cat /etc/NetworkManager/NetworkManager.conf
 
-enable_resolved
+disable_resolved

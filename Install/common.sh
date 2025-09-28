@@ -72,3 +72,6 @@ read -p "Enter your residence (JP, DE): " COUNTRY
 echo -e "[device]\nwifi.country=${COUNTRY}" | sudo tee /etc/NetworkManager/conf.d/wifi-country.conf
 cat /etc/NetworkManager/conf.d/wifi-country.conf
 sudo systemctl restart NetworkManager
+
+
+
