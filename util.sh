@@ -150,6 +150,7 @@ allow_nopass() {
         echo "${username} ALL=(ALL) NOPASSWD: /home/${username}/${basename}.sh" | sudo tee "/etc/sudoers.d/${basename}" > /dev/null
         sudo chmod 440 "/etc/sudoers.d/${basename}"
     fi
+    chmod 700 /home/${username}/${basename}.sh
     USER_HOME=$(get_user_home)
     mkdir -p "$USER_HOME/service_scripts"
     cp "${basename}.sh" "$USER_HOME/service_scripts/${SCRIPT_NAME}.sh"
@@ -169,6 +170,21 @@ EOF
         docker exec -it pihole bash -c "echo -e 'nameserver 1.1.1.1\nnameserver 8.8.8.8' > /etc/resolv.conf"
     fi
   sudo cat /etc/resolv.conf
+  #=== NetworkManager ===
+if grep -q '^\[main\]' /etc/NetworkManager/NetworkManager.conf; then
+  # [main] がある場合
+  if grep -A1 '^\[main\]' /etc/NetworkManager/NetworkManager.conf | grep -q '^dns='; then
+     sudo sed -i '/^\[main\]/,/^\[/{s/^dns=.*/dns=none/}' /etc/NetworkManager/NetworkManager.conf
+  else
+    sudo sed -i '/^\[main\]/a dns=none' /etc/NetworkManager/NetworkManager.conf
+  fi
+else
+  # [main] が無い場合
+  echo -e "[main]\ndns=none" | sudo tee -a /etc/NetworkManager/NetworkManager.conf
+fi
+sudo cat /etc/NetworkManager/NetworkManager.conf
+  sudo systemctl restart NetworkManager
+
 }
 
 disable_resolved() {
@@ -179,6 +195,10 @@ disable_resolved() {
   echo "nameserver 127.0.0.1" | sudo tee /etc/resolv.conf >/dev/null
   sudo chattr +i /etc/resolv.conf
   sudo cat /etc/resolv.conf
+  #=== NetworkManager ===
+  sudo sed -i '/^\s*dns=none\s*$/d' /etc/NetworkManager/NetworkManager.conf
+  cat /etc/NetworkManager/NetworkManager.conf
+  sudo systemctl restart NetworkManager
 }
 
 # ==== デバイス入力 & 確認関数 ====

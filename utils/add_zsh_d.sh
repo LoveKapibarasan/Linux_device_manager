@@ -2,9 +2,10 @@
 set -e
 
 
+USER_HOME=$(get_user_home)
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 SRC="$SCRIPT_DIR/zsh-d"
-DST="$HOME/.zshrc.d"
+DST="$USER_HOME/.zshrc.d"
 
 mkdir -p "$DST"
 

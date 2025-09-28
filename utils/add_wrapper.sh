@@ -4,7 +4,8 @@
 
 root_check
 
-ZSHRC="$HOME/.zshrc"
+USER_HOME=$(get_user_home)
+ZSHRC="$USER_HOME/.zshrc"
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 FUNCTIONS_DIR="$SCRIPT_DIR/scripts"
 

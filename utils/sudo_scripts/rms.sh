@@ -3,6 +3,13 @@
 # Define groups to remove
 REMOVE_GROUPS=("wheel" "docker" "sudo")
 
+if [ -n "$SUDO_USER" ]; then
+    USER_HOME=$(eval echo "~$SUDO_USER")
+else
+    USER_HOME="$HOME"
+fi
+echo "Using home directory: $USER_HOME"
+
 # import
 source ${USER_HOME}/Linux_device_manager/util.sh
 

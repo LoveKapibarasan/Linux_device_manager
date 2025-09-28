@@ -1,11 +1,12 @@
 #!/bin/bash
 
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 # Import functions
-. ../util.sh
+source "$SCRIPT_DIR/../util.sh"
 
 root_check
-ZSHRC="$HOME/.zshrc"
-SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+USER_HOME=$(get_user_home)
+ZSHRC="$USER_HOME/.zshrc"
 FUNCTIONS_DIR="$SCRIPT_DIR/sudo_scripts"
 INSTALL_DIR="/usr/local/bin/sudo_scripts"
 
@@ -30,6 +31,9 @@ for file in "$FUNCTIONS_DIR"/*.sh; do
   sudo chmod +x "$INSTALL_DIR/$name"
   echo "Installed $name -> $INSTALL_DIR/$name"
 done
+
+# Create a symlink
+sudo ln -s "${USER_HOME}/Linux_device_manager/util.sh" "${INSTALL_DIR}/util.sh"
 
 # Add to PATH if not already there
 if grep -q "$INSTALL_DIR" "$ZSHRC"; then

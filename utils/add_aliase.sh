@@ -1,6 +1,7 @@
 #!/bin/bash
 
-ZSHRC="$HOME/.zshrc"
+USER_HOME=$(get_user_home)
+ZSHRC="$USER_HOME/.zshrc"
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 ALIAS_FILE="$SCRIPT_DIR/aliases.csv"
 
@@ -25,4 +26,3 @@ while IFS=, read -r NAME CMD; do
 done < "$ALIAS_FILE"
 
 
-echo "Run 'source ~/.zshrc' to reload aliases."
