@@ -40,6 +40,18 @@ pacman-key --populate archlinux
 pacman -S refind --noconfirm
 refind-install
 
+lsblk -f
+read -p "Enter root prtition: " RFS
+
+UUID=$(blkid -s UUID -o value $RFS)
+
+cat > /boot/refind_linux.conf <<EOF
+"Arch Linux"  "root=UUID=$UUID rw initrd=/boot/initramfs-linux.img"
+"Arch Linux (fallback)"  "root=UUID=$UUID rw initrd=/boot/initramfs-linux-fallback.img"
+EOF
+
+
+
 ## Check entry
 efibootmgr -v
 
