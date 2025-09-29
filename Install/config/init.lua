@@ -1,21 +1,25 @@
--- plugin 管理
-require('packer').startup(function(use)
-  use 'wbthomason/packer.nvim' -- Packer自身
+-- runtimepath に lazy.nvim を追加
+vim.opt.rtp:prepend("~/.local/share/nvim/lazy/lazy.nvim")
 
-  -- Syntax highlight / better parsing
-  use {
-    'nvim-treesitter/nvim-treesitter',
-    run = ':TSUpdate'
-  }
-  use 'nvim-treesitter/nvim-treesitter-context' -- 常に上部に関数/クラス名を表示
-  use 'nvim-treesitter/playground'              -- Treesitterのデバッグ/可視化
 
-  -- File explorer
-  use {
-    'nvim-tree/nvim-tree.lua',
-    requires = { 'nvim-tree/nvim-web-devicons' } -- アイコン表示
-  }
-end)
+-- プラグイン管理
+require("lazy").setup({
+{
+"nvim-treesitter/nvim-treesitter",
+build = ":TSUpdate",
+},
+"nvim-treesitter/nvim-treesitter-context",
+"nvim-treesitter/playground",
+{
+"nvim-tree/nvim-tree.lua",
+dependencies = { "nvim-tree/nvim-web-devicons" },
+},
+{
+"akinsho/toggleterm.nvim", -- Terminal 管理
+config = true
+},
+  { "folke/tokyonight.nvim", lazy = false, priority = 1000 }, 
+})
 
 -- Treesitter 設定
 require'nvim-treesitter.configs'.setup {
@@ -25,8 +29,6 @@ require'nvim-treesitter.configs'.setup {
   sync_install = false, -- 起動時に同期インストールしない
   auto_install = false, -- ファイルを開いたときに自動で入れない
   highlight = { enable = true },
-  indent = { enable = true },
-  incremental_selection = { enable = true },
 }
 
 -- NvimTree 設定
@@ -42,6 +44,16 @@ require("nvim-tree").setup {
     width = 30,
   }
 }
+
+
+-- ToggleTerm 設定
+require("toggleterm").setup {
+size = 20,
+open_mapping = [[<c-t>]], -- Ctrl+ t でトグル
+shade_terminals = true,
+direction = "horizontal",
+}
+
 
 -- キーマッピング
 -- Ctrl + h
@@ -76,8 +88,23 @@ vim.g.clipboard = {
 -- Line Number
 vim.opt.number = true
 
-
 -- 標準テーマ morning を使う
-vim.cmd("colorscheme morning")
+vim.cmd("colorscheme tokyonight")
 
-vim.opt.shortmess:append "I"   -- intro message を非表示にする
+-- intro message を非表示にする
+vim.opt.shortmess:append "I"   
+
+-- ファイル保存を義務化
+vim.o.hidden = false
+
+-- Recover and Delete
+vim.api.nvim_create_autocmd("SwapExists", {
+  callback = function()
+    vim.cmd("recover")                    -- 自動で recover する
+    vim.fn.delete(vim.v.swapname)         -- recover に使った swap を削除
+    vim.notify("Swap recovered and deleted: " .. vim.v.swapname)
+  end,
+})
+
+-- swap ファイルをカレントディレクトリに置く
+vim.opt.directory = "."

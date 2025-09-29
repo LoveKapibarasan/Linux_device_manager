@@ -32,8 +32,6 @@ for file in "$FUNCTIONS_DIR"/*.sh; do
   echo "Installed $name -> $INSTALL_DIR/$name"
 done
 
-# Create a symlink
-sudo ln -s "${USER_HOME}/Linux_device_manager/util.sh" "${INSTALL_DIR}/util.sh"
 
 # Add to PATH if not already there
 if grep -q "$INSTALL_DIR" "$ZSHRC"; then

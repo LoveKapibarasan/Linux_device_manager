@@ -24,5 +24,3 @@ while IFS=, read -r NAME CMD; do
     echo "Added alias '$NAME' to $ZSHRC."
   fi
 done < "$ALIAS_FILE"
-
-
