@@ -29,16 +29,16 @@ pacman-key --populate archlinux
 
 
 # 9. GRUB setting(UEFI)
-pacman -S grub efibootmgr dosfstools os-prober mtools
+pacman -S grub efibootmgr dosfstools os-prober mtools -y
 # GRUB = GRand Unified Bootloader
-read -p "Enter GRUB name" name
+read -p "Enter GRUB name: " name
 grub-install --target=x86_64-efi \
 	--efi-directory=/boot \
 	--bootloader-id="$name"
 grub-mkconfig -o /boot/grub/grub.cfg
 
 # ★ 10. Networking setting
-pacman -S networkmanager iwd dialog
+pacman -S networkmanager iwd dialog-y
 # iwd = wpa authentication by Intel
 # dialog = nmtui, nmcui
 systemctl enable NetworkManager
@@ -48,5 +48,5 @@ passwd
 
 # ★ 12. Exit and reboot
 
-echo "Now reboot!"
+echo "Now exit and reboot!"
 exit
