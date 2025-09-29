@@ -35,7 +35,7 @@ lsblk
 # Disk
 read -p "Enter disk to be cleaned (e.g.: /dev/nvme0n1): " DEV
 sgdisk --zap-all "$DEV"
-
+sgdisk -o "$DEV" # reformat
 sgdisk -n 1:0:+512M -t 1:ef00 -c 1:"EFI System Partition" "$DEV"
 sgdisk -n 2:0:0 -t 2:8300 -c 2:"Linux root" "$DEV"
 sgdisk -p "$DEV"
@@ -51,18 +51,28 @@ read -p "Enter Root partition device (e.g.: /dev/nvme0n1p2): " ROOT_DEV
 echo "EFI partition:  $EFI_DEV"
 echo "Root partition: $ROOT_DEV"
 
+read -p "Select the file system(ext4, btrfs): " fs
 
 mkfs.fat -F32 "$EFI_DEV"
-mkfs.btrfs "$ROOT_DEV"
-# or ext4(Basic), xfs, f2fs… # Memo:
-# 1. EFI = Extensible Firmware Interface, BIOS(Basic I/O System) の後継, OS とハードウェアのあいだを仲介するファームウェア
-# 2. mkfs=make file system
-# 3. Btrfs=B-tree file system(Snap, Compress)
+
+
+case "$fs" in
+  ext4)
+    mkfs.ext4 -F "$ROOT_DEV"
+    ;;
+  btrfs)
+    mkfs.btrfs -f "$ROOT_DEV"
+    ;;
+  *)
+    echo "Unsupported file system: $fs"
+    exit 1
+    ;;
+esac
 
 # 5. mount 
 mount "$ROOT_DEV" /mnt
 mkdir -p /mnt/boot/efi
-mount "$EFI_DEV" /mnt/boot
+mount "$EFI_DEV" /mnt/boot/efi
 
 # 6. Install all necessary packages(with vim)
 pacstrap -K /mnt base linux linux-firmware vim 
@@ -71,9 +81,9 @@ pacstrap -K /mnt base linux linux-firmware vim
 genfstab -U /mnt >> /mnt/etc/fstab
 # -U=use UUID
 # Alternative -L = use label
-# Memo:
 # fstab=file system tables
 
 # 8. chroot
+# Around here, failed to execute a command message may be present.
 arch-chroot /mnt
 

@@ -20,8 +20,8 @@ hwclock --systohc # update RTC
 timedatectl set-ntp true
 
 # 8-1. pacman setting
-pacman -Syu
-pacman -Sy archlinux-keyring 
+pacman -Syu --noconfirm
+pacman -Sy archlinux-keyring --noconfirm 
 pacman-key --init
 pacman-key --populate archlinux
 # Dangerous:
@@ -29,20 +29,23 @@ pacman-key --populate archlinux
 
 
 # 9. GRUB setting(UEFI)
-pacman -S grub efibootmgr dosfstools os-prober mtools -y
+# pacman -S grub efibootmgr dosfstools os-prober mtools  --noconfirm
 # GRUB = GRand Unified Bootloader
-read -p "Enter GRUB name: " name
-grub-install --target=x86_64-efi \
-	--efi-directory=/boot/efi \
-	--bootloader-id="$name" \
-grub-mkconfig -o /boot/grub/grub.cfg
+# read -p "Enter GRUB name: " name
+# grub-install --target=x86_64-efi \
+#	--efi-directory=/boot/efi \
+#	--bootloader-id="$name"  
+# grub-mkconfig -o /boot/grub/grub.cfg
+
+pacman -S refind --noconfirm
+refind-install
 
 ## Check entry
 efibootmgr -v
 
 
 # ★ 10. Networking setting
-pacman -S networkmanager iwd dialog-y
+pacman -S networkmanager iwd dialog --noconfirm
 # iwd = wpa authentication by Intel
 # dialog = nmtui, nmcui
 systemctl enable NetworkManager
@@ -51,6 +54,5 @@ systemctl enable NetworkManager
 passwd
 
 # ★ 12. Exit and reboot
-
-echo "Now exit and reboot!"
+echo "Now reboot!"
 exit
