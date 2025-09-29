@@ -28,6 +28,27 @@ rm -rf "$USER_HOME/.local/share/nvim/site/pack/packer_compiled.lua"
 mkdir -p "$USER_HOME/.config/nvim"
 cp config/init.lua "$USER_HOME/.config/nvim/init.lua"
 
+
+# 指定ディレクトリ以下の全リポジトリで remote origin を upstream にリネームする
+
+BASE_DIR="${1:-$HOME/.local/share/}"
+
+find "$BASE_DIR" -type d -name ".git" | while read -r gitdir; do
+  repo_dir="$(dirname "$gitdir")"
+  echo "Processing: $repo_dir"
+
+  cd "$repo_dir" || continue
+
+  # remote origin があるか確認
+  if git remote | grep -q "^origin$"; then
+    echo "Renaming origin -> upstream"
+    git remote rename origin upstream
+  else
+    echo "No origin found in $repo_dir"
+  fi
+done
+
+
 # .zsh
 cp config/.zprofile "$USER_HOME/.zprofile"
 cp config/.zshrc "$USER_HOME/.zshrc"
