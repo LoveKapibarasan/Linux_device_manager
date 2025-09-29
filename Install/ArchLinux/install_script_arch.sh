@@ -61,7 +61,7 @@ mkfs.btrfs "$ROOT_DEV"
 
 # 5. mount 
 mount "$ROOT_DEV" /mnt
-mkdir -p /mnt/boot
+mkdir -p /mnt/boot/efi
 mount "$EFI_DEV" /mnt/boot
 
 # 6. Install all necessary packages(with vim)
