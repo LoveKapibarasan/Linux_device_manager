@@ -1,2 +1,3 @@
 chmodsh,find ~ -type f -name "*.sh" -exec chmod +x {} \;
 firefox,env MOZ_ENABLE_WAYLAND=1 firefox --kiosk &
+qute,~/qutebrowser/.venv/bin/python3 -m qutebrowser

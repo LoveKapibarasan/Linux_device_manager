@@ -1,6 +1,8 @@
 
 SSH_ENV="$HOME/.ssh/agent_env"
 
+# eval "$(ssh-agent -s)" 
+# ssh-add ~/.ssh/id_ed25519
 function start_agent {
     ssh-agent -s > "$SSH_ENV"
     chmod 600 "$SSH_ENV"

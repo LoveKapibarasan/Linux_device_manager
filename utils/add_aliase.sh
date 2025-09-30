@@ -23,7 +23,7 @@ while IFS=, read -r NAME CMD; do
     echo "Alias '$NAME' already exists in $ZSHRC."
   else
     # Add a blank line
-    echo >> "$ZSHRC"-
+    echo >> "$ZSHRC"
     echo "alias $NAME='$CMD'" >> "$ZSHRC"
     echo "Added alias '$NAME' to $ZSHRC."
   fi

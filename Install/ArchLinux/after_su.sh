@@ -25,7 +25,7 @@ sudo pacman -S base-devel gvim wget btop \
     fcitx5 fcitx5-configtool fcitx5-mozc fcitx5-gtk fcitx5-qt \
     noto-fonts noto-fonts-cjk noto-fonts-emoji \
     git openssh git-lfs vi less git-filter-repo github-cli \
-    kitty wl-clipboard xdg-desktop-portal-hyprland xdg-desktop-portal xdg-desktop-portal-wlr  \
+    kitty wl-clipboard xdg-desktop-portal-hyprland xdg-desktop-portal xdg-desktop-portal-wlr xwayland  \
     dolphin zsh \
     python python-pip python-setuptools python-wheel python-docs\
     nodejs npm nvm \

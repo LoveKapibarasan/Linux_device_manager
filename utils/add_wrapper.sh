@@ -20,6 +20,7 @@ fi
 if grep -q "$FUNCTIONS_DIR" "$ZSHRC"; then
   echo "$FUNCTIONS_DIR is already in PATH."
 else
+  echo "" >> "$ZSHRC"
   echo "export PATH=\"$FUNCTIONS_DIR:\$PATH\"" >> "$ZSHRC"
   echo "Added $FUNCTIONS_DIR to PATH in $ZSHRC"
 fi
