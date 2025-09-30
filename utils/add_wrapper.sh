@@ -1,6 +1,8 @@
 #!/bin/bash
+
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 # Import functions
-. ../util.sh
+source "$SCRIPT_DIR/../util.sh"
 
 root_check
 
@@ -18,6 +20,7 @@ fi
 if grep -q "$FUNCTIONS_DIR" "$ZSHRC"; then
   echo "$FUNCTIONS_DIR is already in PATH."
 else
+  echo "" >> "$ZSHRC"
   echo "export PATH=\"$FUNCTIONS_DIR:\$PATH\"" >> "$ZSHRC"
   echo "Added $FUNCTIONS_DIR to PATH in $ZSHRC"
 fi

@@ -1,5 +1,8 @@
 #!/bin/bash
-set -e
+
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+# Import functions
+source "$SCRIPT_DIR/../util.sh"
 
 
 USER_HOME=$(get_user_home)

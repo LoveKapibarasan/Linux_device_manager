@@ -7,6 +7,8 @@ USER_HOME=$(get_user_home)
 
 # ZSH
 chsh -s $(which zsh)
+cp config/.zprofile "$USER_HOME/.zprofile"
+cp config/.zshrc "$USER_HOME/.zshrc"
 
 # fcitx 5
 # 1. /etc/environment
@@ -15,16 +17,18 @@ sudo cp config/environment /etc/environment
 # Vim
 echo 'set clipboard=unnamedplus' > ~/.vimrc
 ## Neovim
-git clone -o upstream https://github.com/neovim/neovim
-cd neovim
+git clone -o upstream https://github.com/neovim/neovim "${USER_HOME}/neovim"
+cd "${USER_HOME}/neovim"
 make CMAKE_BUILD_TYPE=Release
 sudo make install
 git clone https://github.com/folke/lazy.nvim.git \
   "${USER_HOME}/.local/share/nvim/lazy/lazy.nvim"
-mkdir -p "$USER_HOME/.config/nvim"
+read -p  "Enter your username: " username
+chown -R "${username}:${username}" "/home/${username}/.local/share/nvim"
+mkdir -p "${USER_HOME}/.config/nvim"
 cp config/init.lua "$USER_HOME/.config/nvim/init.lua"
 
-
+cd -
 # 指定ディレクトリ以下の全リポジトリで remote origin を upstream にリネームする
 
 BASE_DIR="${1:-$HOME/.local/share/}"
@@ -45,10 +49,6 @@ find "$BASE_DIR" -type d -name ".git" | while read -r gitdir; do
 done
 
 
-# .zsh
-cp config/.zprofile "$USER_HOME/.zprofile"
-cp config/.zshrc "$USER_HOME/.zshrc"
-
 # WM
 cp config/hyprland.conf "$USER_HOME/.config/hypr/hyprland.conf"
 cp config/config "$USER_HOME/.config/sway/config"
@@ -57,7 +57,13 @@ cp config/config "$USER_HOME/.config/sway/config"
 cp config/profiles.ini "$USER_HOME/.mozilla/firefox/profiles.ini"
 rm -rf "$USER_HOME/.mozilla/firefox/"*.default-release
 
-
+# qutebrowser
+cd "${USER_HOME}"
+git clone -o upstream https://github.com/qutebrowser/qutebrowser.git "${USER_HOME}/qutebrowser"
+cd "${USER_HOME}/qutebrowser"
+cp config/config.py "$USER_HOME/.config/qutebrowser/config.py"
+cd qutebrowser
+cd -
 # FortVPN
 echo "openfortivpn"
 read -p "Username: " username
@@ -73,3 +79,6 @@ trusted-cert = 364fb4fa107e591626b3919f0e7f8169e9d2097974f3e3d55e56c7c756a1f94a
 username = $username
 password = $password
 EOF
+
+
+

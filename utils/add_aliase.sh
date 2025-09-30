@@ -1,5 +1,9 @@
 #!/bin/bash
 
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+# Import functions
+source "$SCRIPT_DIR/../util.sh"
+
 USER_HOME=$(get_user_home)
 ZSHRC="$USER_HOME/.zshrc"
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
@@ -19,7 +23,7 @@ while IFS=, read -r NAME CMD; do
     echo "Alias '$NAME' already exists in $ZSHRC."
   else
     # Add a blank line
-    echo >> "$ZSHRC"-
+    echo >> "$ZSHRC"
     echo "alias $NAME='$CMD'" >> "$ZSHRC"
     echo "Added alias '$NAME' to $ZSHRC."
   fi

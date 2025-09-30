@@ -5,7 +5,7 @@ APP_DIR="/opt/${BASENAME}"
 SERVICE_PATH=/etc/systemd/system/${SERVICE_NAME}
 
 # Import functions
-. ../util.sh
+source ../util.sh
 
 root_check
 
