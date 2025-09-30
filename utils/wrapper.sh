@@ -1,11 +1,9 @@
 #!/bin/bash
 
 # Import functions
-. ../util.sh
+source ../util.sh
 root_check
 
-USER_HOME=$(get_user_home)
-echo "Using home directory: $USER_HOME"
 
 
 ./add_zsh_d.sh

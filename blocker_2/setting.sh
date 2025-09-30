@@ -38,6 +38,13 @@ if [[ "$answer" == "n" || "$answer" == "N" ]]; then
 else
     echo "No changes made."
 fi
+read -p "Can you use suspend? (y/N) " answer
+if [[ "$answer" == "n" || "$answer" == "N" ]]; then
+    # Delete kill_wms
+    sed -i '/^[[:space:]]*kill_wms*/d' block_manager.py
+else
+    echo "No changes made."
+fi
 
 sudo systemctl enable systemd-timesyncd --now   
 

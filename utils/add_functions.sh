@@ -3,6 +3,10 @@
 # Append functions defined in *.sh files under ~/functions into ~/.zshrc
 # Skip if the function already exists in ~/.zshrc
 
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+# Import functions
+source "$SCRIPT_DIR/../util.sh"
+
 USER_HOME=$(get_user_home)
 ZSHRC="$USER_HOME/.zshrc"
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"

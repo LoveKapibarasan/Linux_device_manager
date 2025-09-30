@@ -7,6 +7,8 @@ USER_HOME=$(get_user_home)
 
 # ZSH
 chsh -s $(which zsh)
+cp config/.zprofile "$USER_HOME/.zprofile"
+cp config/.zshrc "$USER_HOME/.zshrc"
 
 # fcitx 5
 # 1. /etc/environment
@@ -15,8 +17,8 @@ sudo cp config/environment /etc/environment
 # Vim
 echo 'set clipboard=unnamedplus' > ~/.vimrc
 ## Neovim
-git clone -o upstream https://github.com/neovim/neovim
-cd neovim
+git clone -o upstream https://github.com/neovim/neovim "${USER_HOME}/neovim"
+cd "${USER_HOME}/neovim"
 make CMAKE_BUILD_TYPE=Release
 sudo make install
 git clone https://github.com/wbthomason/packer.nvim \
@@ -28,7 +30,7 @@ rm -rf "$USER_HOME/.local/share/nvim/site/pack/packer_compiled.lua"
 mkdir -p "$USER_HOME/.config/nvim"
 cp config/init.lua "$USER_HOME/.config/nvim/init.lua"
 
-
+cd -
 # 指定ディレクトリ以下の全リポジトリで remote origin を upstream にリネームする
 
 BASE_DIR="${1:-$HOME/.local/share/}"
@@ -48,10 +50,6 @@ find "$BASE_DIR" -type d -name ".git" | while read -r gitdir; do
   fi
 done
 
-
-# .zsh
-cp config/.zprofile "$USER_HOME/.zprofile"
-cp config/.zshrc "$USER_HOME/.zshrc"
 
 # WM
 cp config/hyprland.conf "$USER_HOME/.config/hypr/hyprland.conf"

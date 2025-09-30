@@ -1,6 +1,8 @@
 #!/bin/bash
+
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 # Import functions
-. ../util.sh
+source "$SCRIPT_DIR/../util.sh"
 
 root_check
 
