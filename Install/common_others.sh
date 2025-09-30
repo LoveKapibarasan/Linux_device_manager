@@ -31,7 +31,7 @@ cp config/init.lua "$USER_HOME/.config/nvim/init.lua"
 cd -
 # 指定ディレクトリ以下の全リポジトリで remote origin を upstream にリネームする
 
-BASE_DIR="${1:-$HOME/.local/share/}"
+BASE_DIR="${1:-$USER_HOME/.local/share/}"
 
 find "$BASE_DIR" -type d -name ".git" | while read -r gitdir; do
   repo_dir="$(dirname "$gitdir")"
