@@ -21,12 +21,8 @@ git clone -o upstream https://github.com/neovim/neovim "${USER_HOME}/neovim"
 cd "${USER_HOME}/neovim"
 make CMAKE_BUILD_TYPE=Release
 sudo make install
-git clone https://github.com/wbthomason/packer.nvim \
-  "$USER_HOME/.local/share/nvim/site/pack/packer/start/packer.nvim"
-
-# Delete Cache
-rm -rf "$USER_HOME/.local/share/nvim/site/pack/packer"
-rm -rf "$USER_HOME/.local/share/nvim/site/pack/packer_compiled.lua"
+git clone https://github.com/folke/lazy.nvim.git \
+  "${USER_HOME}/.local/share/nvim/lazy/lazy.nvim"
 mkdir -p "$USER_HOME/.config/nvim"
 cp config/init.lua "$USER_HOME/.config/nvim/init.lua"
 

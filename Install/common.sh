@@ -50,11 +50,11 @@ esac
 
 if is_command apt || is_command pacman;then
     sudo timedatectl set-timezone $TIMEZONE
-
+fi
 # Keyboard
 if is_command apt;then
         read -p "Enter keyboard layout (jp, de): " KEYMAP
-        sed -in "s/^XKBLAYOUT=.*/XKBLAYOUT=\"${KEYMAP}\"/" /etc/default/keyboard
+        sed -i "s/^XKBLAYOUT=.*/XKBLAYOUT=\"${KEYMAP}\"/" /etc/default/keyboard
 
 elif is_command pacman;then
         read -p "Enter keyboard layout (jp106, de): " KEYMAP
