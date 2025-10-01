@@ -16,11 +16,12 @@ sudo apt upgrade -y
 ## WM git firefox code explorer terminal editor
 sudo apt install sway wl-clipboard \
     git git-lfs openssh-client \
-    firefox \
+    qutebrowser qt6-multimedia ffmpeg \
     code xwayland \
     pcmanfm \
     vim-gtk3 \
-    zsh
+    zsh \
+    v4l-utils
     -y
 
 # 2. Fonts

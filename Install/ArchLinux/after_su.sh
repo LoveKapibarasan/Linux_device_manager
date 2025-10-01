@@ -55,6 +55,6 @@ yay -S nkf
 # Pyenv
 yay -S pyenv pyenv-virtualenv
 
-
-
+# Pihole
+yay -S pi-hole-core pi-hole-ftl pi-hole-web
 
