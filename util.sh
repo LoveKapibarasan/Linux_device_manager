@@ -3,7 +3,8 @@
 # Global Variables
 SERVICE_DIR=$HOME/.config/systemd/user
 
-
+NORMAL_USER=$(awk -F: '$3 > 1000 {print $1}' /etc/passwd)
+export NORMAL_USER
 
 is_command() {
   command -v "$1" >/dev/null 2>&1
@@ -158,7 +159,7 @@ allow_nopass() {
 
 
 enable_resolved() {
-  sudo chattr -i /etc/resolv.conf 2>/dev/null
+  sudo chattr -i /etc/resolv.conf 
   sudo rm -f /etc/resolv.conf
    sudo systemctl unmask systemd-resolved
   sudo systemctl enable systemd-resolved --now
@@ -170,9 +171,9 @@ EOF
         docker exec -it pihole bash -c "echo -e 'nameserver 1.1.1.1\nnameserver 8.8.8.8' > /etc/resolv.conf"
     fi
   sudo cat /etc/resolv.conf
-  #=== NetworkManager ===
+  # NetworkManager 
   sudo sed -i '/^\s*dns=none\s*$/d' /etc/NetworkManager/NetworkManager.conf
-sudo cat /etc/NetworkManager/NetworkManager.conf
+  sudo cat /etc/NetworkManager/NetworkManager.conf
   sudo systemctl restart NetworkManager
 
 }
@@ -186,16 +187,16 @@ disable_resolved() {
   echo "nameserver 127.0.0.1" | sudo tee /etc/resolv.conf >/dev/null
   sudo chattr +i /etc/resolv.conf
   sudo cat /etc/resolv.conf
-  #=== NetworkManager ===
+  # NetworkManager
 if grep -q '^\[main\]' /etc/NetworkManager/NetworkManager.conf; then
-  # [main] がある場合
+  # main exist
   if grep -A1 '^\[main\]' /etc/NetworkManager/NetworkManager.conf | grep -q '^dns='; then
      sudo sed -i '/^\[main\]/,/^\[/{s/^dns=.*/dns=none/}' /etc/NetworkManager/NetworkManager.conf
   else
     sudo sed -i '/^\[main\]/a dns=none' /etc/NetworkManager/NetworkManager.conf
   fi
 else
-  # [main] が無い場合
+  # No main section
   echo -e "[main]\ndns=none" | sudo tee -a /etc/NetworkManager/NetworkManager.conf
 fi
   sudo cat /etc/NetworkManager/NetworkManager.conf
