@@ -14,4 +14,9 @@ export QT_IM_MODULE=fcitx
 export XMODIFIERS=@im=fcitx
 export SDL_IM_MODULE=fcitx
 export GLFW_IM_MODULE=fcitx
-export QT_QUICK_BACKEND=software
+
+
+if [ -z "$SSH_AUTH_SOCK" ] || [ ! -S "$SSH_AUTH_SOCK" ]; then
+    eval "$(ssh-agent -s)" > /dev/null
+    ssh-add ~/.ssh/id_ed25519 2>/dev/null
+fi
