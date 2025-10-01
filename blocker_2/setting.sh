@@ -32,11 +32,11 @@ cd "$APP_DIR"
 read -p "Do you want to shutdown at night? (y/N) " answer
 if [[ "$answer" == "n" || "$answer" == "N" ]]; then
     # Delete 'shutdown_all()', 'suspend_all()'  in block_manager.py
-    sed -i '/shutdown_all()/d' block_manager.py
-    sed -i '/suspend_all()/d' block_manager.py
+    sed -i '/^[[:space:]]*shutdown_all(/d' block_manager.py
+    sed -i '/^[[:space:]]*suspend_all(/d' block_manager.py
     echo "Updated block_manager.py"
 else
-    echo "No changes made."
+    sed -i '/^[[:space:]]*toggle_eth(/d' block_manager.py
 fi
 read -p "Can you use suspend? (y/N) " answer
 if [[ "$answer" == "y" || "$answer" == "Y" ]]; then
