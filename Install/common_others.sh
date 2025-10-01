@@ -49,7 +49,20 @@ cd "${USER_HOME}"
 git clone -o upstream https://github.com/qutebrowser/qutebrowser.git "${USER_HOME}/qutebrowser"
 cd "${USER_HOME}/qutebrowser"
 cd qutebrowser
-python3 scripts/mkvenv.py
+
+read -p "Can you use the newest pyqt? (y/N): " confirm
+
+if [ "$confirm" = "y" ] || [ "$confirm" = "Y" ]; then
+    python3 scripts/mkvenv.py
+else
+    read -p "Enter pyqt version: " version
+    python3 scripts/mkvenv.py --pyqt-version "$version"
+fi
+# libtiff.so.n problems in RasberryPi
+# sudo ln -sf /usr/lib/aarch64-linux-gnu/libwebp.so.7 /usr/lib/aarch64-linux-gnu/libwebp.so.6
+# sudo ln -sf /usr/lib/aarch64-linux-gnu/libtiff.so.6 /usr/lib/aarch64-linux-gnu/libtiff.so.5
+# sudo ldconfig
+
 cd -
 # FortVPN
 echo "openfortivpn"
