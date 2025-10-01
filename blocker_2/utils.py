@@ -117,7 +117,17 @@ def is_ntp_synced() -> bool:
         notify(f"Error at is_ntp_synced{e}")
         return False
 
+def logout_hyprland():
+    try:
+        subprocess.run(["hyprctl", "dispatch", "exit"], check=True)
+        print("Logged out from Hyprland.")
+    except Exception as e:
+        print(f"Logout failed: {e}")
+
 def kill_wms(wm_list: list[str]):
+    # Special Step for Hyprland
+    if "Hyprland" in wm_list or "hyprland" in wm_list:
+        logout_hyprland()
     for wm_name in wm_list:
         try:
             result = subprocess.run(

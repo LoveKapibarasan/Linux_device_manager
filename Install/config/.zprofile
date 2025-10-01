@@ -1,3 +1,8 @@
+if [ -z "$SSH_AUTH_SOCK" ] || [ ! -S "$SSH_AUTH_SOCK" ]; then
+    eval "$(ssh-agent -s)" > /dev/null
+    ssh-add ~/.ssh/id_ed25519 2>/dev/null
+fi
+
 if [[ -z $SSH_CONNECTION ]] && [[ -z $DISPLAY ]] && [[ -z $WAYLAND_DISPLAY ]]; then
   if command -v Hyprland >/dev/null 2>&1; then
     exec Hyprland
@@ -16,7 +21,4 @@ export SDL_IM_MODULE=fcitx
 export GLFW_IM_MODULE=fcitx
 
 
-if [ -z "$SSH_AUTH_SOCK" ] || [ ! -S "$SSH_AUTH_SOCK" ]; then
-    eval "$(ssh-agent -s)" > /dev/null
-    ssh-add ~/.ssh/id_ed25519 2>/dev/null
-fi
+

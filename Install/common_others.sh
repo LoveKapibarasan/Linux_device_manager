@@ -23,8 +23,9 @@ make CMAKE_BUILD_TYPE=Release
 sudo make install
 git clone https://github.com/folke/lazy.nvim.git \
   "${USER_HOME}/.local/share/nvim/lazy/lazy.nvim"
-read -p  "Enter your username: " username
+read -p  "Enter your username for nvim repository ownership: " username
 chown -R "${username}:${username}" "/home/${username}/.local/share/nvim"
+chown -R "${username}:${username}"  "/home/${username}/neovim"
 mkdir -p "${USER_HOME}/.config/nvim"
 cp config/init.lua "$USER_HOME/.config/nvim/init.lua"
 
