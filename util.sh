@@ -171,17 +171,7 @@ EOF
     fi
   sudo cat /etc/resolv.conf
   #=== NetworkManager ===
-if grep -q '^\[main\]' /etc/NetworkManager/NetworkManager.conf; then
-  # [main] がある場合
-  if grep -A1 '^\[main\]' /etc/NetworkManager/NetworkManager.conf | grep -q '^dns='; then
-     sudo sed -i '/^\[main\]/,/^\[/{s/^dns=.*/dns=none/}' /etc/NetworkManager/NetworkManager.conf
-  else
-    sudo sed -i '/^\[main\]/a dns=none' /etc/NetworkManager/NetworkManager.conf
-  fi
-else
-  # [main] が無い場合
-  echo -e "[main]\ndns=none" | sudo tee -a /etc/NetworkManager/NetworkManager.conf
-fi
+  sudo sed -i '/^\s*dns=none\s*$/d' /etc/NetworkManager/NetworkManager.conf
 sudo cat /etc/NetworkManager/NetworkManager.conf
   sudo systemctl restart NetworkManager
 
@@ -197,8 +187,18 @@ disable_resolved() {
   sudo chattr +i /etc/resolv.conf
   sudo cat /etc/resolv.conf
   #=== NetworkManager ===
-  sudo sed -i '/^\s*dns=none\s*$/d' /etc/NetworkManager/NetworkManager.conf
-  cat /etc/NetworkManager/NetworkManager.conf
+if grep -q '^\[main\]' /etc/NetworkManager/NetworkManager.conf; then
+  # [main] がある場合
+  if grep -A1 '^\[main\]' /etc/NetworkManager/NetworkManager.conf | grep -q '^dns='; then
+     sudo sed -i '/^\[main\]/,/^\[/{s/^dns=.*/dns=none/}' /etc/NetworkManager/NetworkManager.conf
+  else
+    sudo sed -i '/^\[main\]/a dns=none' /etc/NetworkManager/NetworkManager.conf
+  fi
+else
+  # [main] が無い場合
+  echo -e "[main]\ndns=none" | sudo tee -a /etc/NetworkManager/NetworkManager.conf
+fi
+  sudo cat /etc/NetworkManager/NetworkManager.conf
   sudo systemctl restart NetworkManager
 }
 
