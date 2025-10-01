@@ -21,11 +21,6 @@
     * `rm_sudo_raspi.sh`
     * `ops`
 
-## 2. Others
-
-    
-**Firemox**
-    1. Copy `.mozillia`
 
 
 ## 3. PC
