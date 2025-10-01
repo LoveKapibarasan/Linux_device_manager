@@ -3,8 +3,9 @@
 # Global Variables
 SERVICE_DIR=$HOME/.config/systemd/user
 
-NORMAL_USER=$(awk -F: '$3 > 1000 {print $1}' /etc/passwd)
+NORMAL_USER=$(awk -F: '$3 >= 1000 && $1 != "nobody" {print $1; exit}' /etc/passwd)
 export NORMAL_USER
+
 
 is_command() {
   command -v "$1" >/dev/null 2>&1
