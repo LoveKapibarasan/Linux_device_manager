@@ -14,10 +14,10 @@ sudo sed -i 's/^#\[multilib\]/[multilib]/' /etc/pacman.conf
 read -p "Select intel or ryzen: " c
 if [ "$c" = "intel" ]; then
     # Intel => Vulkan, mesa
-    sudo pacman -S mesa lib32-mesa vulkan-intel lib32-vulkan-intel
+    sudo pacman -S mesa lib32-mesa vulkan-intel lib32-vulkan-intel --noconfirm
 else
     # Ryzen
-    sudo pacman -S mesa lib32-mesa vulkan-radeon lib32-vulkan-radeon
+    sudo pacman -S mesa lib32-mesa vulkan-radeon lib32-vulkan-radeon --noconfirm
 fi
 
 
@@ -30,31 +30,32 @@ sudo pacman -S base-devel gvim wget btop usbutils\
     python python-pip python-setuptools python-wheel python-docs\
     nodejs npm nvm \
     docker docker-compose \
-    apparmor
+    apparmor  --noconfirm
 
 sudo systemctl enable --now docker
 sudo systemctl enable --now apparmor
-
+systemctl --user enable ssh-agent.service
+systemctl --user start ssh-agent.service
 
 ## Electron
 sudo pacman -S atk at-spi2-core at-spi2-atk gtk3 nss alsa-lib libdrm libgbm libxkbcommon libcups \
-    fuse2 fuse3
+    fuse2 fuse3  --noconfirm
+
 ## clang
-sudo pacman -S clang llvm lld
+sudo pacman -S clang llvm lld  --noconfirm
 
 ## PDF
-sudo pacman -S okular qpdf
+sudo pacman -S okular qpdf  --noconfirm
 
 # 4. yay
 cd $(get_user_home)
 git clone https://aur.archlinux.org/yay.git
 cd yay
 makepkg -si
-yay -S nkf
+yay -S nkf  --noconfirm
 
 # Pyenv
-yay -S pyenv pyenv-virtualenv
+yay -S pyenv pyenv-virtualenv  --noconfirm
 
 # Pihole
-yay -S pi-hole-core pi-hole-ftl pi-hole-web
-
+yay -S pi-hole-core pi-hole-ftl pi-hole-web --noconfirm
