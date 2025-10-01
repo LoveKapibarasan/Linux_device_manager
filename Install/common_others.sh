@@ -36,9 +36,6 @@ origin_to_upstream "$USER_HOME/.local/share/"
 
 cd -
 
-
-
-
 # WM
 cp config/hyprland.conf "$USER_HOME/.config/hypr/hyprland.conf"
 cp config/config "$USER_HOME/.config/sway/config"
