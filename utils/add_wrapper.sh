@@ -4,7 +4,6 @@ SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 # Import functions
 source "$SCRIPT_DIR/../util.sh"
 
-root_check
 
 USER_HOME=$(get_user_home)
 ZSHRC="$USER_HOME/.zshrc"
