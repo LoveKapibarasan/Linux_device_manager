@@ -17,7 +17,11 @@ sudo cp config/environment /etc/environment
 # Vim
 echo 'set clipboard=unnamedplus' > ~/.vimrc
 ## Neovim
+read -p "Enter your username: " username
 git clone -o upstream https://github.com/neovim/neovim "${USER_HOME}/neovim"
+cp config/init.lua "$USER_HOME/.config/nvim/init.lua"
+chown "${username}" "$USER_HOME/.config/nvim/init.lua"
+
 cd "${USER_HOME}/neovim"
 make CMAKE_BUILD_TYPE=Release
 sudo make install
@@ -27,9 +31,9 @@ read -p  "Enter your username for nvim repository ownership: " username
 chown -R "${username}:${username}" "/home/${username}/.local/share/nvim"
 chown -R "${username}:${username}"  "/home/${username}/neovim"
 mkdir -p "${USER_HOME}/.config/nvim"
-cp config/init.lua "$USER_HOME/.config/nvim/init.lua"
 
 origin_to_upstream "$USER_HOME/.local/share/"
+
 cd -
 
 

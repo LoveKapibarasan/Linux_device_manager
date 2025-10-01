@@ -24,7 +24,7 @@ config = true
 -- Treesitter 設定
 require'nvim-treesitter.configs'.setup {
   ensure_installed = { "lua", "vim", "python", "javascript", "typescript",
-   "html", "css", "markdown", "markdown_inline" 
+   "html", "css", "markdown", "markdown_inline", "c", "cpp" 
   },
   sync_install = false, -- 起動時に同期インストールしない
   auto_install = false, -- ファイルを開いたときに自動で入れない
