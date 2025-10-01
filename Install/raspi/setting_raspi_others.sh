@@ -33,4 +33,4 @@ sudo apt install -y cmake ninja-build gettext libtool libtool-bin autoconf autom
 sudo apt install qpdf jq -y
 
 # Selenuim
-sudo apt install -y firefox-esr geckodriver
+sudo apt install -y firefox-esr
