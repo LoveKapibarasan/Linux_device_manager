@@ -63,6 +63,7 @@ cd "${USER_HOME}"
 git clone -o upstream https://github.com/qutebrowser/qutebrowser.git "${USER_HOME}/qutebrowser"
 cd "${USER_HOME}/qutebrowser"
 cd qutebrowser
+python3 scripts/mkvenv.py
 cd -
 # FortVPN
 echo "openfortivpn"
