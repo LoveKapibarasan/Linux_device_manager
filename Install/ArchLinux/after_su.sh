@@ -21,7 +21,7 @@ else
 fi
 
 
-sudo pacman -S base-devel gvim wget btop \
+sudo pacman -S base-devel gvim wget btop usbutils\
     fcitx5 fcitx5-configtool fcitx5-mozc fcitx5-gtk fcitx5-qt \
     noto-fonts noto-fonts-cjk noto-fonts-emoji \
     git openssh git-lfs vi less git-filter-repo github-cli \

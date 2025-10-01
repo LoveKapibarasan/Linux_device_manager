@@ -35,7 +35,7 @@ require'nvim-treesitter.configs'.setup {
 require("nvim-tree").setup {
   filters = {
     dotfiles = false,    -- 初期状態では表示しない
-    git_ignored = true,  -- 初期状態では表示しない
+    git_ignored = false,
   },
   git = {
     ignore = true,

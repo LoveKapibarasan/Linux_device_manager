@@ -58,10 +58,10 @@ cp config/profiles.ini "$USER_HOME/.mozilla/firefox/profiles.ini"
 rm -rf "$USER_HOME/.mozilla/firefox/"*.default-release
 
 # qutebrowser
+cp config/config.py "$USER_HOME/.config/qutebrowser/config.py"
 cd "${USER_HOME}"
 git clone -o upstream https://github.com/qutebrowser/qutebrowser.git "${USER_HOME}/qutebrowser"
 cd "${USER_HOME}/qutebrowser"
-cp config/config.py "$USER_HOME/.config/qutebrowser/config.py"
 cd qutebrowser
 cd -
 # FortVPN
