@@ -53,9 +53,11 @@ git clone https://aur.archlinux.org/yay.git
 cd yay
 makepkg -si
 yay -S nkf  --noconfirm
-
+/home/takanori/.cache/yay
 # Pyenv
 yay -S pyenv pyenv-virtualenv  --noconfirm
 
 # Pihole
 yay -S pi-hole-core pi-hole-ftl pi-hole-web --noconfirm
+
+origin_to_upstream "$USER_HOME/.cache/yay/"

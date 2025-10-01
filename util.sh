@@ -10,15 +10,15 @@ is_command() {
 }
 # Functions
 copy_files() {
-    APP_DIR="$1"
+    local APP_DIR="$1"
     sudo rm -rf "$APP_DIR"
     sudo mkdir -p "$APP_DIR"
     sudo cp -r . "$APP_DIR/"
 }
 
 copy_user_service_files(){
-    BASE_NAME="$1"
-    SERVICE_DIR="$2"
+    local BASE_NAME="$1"
+    local SERVICE_DIR="$2"
     mkdir -p "$SERVICE_DIR"
     cp "${BASE_NAME}.service" "$SERVICE_DIR"
     if [[ ! -f "${BASE_NAME}.timer" ]]; then
@@ -27,7 +27,7 @@ copy_user_service_files(){
 }
 
 reset_service() {
-    SERVICE_NAME="$1"
+    local SERVICE_NAME="$1"
     sudo systemctl stop "$SERVICE_NAME"
     sudo systemctl disable "$SERVICE_NAME"
     sudo rm -f "/etc/systemd/system/$SERVICE_NAME"
@@ -38,14 +38,14 @@ reset_service() {
 }
 
 start_service() {
-    SERVICE_NAME="$1"
+    local SERVICE_NAME="$1"
     sudo systemctl start "$SERVICE_NAME"
     sudo systemctl enable "$SERVICE_NAME"
     journalctl -u "$SERVICE_NAME" -f
 }
 
 reset_user_service() {
-    SERVICE_NAME="$1"
+    local SERVICE_NAME="$1"
     systemctl --user stop "$SERVICE_NAME"
     systemctl --user disable "$SERVICE_NAME"
     rm -f "$HOME/.config/systemd/user/$SERVICE_NAME"
@@ -56,7 +56,7 @@ reset_user_service() {
 }
 
 start_user_service() {
-    SERVICE_NAME="$1"
+    local SERVICE_NAME="$1"
     systemctl --user enable --now "$SERVICE_NAME"
     systemctl --user status "$SERVICE_NAME" --no-pager
     echo "logs (follow mode):"
@@ -65,7 +65,7 @@ start_user_service() {
 
 
 reset_user_timer() {
-    TIMER_NAME="$1" 
+    local TIMER_NAME="$1" 
     systemctl --user stop "$TIMER_NAME"
     systemctl --user disable "$TIMER_NAME"
     rm -f "$HOME/.config/systemd/user/$TIMER_NAME"
@@ -78,7 +78,7 @@ reset_user_timer() {
 
 
 start_user_timer() {
-    TIMER_NAME="$1"
+    local TIMER_NAME="$1"
     systemctl --user enable --now "$TIMER_NAME"
     systemctl --user list-timers --all | grep "$TIMER_NAME"
     echo " logs:"
@@ -86,7 +86,7 @@ start_user_timer() {
 }
 
 create_venv() {
-    APP_DIR="$1"
+    local APP_DIR="$1"
     /usr/bin/python3 -m venv "$APP_DIR/venv"
     sudo "$APP_DIR/venv/bin/pip" install -r "$APP_DIR/requirements.txt"
 }
@@ -337,4 +337,25 @@ backup_to_usb() {
     sudo umount "$usbpath"
     echo "[OK] USB をアンマウントしました ($usbpath)"
     
+}
+
+
+# 指定ディレクトリ以下の全リポジトリで remote origin を upstream にリネームする
+origin_to_upstream() {
+local BASE_DIR="$1"
+
+find "$BASE_DIR" -type d -name ".git" | while read -r gitdir; do
+  repo_dir="$(dirname "$gitdir")"
+  echo "Processing: $repo_dir"
+
+  cd "$repo_dir" || continue
+
+  # remote origin があるか確認
+  if git remote | grep -q "^origin$"; then
+    echo "Renaming origin -> upstream"
+    git remote rename origin upstream
+  else
+    echo "No origin found in $repo_dir"
+  fi
+done
 }
