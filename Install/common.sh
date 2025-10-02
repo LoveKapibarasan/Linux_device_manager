@@ -36,7 +36,7 @@ fi
 locale -a
 
 # Timezone
-
+# sudo date -s "YYYY-MM-DD HH:MM:SS"
 echo "Select timezone:"
 echo "1) Tokyo"
 echo "2) Berlin"
