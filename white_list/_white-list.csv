@@ -8,6 +8,15 @@
 (^|\.)lh3\.googleusercontent\.com$
 (^|\.)oaiusercontent\.com$
 
+# Claude
+(^|\.)claude\.ai$
+(^|\.)honeycomb\.io$
+(^|\.)stripe\.com$
+(^|\.)anthropic\.com$
+(^|\.)stripe\.network$
+(^|\.)intercom\.io$
+(^|\.)claude\.com$
+
 # oth
 (^|\.)elearning\.oth-regensburg\.de$
 (^|\.)oth-regensburg\.de$
