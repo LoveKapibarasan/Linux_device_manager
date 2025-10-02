@@ -15,3 +15,4 @@ c.url.start_pages = [f"file://{home}/Linux_device_manager/Install/config/index.h
 
 # 新しいタブを開いたときのデフォルトページも設定する場合
 c.url.default_page = f"file://{home}/Linux_device_manager/Install/config/index.html"
+

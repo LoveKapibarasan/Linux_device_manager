@@ -47,6 +47,9 @@ sudo pacman -S clang llvm lld  --noconfirm
 ## PDF
 sudo pacman -S okular qpdf --noconfirm
 
+## Camera
+sudo pacman -S cheese
+
 # 4. yay
 cd $(get_user_home)
 git clone https://aur.archlinux.org/yay.git
