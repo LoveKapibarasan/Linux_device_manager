@@ -31,3 +31,5 @@ c.qt.args = [
 c.qt.environ = {
     'LIBGL_ALWAYS_SOFTWARE': '0',  # ハードウェアアクセラレーション
 }
+# Pihole
+c.content.tls.certificate_errors = "block"

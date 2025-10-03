@@ -32,7 +32,7 @@ curl -sSL https://install.pi-hole.net | bash
 # choose wlp3s0 interface
 # choose cloudflare or google
 # show everything for ETL
-sudo apt install sqlite3 libsqlite3-dev -y
+sudo apt install sqlite3 libsqlite3-dev tcpdump -y
 
 # 4. fcitx5
 sudo apt install fcitx5 fcitx5-config-qt fcitx5-frontend-gtk3 fcitx5-frontend-gtk4 fcitx5-frontend-qt5 fcitx5-modules fcitx5-mozc -y
