@@ -16,3 +16,18 @@ c.url.start_pages = [f"file://{home}/Linux_device_manager/Install/config/index.h
 # 新しいタブを開いたときのデフォルトページも設定する場合
 c.url.default_page = f"file://{home}/Linux_device_manager/Install/config/index.html"
 
+# WebGL
+c.content.webgl = True
+
+# GPU引数（OpenGL ES用）
+c.qt.args = [
+    'ignore-gpu-blacklist',
+    'enable-gpu-rasterization',
+    'use-gl=egl',  # OpenGL ES用
+    'enable-zero-copy'
+]
+
+# Qt環境変数
+c.qt.environ = {
+    'LIBGL_ALWAYS_SOFTWARE': '0',  # ハードウェアアクセラレーション
+}

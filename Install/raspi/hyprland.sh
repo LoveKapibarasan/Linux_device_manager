@@ -10,9 +10,11 @@ source "${USER_HOME}/venv/bin/activate"
 pip install --upgrade pip
 pip install cmake
 
-export PATH=$HOME/venv/bin:$PATH
+export PATH="${USER_HOME}/venv/bin:${PATH}"
 
 git submodule update --init --recursive
+
+sudo apt install meson ninja-build
 
 sudo apt install \
   libwayland-dev \
@@ -38,3 +40,34 @@ sudo apt install \
 git clone -o upstream --recursive https://github.com/hyprwm/Hyprland  "${USER_HOME}/Hyprland"
 cd "${USER_HOME}/Hyprland"
 make all && sudo make install
+
+
+cd ~/Hyprland
+
+# subprojectsを更新
+meson subprojects update --reset
+
+# ビルドディレクトリをセットアップ
+meson setup build
+
+# ビルド
+ninja -C build
+
+# インストール（オプション）
+sudo ninja -C build install --tags runtime,man
+
+
+https://wiki.hypr.land/Getting-Started/Installation/
+head -20 meson.build | grep cpp_std
+    'optimization=3',
+    'buildtype=release',
+    'debug=false',
+    'cpp_std=c++23',
+  ],
+
+mkdir -p ~/hypr-deps
+cd ~/hypr-deps
+pc% 
+pc% git clone https://github.com/hyprwm/hyprutils.git
+cd hyprutils
+

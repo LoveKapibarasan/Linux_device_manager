@@ -3,9 +3,16 @@
 sudo pacman -S pipewire pipewire-alsa pipewire-pulse  \
     alsamixer --noconfirm # sof-firmware
 
-# multilib を有効化
-sudo sed -i 's/^#\[multilib\]/[multilib]/' /etc/pacman.conf
+# multilib が無効の場合のみ有効化
+if grep -q "^#\[multilib\]" /etc/pacman.conf; then
+    sudo sed -i '/^#\[multilib\]/,+1 s/^#//' /etc/pacman.conf
+    echo "multilib を有効化しました"
+else
+    echo "multilib は既に有効です"
+fi
 
+# パッケージデータベースを更新
+sudo pacman -Sy
 # GPU Driver
 read -p "Select intel or ryzen: " c
 if [ "$c" = "intel" ]; then
@@ -16,7 +23,39 @@ else
     sudo pacman -S mesa lib32-mesa vulkan-radeon lib32-vulkan-radeon --noconfirm
 fi
 
+# Reflector 
+sudo pacman -S reflector --noconfirm
 
+echo "Japan, Germany, USA"
+
+read -p "Enter your regidence." address
+# Mirrorlistを最適化
+sudo reflector \
+    --country "$address" \
+    --age 12 \
+    --protocol https \
+    --sort rate \
+    --save /etc/pacman.d/mirrorlist
+
+# 結果を確認
+if [ $? -eq 0 ]; then
+    echo "✓ Mirrorlist最適化完了"
+    
+    # 自動更新を有効化
+    echo "Reflector自動更新を有効化しています..."
+    sudo systemctl enable reflector.timer
+    sudo systemctl start reflector.timer
+    
+    # パッケージデータベースを更新
+    sudo pacman -Sy
+    
+    echo "✓ すべて完了しました！"
+else
+    echo "✗ エラーが発生しました。国名を確認してください。"
+    exit 1
+fi
+
+# Basic Packages
 sudo pacman -S base-devel gvim wget btop usbutils\
     fcitx5 fcitx5-configtool fcitx5-mozc fcitx5-gtk fcitx5-qt \
     noto-fonts noto-fonts-cjk noto-fonts-emoji \
