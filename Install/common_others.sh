@@ -32,7 +32,7 @@ chown -R "${username}:${username}" "/home/${username}/.local/share/nvim"
 chown -R "${username}:${username}"  "/home/${username}/neovim"
 mkdir -p "${USER_HOME}/.config/nvim"
 
-origin_to_upstream "$USER_HOME/.local/share/"
+origin_to_upstream "${USER_HOME}/.local/share/"
 
 cd -
 
@@ -40,9 +40,6 @@ cd -
 cp config/hyprland.conf "$USER_HOME/.config/hypr/hyprland.conf"
 cp config/config "$USER_HOME/.config/sway/config"
 
-# Firefox
-cp config/profiles.ini "$USER_HOME/.mozilla/firefox/profiles.ini"
-rm -rf "$USER_HOME/.mozilla/firefox/"*.default-release
 
 # qutebrowser
 cp config/config.py "$USER_HOME/.config/qutebrowser/config.py"
@@ -81,5 +78,6 @@ username = $username
 password = $password
 EOF
 
-
-
+# Firefox
+# cp config/profiles.ini "$USER_HOME/.mozilla/firefox/profiles.ini"
+# rm -rf "$USER_HOME/.mozilla/firefox/"*.default-release

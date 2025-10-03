@@ -4,6 +4,8 @@
 sudo pacman -S fprintd
 fprintd-enroll $USER -f right-index-finger
 
+## Camera
+sudo pacman -S cheese --noconfirm
 
 # PostgreSQL
 sudo pacman -S postgresql
@@ -11,7 +13,9 @@ sudo pacman -S postgresql
 sudo -iu postgres initdb -D /var/lib/postgres/data
 sudo systemctl enable --now postgresql
 
-# 9. FortClient nordvpn
-# the full GUI client
-yay -S forticlient nordvpn-bin nordvpn-gui
-yay -Rns nordvpn-bin nordvpn-gui
+# FortClient nordvpn
+yay -S forticlient nordvpn-bin
+yay -Rns nordvpn-bin
+
+# Pyenv
+yay -S pyenv pyenv-virtualenv  --noconfirm

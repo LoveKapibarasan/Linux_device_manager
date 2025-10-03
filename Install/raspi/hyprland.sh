@@ -3,6 +3,8 @@
 source ../../util.sh
 root_check
 
+USER_HOME=$(get_user_home)
+
 python3 -m venv "${USER_HOME}/venv"
 source "${USER_HOME}/venv/bin/activate"
 pip install --upgrade pip

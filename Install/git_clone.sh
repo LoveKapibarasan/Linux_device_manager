@@ -1,4 +1,7 @@
 #!/bin/bash
+source ../../util.sh
+
+non_root_check
 
 git lfs install
 
@@ -20,6 +23,6 @@ git clone git@github.com:LoveKapibarasan/my_website.git
 git clone git@github.com:LoveKapibarasan/enc-private.git
 
 git clone git@github.com:LoveKapibarasan/shogihome.git
-cd shogihome
+cd "${HOME}/shogihome"
 git remote add origin upstream git@github.com:sunfish-shogi/shogihome.git
-cd -
+cd

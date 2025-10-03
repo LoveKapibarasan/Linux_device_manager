@@ -1,6 +1,0 @@
-[Unit]
-Description=Enable autologin before nightly job
-
-[Service]
-Type=oneshot
-ExecStart=/home/%u/service_scripts/toggle-autologin.sh

@@ -7,10 +7,8 @@ APP_PATH=${APP_DIR}/shutdown_cui.py
 SERVICE_PATH=/etc/systemd/system/${SERVICE_NAME}
 
 # Import functions
-. ../util.sh
+source ../util.sh
 root_check
-
-
 
 
 # Reset the service
