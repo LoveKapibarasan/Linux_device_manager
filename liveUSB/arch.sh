@@ -1,8 +1,7 @@
-#!/usr/bin/env bash
-
+#!/bin/bash
 
 # Import functions
-. ../util.sh
+source ../util.sh
 
 root_check
 
@@ -13,8 +12,6 @@ echo "Using home directory: $USER_HOME"
 cd "$USER_HOME/Downloads" || exit 1
 # Delete old one if exist
 sudo rm -rf archlinux-x86_64.iso
-
-
 
 # Download the latest Arch Linux ISO from an official mirror
 wget https://mirror.rackspace.com/archlinux/iso/latest/archlinux-x86_64.iso
@@ -30,5 +27,3 @@ echo "Done."
 
 
 sudo rm -rf archlinux-x86_64.iso
-
-

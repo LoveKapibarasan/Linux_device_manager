@@ -1,16 +1,19 @@
 #!/bin/bash
 # Basic Packages
 sudo pacman -S pipewire pipewire-alsa pipewire-pulse  \
-    alsamixer 
-### sof-firmware
+    alsamixer --noconfirm # sof-firmware
 
-# Graphic Drivers
+# multilib が無効の場合のみ有効化
+if grep -q "^#\[multilib\]" /etc/pacman.conf; then
+    sudo sed -i '/^#\[multilib\]/,+1 s/^#//' /etc/pacman.conf
+    echo "multilib を有効化しました"
+else
+    echo "multilib は既に有効です"
+fi
 
-
-# multilib を有効化
-sudo sed -i 's/^#\[multilib\]/[multilib]/' /etc/pacman.conf
-
-# GPU ドライバ選択
+# パッケージデータベースを更新
+sudo pacman -Sy
+# GPU Driver
 read -p "Select intel or ryzen: " c
 if [ "$c" = "intel" ]; then
     # Intel => Vulkan, mesa
@@ -20,18 +23,51 @@ else
     sudo pacman -S mesa lib32-mesa vulkan-radeon lib32-vulkan-radeon --noconfirm
 fi
 
+# Reflector 
+sudo pacman -S reflector --noconfirm
 
+echo "Japan, Germany, USA"
+
+read -p "Enter your regidence." address
+# Mirrorlistを最適化
+sudo reflector \
+    --country "$address" \
+    --age 12 \
+    --protocol https \
+    --sort rate \
+    --save /etc/pacman.d/mirrorlist
+
+# 結果を確認
+if [ $? -eq 0 ]; then
+    echo "✓ Mirrorlist最適化完了"
+    
+    # 自動更新を有効化
+    echo "Reflector自動更新を有効化しています..."
+    sudo systemctl enable reflector.timer
+    sudo systemctl start reflector.timer
+    
+    # パッケージデータベースを更新
+    sudo pacman -Sy
+    
+    echo "✓ すべて完了しました！"
+else
+    echo "✗ エラーが発生しました。国名を確認してください。"
+    exit 1
+fi
+
+# Basic Packages
 sudo pacman -S base-devel gvim wget btop usbutils\
     fcitx5 fcitx5-configtool fcitx5-mozc fcitx5-gtk fcitx5-qt \
     noto-fonts noto-fonts-cjk noto-fonts-emoji \
     git openssh git-lfs vi less git-filter-repo github-cli \
-    hyprland kitty wl-clipboard xdg-desktop-portal-hyprland xdg-desktop-portal xdg-desktop-portal-wlr xwayland  \
+    hyprland kitty wl-clipboard xdg-desktop-portal-hyprland xdg-desktop-portal    
+    grim wtype \ 
+    xdg-desktop-portal-wlr xwayland  \
     dolphin zsh \
     python python-pip python-setuptools python-wheel python-docs\
     nodejs npm nvm \
     docker docker-compose \
     apparmor  --noconfirm
-# grim wtype
 
 sudo systemctl enable --now docker
 sudo systemctl enable --now apparmor
@@ -42,14 +78,12 @@ systemctl --user start ssh-agent.service
 sudo pacman -S atk at-spi2-core at-spi2-atk gtk3 nss alsa-lib libdrm libgbm libxkbcommon libcups \
     fuse2 fuse3  --noconfirm
 
-## clang
+## clang for Yaneuraou
 sudo pacman -S clang llvm lld  --noconfirm
 
 ## PDF
-sudo pacman -S okular qpdf --noconfirm
+sudo pacman -S zathura qpdf --noconfirm
 
-## Camera
-sudo pacman -S cheese
 
 # 4. yay
 cd $(get_user_home)
@@ -57,9 +91,6 @@ git clone https://aur.archlinux.org/yay.git
 cd yay
 makepkg -si
 yay -S nkf  --noconfirm
-/home/takanori/.cache/yay
-# Pyenv
-yay -S pyenv pyenv-virtualenv  --noconfirm
 
 # Pihole
 yay -S pi-hole-core pi-hole-ftl pi-hole-web --noconfirm
