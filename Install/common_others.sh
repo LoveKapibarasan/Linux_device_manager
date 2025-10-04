@@ -43,6 +43,7 @@ cp config/config "$USER_HOME/.config/sway/config"
 
 # qutebrowser
 cp config/config.py "$USER_HOME/.config/qutebrowser/config.py"
+cp config/qutebrowser.desktop "${USER_HOME}/.local/share/applications/qutebrowser.desktop"
 cd "${USER_HOME}"
 git clone -o upstream https://github.com/qutebrowser/qutebrowser.git "${USER_HOME}/qutebrowser"
 cd "${USER_HOME}/qutebrowser"
@@ -62,6 +63,9 @@ else
 # sudo ln -sf /usr/lib/aarch64-linux-gnu/libtiff.so.6 /usr/lib/aarch64-linux-gnu/libtiff.so.5
 # sudo ldconfig
 
+# Symbolic Link
+sudo ln -s "${USER_HOME}/qutebrowser/.venv/bin/qutebrowser" /usr/bin/qutebrowser
+
 cd -
 # FortVPN
 echo "openfortivpn"
@@ -78,6 +82,10 @@ trusted-cert = 364fb4fa107e591626b3919f0e7f8169e9d2097974f3e3d55e56c7c756a1f94a
 username = $username
 password = $password
 EOF
+
+# Zathura
+mkdir -p ~/.config/zathura   
+echo "set selection-clipboard clipboard" >> "${USER_HOME}/.config/zathura/zathurarc"  
 
 # Firefox
 # cp config/profiles.ini "$USER_HOME/.mozilla/firefox/profiles.ini"

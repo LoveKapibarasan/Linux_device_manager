@@ -85,7 +85,8 @@ sudo pacman -S atk at-spi2-core at-spi2-atk gtk3 nss alsa-lib libdrm libgbm libx
 sudo pacman -S clang llvm lld  --noconfirm
 
 ## PDF
-sudo pacman -S zathura qpdf --noconfirm
+### Zathura need framework and backend
+sudo pacman -S zathura zathura-pdf-poppler qpdf --noconfirm
 
 
 # 4. yay
