@@ -4,3 +4,4 @@ qute,cd ~/qutebrowser && .venv/bin/python3 -m qutebrowser
 clip,wl-copy
 paste,wl-paste
 @cp,fc -ln -1 | wl-copy
+@o,xdg-open
