@@ -108,3 +108,4 @@ vim.api.nvim_create_autocmd("SwapExists", {
 
 -- swap ファイルをカレントディレクトリに置く
 vim.opt.directory = "."
+

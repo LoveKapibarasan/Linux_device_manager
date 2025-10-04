@@ -13,6 +13,8 @@
 sudo apt update -y 
 sudo apt upgrade -y
 
+sudo apt purge nano vim -y
+
 ## WM git firefox code explorer terminal editor
 sudo apt install sway wl-clipboard \
     git git-lfs openssh-client \
@@ -23,6 +25,9 @@ sudo apt install sway wl-clipboard \
     zsh \
     v4l-utils
     -y
+
+# Purge foot and install kitty
+sudo apt purge foot -y && sudo apt install kitty -y
 
 # 2. Fonts
 sudo apt install fonts-noto-cjk fonts-noto-cjk-extra -y
@@ -41,3 +46,6 @@ fcitx5-configtool
 # 5. Dev tools
 sudo apt install python3 python3-pip python3-venv -y
 sudo apt install nodejs npm -y
+
+
+sudo apt autoremove

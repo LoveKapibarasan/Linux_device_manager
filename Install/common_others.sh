@@ -54,8 +54,9 @@ if [ "$confirm" = "y" ] || [ "$confirm" = "Y" ]; then
     python3 scripts/mkvenv.py
 else
     read -p "Enter pyqt version: " version
-    python3 scripts/mkvenv.py --pyqt-version "$version"
-fi
+    python3 scripts/mkvenv.py --pyqt-version "$version" # 6.7
+     python3 scripts/mkvenv.py --pyqt-type link --pyqt-version 6 
+     # Link with System PyQt6
 # libtiff.so.n problems in RasberryPi
 # sudo ln -sf /usr/lib/aarch64-linux-gnu/libwebp.so.7 /usr/lib/aarch64-linux-gnu/libwebp.so.6
 # sudo ln -sf /usr/lib/aarch64-linux-gnu/libtiff.so.6 /usr/lib/aarch64-linux-gnu/libtiff.so.5

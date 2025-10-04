@@ -1,5 +1,11 @@
 #!/bin/bash
 
+# Purge LXDE
+## Default Menu
+dpkg -l | grep -i "^ii.*\slx"
+sudo apt purge lxmenu-data libmenu-cache-bin libmenu-cache3 lxde-icon-theme lxpolkit lxsession-data -y
+
+
 # Graphics
 sudo apt install -y mesa-utils mesa-vulkan-drivers vulkan-tools
 

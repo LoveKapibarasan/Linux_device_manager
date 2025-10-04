@@ -24,5 +24,5 @@ git clone git@github.com:LoveKapibarasan/enc-private.git
 
 git clone git@github.com:LoveKapibarasan/shogihome.git
 cd "${HOME}/shogihome"
-git remote add origin upstream git@github.com:sunfish-shogi/shogihome.git
+git remote add upstream git@github.com:sunfish-shogi/shogihome.git
 cd

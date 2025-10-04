@@ -55,6 +55,9 @@ else
     exit 1
 fi
 
+# Purge
+sudo pacman -Rns nano vim
+
 # Basic Packages
 sudo pacman -S base-devel gvim wget btop usbutils\
     fcitx5 fcitx5-configtool fcitx5-mozc fcitx5-gtk fcitx5-qt \
