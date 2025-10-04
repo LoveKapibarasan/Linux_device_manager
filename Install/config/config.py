@@ -23,7 +23,6 @@ c.content.webgl = True
 c.qt.args = [
     'ignore-gpu-blacklist',
     'enable-gpu-rasterization',
-    'use-gl=egl',  # OpenGL ES用
     'enable-zero-copy'
 ]
 
@@ -33,3 +32,8 @@ c.qt.environ = {
 }
 # Pihole
 c.content.tls.certificate_errors = "block"
+
+# Disable Trusted Types enforcement globally
+c.content.headers.custom = {
+    'Content-Security-Policy': "require-trusted-types-for 'none'"
+}
