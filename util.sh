@@ -39,11 +39,29 @@ reset_service() {
     sudo systemctl daemon-reexec
 }
 
+reset_timer() {
+    local TIMER_NAME="$1"
+    sudo systemctl stop "$TIMER_NAME"
+    sudo systemctl disable "$TIMER_NAME"
+    sudo rm -f "/etc/systemd/system/$TIMER_NAME"
+    sudo rm -f "/etc/systemd/system/timers.target.wants/$TIMER_NAME"
+    sudo systemctl reset-failed "$TIMER_NAME"
+    sudo systemctl daemon-reload
+}
+
 start_service() {
     local SERVICE_NAME="$1"
-    sudo systemctl start "$SERVICE_NAME"
-    sudo systemctl enable "$SERVICE_NAME"
-    journalctl -u "$SERVICE_NAME" -f
+    sudo systemctl enable --now "$SERVICE_NAME"
+    echo "Service logs:"
+    sudo journalctl -u "$SERVICE_NAME" -n 20 -f
+}
+
+start_timer() {
+    local TIMER_NAME="$1"
+    sudo systemctl enable --now "$TIMER_NAME"
+    sudo systemctl list-timers --all | grep "$TIMER_NAME"
+    echo "Timer logs:"
+    sudo journalctl -u "${TIMER_NAME%.timer}.service" -n 20 -f
 }
 
 reset_user_service() {
@@ -57,15 +75,6 @@ reset_user_service() {
     systemctl --user daemon-reexec
 }
 
-start_user_service() {
-    local SERVICE_NAME="$1"
-    systemctl --user enable --now "$SERVICE_NAME"
-    systemctl --user status "$SERVICE_NAME" --no-pager
-    echo "logs (follow mode):"
-    journalctl --user -u "$SERVICE_NAME" -n 20 -f
-}
-
-
 reset_user_timer() {
     local TIMER_NAME="$1" 
     systemctl --user stop "$TIMER_NAME"
@@ -77,13 +86,18 @@ reset_user_timer() {
     systemctl --user daemon-reexec
 }
 
-
+start_user_service() {
+    local SERVICE_NAME="$1"
+    systemctl --user enable --now "$SERVICE_NAME"
+    echo "Service logs:"
+    journalctl --user -u "$SERVICE_NAME" -n 20 -f
+}
 
 start_user_timer() {
     local TIMER_NAME="$1"
     systemctl --user enable --now "$TIMER_NAME"
     systemctl --user list-timers --all | grep "$TIMER_NAME"
-    echo " logs:"
+    echo "Timer logs:"
     journalctl --user -u "${TIMER_NAME%.timer}.service" -n 20 -f
 }
 
@@ -128,6 +142,13 @@ root_check(){
     fi
 }
 
+non_root_check(){
+    if [ "$(id -u)" -eq 0 ]; then
+        echo "This script must NOT be run as root" >&2
+        exit 1
+    fi
+}
+
 # Function to get the home directory of the user who invoked sudo
 get_user_home() {
     if [ -n "$SUDO_USER" ]; then
@@ -141,21 +162,6 @@ replace_vars() {
     local basename=$1
     local username=$2
     sed "s|<USER>|$username|g" "${basename}.example" > "$basename"
-}
-
-allow_nopass() {
-    local basename=$1
-    local username=$2
-
-    sudo mkdir -p /etc/sudoers.d
-    if [ ! -f /etc/sudoers.d/toggle-autologin ]; then
-        echo "${username} ALL=(ALL) NOPASSWD: /home/${username}/${basename}.sh" | sudo tee "/etc/sudoers.d/${basename}" > /dev/null
-        sudo chmod 440 "/etc/sudoers.d/${basename}"
-    fi
-    chmod 700 /home/${username}/${basename}.sh
-    USER_HOME=$(get_user_home)
-    mkdir -p "$USER_HOME/service_scripts"
-    cp "${basename}.sh" "$USER_HOME/service_scripts/${SCRIPT_NAME}.sh"
 }
 
 
