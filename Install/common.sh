@@ -17,7 +17,6 @@ cat > /etc/hosts <<EOF
 127.0.1.1   ${hostname}.localdomain ${HOSTNAME}
 EOF
 
-
 # Locale
 ## Candidates
 if is_command apt || is_command pacman;then
