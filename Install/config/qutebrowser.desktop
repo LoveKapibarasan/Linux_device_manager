@@ -1,0 +1,10 @@
+[Desktop Entry]
+Type=Application
+Name=Qutebrowser (venv)
+Comment=Keyboard-driven, vim-like browser from venv
+Icon=qutebrowser
+Categories=Network;WebBrowser;
+MimeType=text/html;text/xml;application/xhtml+xml;x-scheme-handler/http;x-scheme-handler/https;
+Exec=qutebrowser %u
+Terminal=false
+StartupNotify=true

@@ -17,7 +17,6 @@ cat > /etc/hosts <<EOF
 127.0.1.1   ${hostname}.localdomain ${HOSTNAME}
 EOF
 
-
 # Locale
 ## Candidates
 if is_command apt || is_command pacman;then
@@ -73,5 +72,24 @@ echo -e "[device]\nwifi.country=${COUNTRY}" | sudo tee /etc/NetworkManager/conf.
 cat /etc/NetworkManager/conf.d/wifi-country.conf
 sudo systemctl restart NetworkManager
 
+# MIME
+ZATHURA=$(ls /usr/share/applications/ | grep zathura)
+xdg-mime default "$ZATHURA" application/pdf
+xdg-mime query default application/pdf
 
+sudo cp config/nvim.desktop /usr/share/applications/ 
+# text/*のMIMEタイプを全て取得してnvimに設定
+grep '^text/' /etc/mime.types | awk '{print $1}' | sort -u | while read mime; do
+    xdg-mime default nvim.desktop "$mime"
+done
 
+# URL
+xdg-mime default qutebrowser.desktop x-scheme-handler/http
+xdg-mime default qutebrowser.desktop x-scheme-handler/https
+
+xdg-settings set default-web-browser qutebrowser.desktop
+
+xdg-settings get default-web-browser
+# Reload and Test
+update-desktop-database ~/.local/share/applications/
+xdg-open http://example.com

@@ -13,9 +13,15 @@ sudo pacman -S postgresql
 sudo -iu postgres initdb -D /var/lib/postgres/data
 sudo systemctl enable --now postgresql
 
-# FortClient nordvpn
-yay -S forticlient nordvpn-bin
-yay -Rns nordvpn-bin
+# HP Printer
+sudo pacman -S cups hplip
+sudo systemctl enable --now cups.service
 
+# FortClient nordvpn
+yay -S forticlient --noconfirm
+yay -S nordvpn-bin --noconfirm
+systemctl enable --now nordvpnd
+nordvpn login --token "$token"
+nordvpn connect "$country"
 # Pyenv
 yay -S pyenv pyenv-virtualenv  --noconfirm

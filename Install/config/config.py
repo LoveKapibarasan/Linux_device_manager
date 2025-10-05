@@ -37,3 +37,7 @@ c.content.tls.certificate_errors = "block"
 c.content.headers.custom = {
     'Content-Security-Policy': "require-trusted-types-for 'none'"
 }
+# Content Security Policy (CSP) 
+c.content.headers.content_security_policy = {
+    "*": "default-src 'self' 'unsafe-inline'"
+}

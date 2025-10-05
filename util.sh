@@ -186,7 +186,8 @@ EOF
 }
 
 disable_resolved() {
-  sudo systemctl disable --now systemd-resolved.service systemd-resolved.socket systemd-resolved-varlink.socket systemd-resolved-monitor.socket
+  sudo systemctl disable --now systemd-resolved.service systemd-resolved.socket systemd-resolved-varlink.socket systemd-resolved-monitor.socket systemd-resolved-monitor.socket systemd-resolved-varlink.socket
+  sudo systemctl mask systemd-resolved
   sudo systemctl mask dnsmasq
   sudo systemctl mask dhcpcd
   sudo chattr -i /etc/resolv.conf
