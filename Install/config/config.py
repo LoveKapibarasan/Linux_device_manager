@@ -1,4 +1,10 @@
 import os
+
+### Arguments List
+# qutebrowser: https://qutebrowser.org/doc/help/settings.html#qt.args
+# Chromium flags: https://peter.sh/experiments/chromium-command-line-switches/
+###
+
 # Load autoconfig.yml (GUI changes)
 config.load_autoconfig()
 
@@ -16,28 +22,19 @@ c.url.start_pages = [f"file://{home}/Linux_device_manager/Install/config/index.h
 # 新しいタブを開いたときのデフォルトページも設定する場合
 c.url.default_page = f"file://{home}/Linux_device_manager/Install/config/index.html"
 
+c.content.pdfjs = True # enable to see pdf
+
 # WebGL
 c.content.webgl = True
-
-# GPU引数（OpenGL ES用）
+# WARNING: Only --use-gl=angle is supported on this platform.
+# Vulkanを有効化
 c.qt.args = [
-    'ignore-gpu-blacklist',
+    'ignore-gpu-blocklist',
     'enable-gpu-rasterization',
-    'enable-zero-copy'
+    'enable-unsafe-webgpu',
+    'use-gl=angle',
+    'use-vulkan',
+    'enable-features=Vulkan',
+    # Innner HTML
+    '--disable-features=TrustedDOMTypes',
 ]
-
-# Qt環境変数
-c.qt.environ = {
-    'LIBGL_ALWAYS_SOFTWARE': '0',  # ハードウェアアクセラレーション
-}
-# Pihole
-c.content.tls.certificate_errors = "block"
-
-# Disable Trusted Types enforcement globally
-c.content.headers.custom = {
-    'Content-Security-Policy': "require-trusted-types-for 'none'"
-}
-# Content Security Policy (CSP) 
-c.content.headers.content_security_policy = {
-    "*": "default-src 'self' 'unsafe-inline'"
-}

@@ -6,21 +6,20 @@ sudo pacman -S pipewire pipewire-alsa pipewire-pulse  \
 # multilib が無効の場合のみ有効化
 if grep -q "^#\[multilib\]" /etc/pacman.conf; then
     sudo sed -i '/^#\[multilib\]/,+1 s/^#//' /etc/pacman.conf
-    echo "multilib を有効化しました"
-else
-    echo "multilib は既に有効です"
+    echo "multilib enabled"
 fi
 
 # パッケージデータベースを更新
 sudo pacman -Sy
 # GPU Driver
+sudo pacman -S vulkan-tools mesa lib32-mesa --noconfirm 
 read -p "Select intel or ryzen: " c
 if [ "$c" = "intel" ]; then
     # Intel => Vulkan, mesa
-    sudo pacman -S mesa lib32-mesa vulkan-intel lib32-vulkan-intel --noconfirm
+    sudo pacman -S vulkan-intel lib32-vulkan-intel --noconfirm
 else
     # Ryzen
-    sudo pacman -S mesa lib32-mesa vulkan-radeon lib32-vulkan-radeon --noconfirm
+    sudo pacman -S vulkan-radeon lib32-vulkan-radeon --noconfirm
 fi
 
 # Reflector 
@@ -75,7 +74,8 @@ sudo pacman -S base-devel gvim wget btop usbutils\
 sudo systemctl enable --now docker
 sudo systemctl enable --now apparmor
 systemctl --user enable ssh-agent.service
-systemctl --user start ssh-agent.service
+systemctl --user start ssh-agent.servic:wq
+e
 
 ## Electron
 sudo pacman -S atk at-spi2-core at-spi2-atk gtk3 nss alsa-lib libdrm libgbm libxkbcommon libcups \
@@ -86,8 +86,9 @@ sudo pacman -S clang llvm lld  --noconfirm
 
 ## PDF
 ### Zathura need framework and backend
-sudo pacman -S zathura zathura-pdf-poppler qpdf --noconfirm
-
+sudo pacman -S zathura zathura-pdf-poppler qpdf pdfjs --noconfirm
+### Image Viewer
+sudo pacman -S imv --noconfirm
 
 # 4. yay
 cd $(get_user_home)

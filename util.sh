@@ -166,10 +166,11 @@ replace_vars() {
 
 
 enable_resolved() {
-  sudo chattr -i /etc/resolv.conf 
+   sudo chattr -i /etc/resolv.conf 
   sudo rm -f /etc/resolv.conf
    sudo systemctl unmask systemd-resolved
   sudo systemctl enable systemd-resolved --now
+  sudo sed -i 's/hosts: mymachines files/hosts: mymachines resolve [!UNAVAIL=return] files/' /etc/nsswitch.conf
 sudo tee /etc/resolv.conf >/dev/null <<EOF
 nameserver 1.1.1.1
 nameserver 8.8.8.8
@@ -186,8 +187,18 @@ EOF
 }
 
 disable_resolved() {
-  sudo systemctl disable --now systemd-resolved.service systemd-resolved.socket systemd-resolved-varlink.socket systemd-resolved-monitor.socket systemd-resolved-monitor.socket systemd-resolved-varlink.socket
-  sudo systemctl mask systemd-resolved
+  # Socket activation of resolved	
+  sudo systemctl mask systemd-resolved-varlink.socket
+  sudo systemctl mask systemd-resolved-monitor.socket
+  sudo systemctl disable systemd-resolved.service
+  sudo systemctl mask systemd-resolved.service
+  sudo mv /usr/lib/systemd/systemd-resolved /usr/lib/systemd/systemd-resolved.disabled
+  # Symbolic Link from sysinit  
+  ls -la /etc/systemd/system/sysinit.target.wants/ | grep resolved
+  sudo rm /etc/systemd/system/sysinit.target.wants/systemd-resolved.service
+  # etc nssconf.switch
+  sudo sed -i 's/resolve \[!UNAVAIL=return\] //g' /etc/nsswitch.conf
+  cat /etc/nsswitch.conf | grep hosts
   sudo systemctl mask dnsmasq
   sudo systemctl mask dhcpcd
   sudo chattr -i /etc/resolv.conf

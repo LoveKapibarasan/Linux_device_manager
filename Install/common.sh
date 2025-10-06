@@ -93,3 +93,9 @@ xdg-settings get default-web-browser
 # Reload and Test
 update-desktop-database ~/.local/share/applications/
 xdg-open http://example.com
+
+### imv
+ls /usr/share/applications/ | grep imv
+xdg-mime default imv.desktop image/png
+xdg-mime default imv.desktop image/jpeg
+xdg-mime default imv.desktop image/webp

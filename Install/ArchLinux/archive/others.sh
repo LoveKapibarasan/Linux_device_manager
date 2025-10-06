@@ -23,5 +23,6 @@ yay -S nordvpn-bin --noconfirm
 systemctl enable --now nordvpnd
 nordvpn login --token "$token"
 nordvpn connect "$country"
+nordvpn set dns 127.0.0.1
 # Pyenv
 yay -S pyenv pyenv-virtualenv  --noconfirm
