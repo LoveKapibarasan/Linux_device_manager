@@ -38,3 +38,6 @@ c.qt.args = [
     # Innner HTML
     '--disable-features=TrustedDOMTypes',
 ]
+
+
+c.content.tls.certificate_errors = 'block'

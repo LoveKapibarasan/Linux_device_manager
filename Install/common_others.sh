@@ -18,15 +18,14 @@ sudo cp config/environment /etc/environment
 echo 'set clipboard=unnamedplus' > ~/.vimrc
 ## Neovim
 read -p "Enter your username: " username
-git clone -o upstream https://github.com/neovim/neovim "${USER_HOME}/neovim"
+git clone -o upstream git@github.com:neovim/neovim.git "${USER_HOME}/neovim"
 cp config/init.lua "$USER_HOME/.config/nvim/init.lua"
 chown "${username}" "$USER_HOME/.config/nvim/init.lua"
 
 cd "${USER_HOME}/neovim"
 make CMAKE_BUILD_TYPE=Release
 sudo make install
-git clone https://github.com/folke/lazy.nvim.git \
-  "${USER_HOME}/.local/share/nvim/lazy/lazy.nvim"
+git clone git@github.com:folke/lazy.nvim.git "${USER_HOME}/.local/share/nvim/lazy/lazy.nvim"
 read -p  "Enter your username for nvim repository ownership: " username
 chown -R "${username}:${username}" "/home/${username}/.local/share/nvim"
 chown -R "${username}:${username}"  "/home/${username}/neovim"
@@ -45,7 +44,7 @@ cp config/config "$USER_HOME/.config/sway/config"
 cp config/config.py "$USER_HOME/.config/qutebrowser/config.py"
 cp config/qutebrowser.desktop "${USER_HOME}/.local/share/applications/qutebrowser.desktop"
 cd "${USER_HOME}"
-git clone -o upstream https://github.com/qutebrowser/qutebrowser.git "${USER_HOME}/qutebrowser"
+git clone -o upstream git@github.com:qutebrowser/qutebrowser.git "${USER_HOME}/qutebrowser"
 cd "${USER_HOME}/qutebrowser"
 cd qutebrowser
 

@@ -26,3 +26,10 @@ nordvpn connect "$country"
 nordvpn set dns 127.0.0.1
 # Pyenv
 yay -S pyenv pyenv-virtualenv  --noconfirm
+
+# Display
+yay -S hyprshade  
+
+# Apply 
+hyprshade on grayscale
+hyprshade off

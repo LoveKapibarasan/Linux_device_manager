@@ -26,3 +26,32 @@ git clone git@github.com:LoveKapibarasan/shogihome.git
 cd "${HOME}/shogihome"
 git remote add upstream git@github.com:sunfish-shogi/shogihome.git
 cd
+
+
+# Repository List
+USER_HOME=$(get_user_home)
+
+# Arch Linux
+# https://archlinux.org/
+
+# tsshogi
+git clone -o upstream git@github.com:sunfish-shogi/tsshogi.git "${USER_HOME}/tsshogi"
+
+# Neo Vim
+git clone -o upstream git@github.com:neovim/neovim.git "${USER_HOME}/neovim"
+git clone -o upstream git@github.com:folke/lazy.nvim.git "${USER_HOME}/.local/share/nvim/lazy/lazy.nvim"
+
+# Kitty
+git clone -o upstream git@github.com:kovidgoyal/kitty.git "${USER_HOME}/kitty"
+
+# Qutebrowser
+git clone -o upstream git@github.com:qutebrowser/qutebrowser.git "${USER_HOME}/qutebrowser"
+
+# Hyprland
+git clone -o upstream git@github.com:hyprwm/Hyprland.git "${USER_HOME}/Hyprland"
+
+# Pi-hole
+git clone -o upstream git@github.com:pi-hole/pi-hole.git "${USER_HOME}/pi-hole"
+# git@github.com:pi-hole/FTL.git, git@github.com:pi-hole/web.git, git@github.com:pi-hole/docs.git
+
+# Zsh
