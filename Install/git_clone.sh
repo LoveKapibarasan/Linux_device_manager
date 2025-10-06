@@ -54,4 +54,14 @@ git clone -o upstream git@github.com:hyprwm/Hyprland.git "${USER_HOME}/Hyprland"
 git clone -o upstream git@github.com:pi-hole/pi-hole.git "${USER_HOME}/pi-hole"
 # git@github.com:pi-hole/FTL.git, git@github.com:pi-hole/web.git, git@github.com:pi-hole/docs.git
 
+# fcitx 5 
+git clone -o upstream git@github.com:fcitx/fcitx5.git "${USER_HOME}/fcitx5"
+## Mozc  
+git clone -o upstream git@github.com:google/mozc.git "${USER_HOME}/mozc"
+
+# btop
+git clone -o upstream git@github.com:aristocratos/btop.git  "${USER_HOME}/btop"
+
 # Zsh
+
+# Claude
