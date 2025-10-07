@@ -89,3 +89,12 @@ echo "set selection-clipboard clipboard" >> "${USER_HOME}/.config/zathura/zathur
 # Firefox
 # cp config/profiles.ini "$USER_HOME/.mozilla/firefox/profiles.ini"
 # rm -rf "$USER_HOME/.mozilla/firefox/"*.default-release
+
+
+# Ollama
+curl -fsSL https://ollama.com/install.sh | sh
+
+
+# Alacritty
+mkdir -p "${USER_HOME}/.config/alacritty/" 
+cp config/alacritty.toml "${USER_HOME}/.config/alacritty/alacritty.toml"

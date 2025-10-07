@@ -41,3 +41,5 @@ c.qt.args = [
 
 
 c.content.tls.certificate_errors = 'block'
+
+c.content.autoplay = True
