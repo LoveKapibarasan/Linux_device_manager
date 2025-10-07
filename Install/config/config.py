@@ -37,6 +37,12 @@ c.qt.args = [
     'enable-features=Vulkan',
     # Innner HTML
     '--disable-features=TrustedDOMTypes',
+    # Audio
+    '--autoplay-policy=no-user-gesture-required',
+  '--disable-features=AudioServiceOutOfProcess',
+  '--disable-features=AudioServiceSandbox',
+  '--enable-features=AudioWorkletRealtimeThread',
+  '--disable-blink-features=BlockCredentialedSubresources',
 ]
 
 

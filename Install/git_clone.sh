@@ -67,3 +67,7 @@ git clone git@github.com:ollama/ollama.git "${USER_HOME}/ollama"
 
 # Zsh
 # https://zsh.sourceforge.io/
+
+# Mail Server
+git clone -o upstream git@github.com:mail-in-a-box/mailinabox.git "${USER_HOME}/mailinabox"
+
