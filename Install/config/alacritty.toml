@@ -4,16 +4,8 @@ dynamic_title = true
 startup_mode = "Maximized"  
 
 [font.normal]
-family = "UDEV Gothic NF"
-style = "Regular"
+family = "Noto Sans Mono CJK JP"
 
-[font.bold]
-family = "UDEV Gothic NF"
-style = "Bold"
-
-[font.italic]
-family = "UDEV Gothic NF"
-style = "Italic"
 
 [colors.primary]
 background = "#1e1e1e"

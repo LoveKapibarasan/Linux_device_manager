@@ -26,8 +26,11 @@ sudo chmod 0440 /etc/sudoers.d/ops
 
 for u in $(awk -F: '$3 >= 1000 && $1 != "nobody" {print $1}' /etc/passwd); do
     sudo usermod -aG systemd-journal "$u"
+    sudo usermod -aG ops "$u"
 done
 
 if [ -z "$(getent group ops)" ];then
     sudo groupadd ops
 fi
+
+
