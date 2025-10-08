@@ -27,6 +27,9 @@ c.content.pdfjs = True # enable to see pdf
 # WebGL
 c.content.webgl = True
 # WARNING: Only --use-gl=angle is supported on this platform.
+
+
+# Remove this when you use Rasberry Pi
 # Vulkanを有効化
 c.qt.args = [
     'ignore-gpu-blocklist',

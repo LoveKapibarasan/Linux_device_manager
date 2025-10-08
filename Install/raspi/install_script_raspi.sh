@@ -26,8 +26,8 @@ sudo apt install sway wl-clipboard \
     v4l-utils
     -y
 
-# Purge foot and install kitty
-sudo apt purge foot -y && sudo apt install kitty -y
+# Purge foot and install terminal 
+sudo apt purge foot -y && sudo apt install xterm kitty -y
 
 # 2. Fonts
 sudo apt install fonts-noto-cjk fonts-noto-cjk-extra -y

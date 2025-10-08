@@ -16,4 +16,4 @@ sudo apt install -y libfuse2
 sudo apt install -y cmake ninja-build gettext libtool libtool-bin autoconf automake cmake g++ pkg-config unzip curl doxygen
 
 # PDF JQ
-sudo apt install qpdf zathura jq -y
+sudo apt install qpdf zathura libjs-pdf jq -y

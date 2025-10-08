@@ -1,13 +1,11 @@
 ### Variables
 set $mod Mod4
-set $term kitty 
+set $term alacritty 
 
 include /etc/sway/config-vars.d/*
 
 ###  exec
 exec --no-startup-id fcitx5 -d
-exec "pkill firefox"
-exec "pkill code"
 
 
 
