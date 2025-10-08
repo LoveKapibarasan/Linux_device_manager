@@ -27,7 +27,7 @@ sudo apt install sway wl-clipboard \
     -y
 
 # Purge foot and install terminal 
-sudo apt purge foot -y && sudo apt install xterm kitty -y
+sudo apt purge foot -y && sudo apt install alacritty -y
 
 # 2. Fonts
 sudo apt install fonts-noto-cjk fonts-noto-cjk-extra -y

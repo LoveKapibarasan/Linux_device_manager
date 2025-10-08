@@ -25,7 +25,7 @@ input * {
 ### Basics:
 
     # Start a terminal
-    bindsym $mod+q exec LIBGL_ALWAYS_SOFTWARE=1 $term
+    bindsym $mod+q exec $term
 
     # Kill focused window
     bindsym $mod+c kill
