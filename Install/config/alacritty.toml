@@ -1,0 +1,14 @@
+[window]
+decorations = "full"
+dynamic_title = true
+startup_mode = "Maximized"  
+
+[font.normal]
+family = "Noto Sans Mono CJK JP"
+
+
+[colors.primary]
+background = "#1e1e1e"
+foreground = "#d4d4d4"
+
+

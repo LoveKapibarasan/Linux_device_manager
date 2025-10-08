@@ -38,19 +38,15 @@ sudo reflector \
 
 # 結果を確認
 if [ $? -eq 0 ]; then
-    echo "✓ Mirrorlist最適化完了"
-    
-    # 自動更新を有効化
-    echo "Reflector自動更新を有効化しています..."
+    echo "Success! Enabling auto update."
     sudo systemctl enable reflector.timer
     sudo systemctl start reflector.timer
     
-    # パッケージデータベースを更新
+    # Update Package database
     sudo pacman -Sy
     
-    echo "✓ すべて完了しました！"
 else
-    echo "✗ エラーが発生しました。国名を確認してください。"
+    echo "Error!"
     exit 1
 fi
 
@@ -62,7 +58,7 @@ sudo pacman -S base-devel gvim wget btop usbutils\
     fcitx5 fcitx5-configtool fcitx5-mozc fcitx5-gtk fcitx5-qt \
     noto-fonts noto-fonts-cjk noto-fonts-emoji \
     git openssh git-lfs vi less git-filter-repo github-cli \
-    hyprland kitty wl-clipboard xdg-desktop-portal-hyprland xdg-desktop-portal    
+    hyprland alacritty wl-clipboard xdg-desktop-portal-hyprland xdg-desktop-portal    
     grim wtype \ 
     xdg-desktop-portal-wlr xwayland  \
     dolphin zsh \
@@ -89,6 +85,8 @@ sudo pacman -S clang llvm lld  --noconfirm
 sudo pacman -S zathura zathura-pdf-poppler qpdf pdfjs --noconfirm
 ### Image Viewer
 sudo pacman -S imv --noconfirm
+# Qutebrowser
+sudo pacman -S qt6-base qt6-webengine
 
 # 4. yay
 cd $(get_user_home)
@@ -101,3 +99,7 @@ yay -S nkf  --noconfirm
 yay -S pi-hole-core pi-hole-ftl pi-hole-web --noconfirm
 
 origin_to_upstream "$USER_HOME/.cache/yay/"
+
+
+# USB mount
+sudo usermod -aG storage $USER

@@ -14,7 +14,7 @@ Cmnd_Alias SERVICE_OPS = /usr/bin/systemctl start *, /usr/bin/systemctl restart 
 Cmnd_Alias PACKAGE_MGR = /usr/bin/pacman, /usr/bin/yay, /usr/bin/apt, /usr/bin/apt-get
 
 # VPN (動的に取得したフルパスを埋め込む)
-Cmnd_Alias VPN_OPS =  $(which openfortivpn) # $(which nordvpn)
+Cmnd_Alias VPN_OPS =  $(which openfortivpn)  $(which nordvpn)
 
 # Apply to ops
 %ops ALL=(ALL:ALL) NOPASSWD: SERVICE_OPS, PACKAGE_MGR, VPN_OPS
@@ -26,8 +26,11 @@ sudo chmod 0440 /etc/sudoers.d/ops
 
 for u in $(awk -F: '$3 >= 1000 && $1 != "nobody" {print $1}' /etc/passwd); do
     sudo usermod -aG systemd-journal "$u"
+    sudo usermod -aG ops "$u"
 done
 
 if [ -z "$(getent group ops)" ];then
     sudo groupadd ops
 fi
+
+

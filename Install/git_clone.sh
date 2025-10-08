@@ -41,8 +41,8 @@ git clone -o upstream git@github.com:sunfish-shogi/tsshogi.git "${USER_HOME}/tss
 git clone -o upstream git@github.com:neovim/neovim.git "${USER_HOME}/neovim"
 git clone -o upstream git@github.com:folke/lazy.nvim.git "${USER_HOME}/.local/share/nvim/lazy/lazy.nvim"
 
-# Kitty
-git clone -o upstream git@github.com:kovidgoyal/kitty.git "${USER_HOME}/kitty"
+# Terminal 
+git clone -o upstream git@github.com:alacritty/alacritty.git "${USER_HOME}/kitty"
 
 # Qutebrowser
 git clone -o upstream git@github.com:qutebrowser/qutebrowser.git "${USER_HOME}/qutebrowser"
@@ -62,6 +62,12 @@ git clone -o upstream git@github.com:google/mozc.git "${USER_HOME}/mozc"
 # btop
 git clone -o upstream git@github.com:aristocratos/btop.git  "${USER_HOME}/btop"
 
-# Zsh
+# LLM
+git clone git@github.com:ollama/ollama.git "${USER_HOME}/ollama"
 
-# Claude
+# Zsh
+# https://zsh.sourceforge.io/
+
+# Mail Server
+git clone -o upstream git@github.com:mail-in-a-box/mailinabox.git "${USER_HOME}/mailinabox"
+
