@@ -103,8 +103,8 @@ start_user_timer() {
 
 create_venv() {
     local APP_DIR="$1"
-    /usr/bin/python3 -m venv "$APP_DIR/venv"
-    sudo "$APP_DIR/venv/bin/pip" install -r "$APP_DIR/requirements.txt"
+    /usr/bin/python3 -m venv "$APP_DIR/.venv"
+    sudo "$APP_DIR/.venv/bin/pip" install -r "$APP_DIR/requirements.txt"
 }
 
 clean_logs() {

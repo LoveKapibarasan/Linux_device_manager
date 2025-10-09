@@ -27,12 +27,3 @@ nordvpn set dns 127.0.0.1
 nordvpn set dns off
 nordvpn set autoconnect on
 
-# Pyenv
-yay -S pyenv pyenv-virtualenv  --noconfirm
-
-# Display
-yay -S hyprshade  
-
-# Apply 
-hyprshade on grayscale
-hyprshade off

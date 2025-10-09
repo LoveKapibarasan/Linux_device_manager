@@ -86,9 +86,6 @@ EOF
 mkdir -p ~/.config/zathura   
 echo "set selection-clipboard clipboard" >> "${USER_HOME}/.config/zathura/zathurarc"  
 
-# Firefox
-# cp config/profiles.ini "$USER_HOME/.mozilla/firefox/profiles.ini"
-# rm -rf "$USER_HOME/.mozilla/firefox/"*.default-release
 
 
 # Ollama

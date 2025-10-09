@@ -105,13 +105,17 @@ workgroup
 (^|\.)heroz\.jp$
 (^|\.)doubleclick\.net$ 
 (^|\.)challenges\.cloudflare\.com$ 
-(^|\.)shogi-extend\.com$ 
+(^|\.)shogi\-extend\.com$ 
+(^|\.)googlechromelabs\.github\.io$
+(^|\.)sunfish\-shogi\.github\.io
+
 
 # Google
 (^|\.)accounts\.google.com$
 (^|\.)googleusercontent\.com$
 (^|\.)gstatic\.com$
 (^|\.)googleapis\.com$
+(^|\.)cdn\.jsdelivr\.net$
 
 # Gmail
 (^|\.)mail\.google\.com$
@@ -128,6 +132,7 @@ workgroup
 
 # Bluehost
 (^|\.)bluehost\.com$
+(^|\.)lovekapibarasan\.org
 
 # raspberrypi
 (^|\.)piwheels\.org$

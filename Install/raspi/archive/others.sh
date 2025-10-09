@@ -6,8 +6,7 @@ sudo apt install openfortivpn -y
 #  2FA
 sudo apt install -y oathtool
 
-# pyenv
-curl https://pyenv.run | bash
+
 
 sudo apt install -y \
     build-essential \
@@ -22,9 +21,6 @@ sudo apt install -y \
     libgdbm-dev \
     uuid-dev \
     libssl-dev
-
-# NVM
-curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/master/install.sh | bash
 
 # Camera
 sudo apt install -y cheese
