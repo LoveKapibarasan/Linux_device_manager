@@ -85,8 +85,9 @@ sudo pacman -S clang llvm lld  --noconfirm
 sudo pacman -S zathura zathura-pdf-poppler qpdf pdfjs --noconfirm
 ### Image Viewer
 sudo pacman -S imv --noconfirm
-# Qutebrowser
-sudo pacman -S qt6-base qt6-webengine
+
+### USB
+sudo pacman -S udiskie --noconfirm
 
 # 4. yay
 cd $(get_user_home)
