@@ -100,7 +100,3 @@ yay -S nkf  --noconfirm
 yay -S pi-hole-core pi-hole-ftl pi-hole-web --noconfirm
 
 origin_to_upstream "$USER_HOME/.cache/yay/"
-
-
-# USB mount
-sudo usermod -aG storage $USER
