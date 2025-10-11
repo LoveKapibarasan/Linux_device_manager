@@ -56,10 +56,9 @@ if is_command apt;then
         sed -i "s/^XKBLAYOUT=.*/XKBLAYOUT=\"${KEYMAP}\"/" /etc/default/keyboard
 
 elif is_command pacman;then
-        read -p "Enter keyboard layout (jp106, de): " KEYMAP
-        echo "KEYMAP=${KEYMAP}" > /etc/vconsole.conf
+        read -p "Enter keyboard layout (jp106, de, us): " KEYMAP
         ## Reload
-        sudo localectl set-keymap de
+        sudo localectl set-keymap "$KEYMAP"
         sudo localectl status
 fi
 

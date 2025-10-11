@@ -27,3 +27,9 @@ nordvpn set dns 127.0.0.1
 nordvpn set dns off
 nordvpn set autoconnect on
 
+# OAuthTool
+yay -S oath-toolkit
+export SECRET_KEY=
+# This command runs locally
+oathtool --totp --base32 "$SECRET_KEY" | clip -selection clipboard
+#  --counter=0
