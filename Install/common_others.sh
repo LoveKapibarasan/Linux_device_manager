@@ -72,7 +72,7 @@ read -p "Username: " username
 echo
 read -p "Password: " password
 echo
-
+mkdir -p /etc/openfortivpn
 cat <<EOF | sudo tee -a /etc/openfortivpn/config > /dev/null
 host = sslvpn.oth-regensburg.de
 port = 443

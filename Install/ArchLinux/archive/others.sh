@@ -17,7 +17,20 @@ sudo systemctl enable --now postgresql
 sudo pacman -S cups hplip
 sudo systemctl enable --now cups.service
 
+# Latex
+# https://tug.org/texlive/quickinstall.html
+rm -rf /usr/local/texlive
+rm -rf ~/.texlive*
+mkdir ~/latex
+cd ~/latex
+curl -L -o install-tl-unx.tar.gz https://mirror.ctan.org/systems/texlive/tlnet/install-tl-unx.tar.gz
+zcat < install-tl-unx.tar.gz | tar xf - 
+# note final - on that command line. It means tar get input from |
+cd install-tl-2*
+perl ./install-tl --no-interaction
+
 # FortClient nordvpn
+sudo pacman -S openfortivpn --noconfirm
 yay -S forticlient --noconfirm
 yay -S nordvpn-bin --noconfirm
 systemctl enable --now nordvpnd
@@ -29,7 +42,3 @@ nordvpn set autoconnect on
 
 # OAuthTool
 yay -S oath-toolkit
-export SECRET_KEY=
-# This command runs locally
-oathtool --totp --base32 "$SECRET_KEY" | clip -selection clipboard
-#  --counter=0
