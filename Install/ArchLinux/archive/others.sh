@@ -5,7 +5,7 @@ sudo pacman -S fprintd
 fprintd-enroll $USER -f right-index-finger
 
 ## Camera
-sudo pacman -S cheese --noconfirm
+sudo pacman -S cheese libreoffice-fresh --noconfirm
 
 # PostgreSQL
 sudo pacman -S postgresql

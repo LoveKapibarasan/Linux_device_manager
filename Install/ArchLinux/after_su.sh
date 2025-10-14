@@ -83,8 +83,8 @@ sudo pacman -S clang llvm lld  --noconfirm
 ## PDF
 ### Zathura need framework and backend
 sudo pacman -S zathura zathura-pdf-poppler qpdf pdfjs --noconfirm
-### Image Viewer
-sudo pacman -S imv --noconfirm
+### Image Viewer VLC
+sudo pacman -S imv mpv ffmpeg --noconfirm
 
 ### USB
 sudo pacman -S udiskie --noconfirm
