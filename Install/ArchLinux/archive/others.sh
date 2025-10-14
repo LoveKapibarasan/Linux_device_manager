@@ -20,9 +20,9 @@ sudo systemctl enable --now cups.service
 # Latex
 # https://tug.org/texlive/quickinstall.html
 rm -rf /usr/local/texlive
-rm -rf ~/.texlive*
-mkdir ~/latex
-cd ~/latex
+rm -rf "${HOME}/.texlive*"
+mkdir "${HOME}/latex"
+cd "${HOME}/latex"
 curl -L -o install-tl-unx.tar.gz https://mirror.ctan.org/systems/texlive/tlnet/install-tl-unx.tar.gz
 zcat < install-tl-unx.tar.gz | tar xf - 
 # note final - on that command line. It means tar get input from |
