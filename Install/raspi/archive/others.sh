@@ -6,8 +6,6 @@ sudo apt install openfortivpn -y
 #  2FA
 sudo apt install -y oathtool
 
-
-
 sudo apt install -y \
     build-essential \
     libbz2-dev \

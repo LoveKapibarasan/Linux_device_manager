@@ -1,0 +1,16 @@
+[Unit]
+Description=SearxNG
+After=network.target
+
+[Service]
+Type=notify
+User=searxng
+Group=searxng
+WorkingDirectory=/usr/local/searxng/searxng-src
+Environment="SEARXNG_SETTINGS_PATH=/etc/searxng/settings.yml"
+ExecStart=/usr/local/searxng/searx-pyenv/bin/python searx/webapp.py
+Restart=on-failure
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target

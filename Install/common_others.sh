@@ -4,11 +4,19 @@ source ../util.sh
 root_check
 
 USER_HOME=$(get_user_home)
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+
+# Git
+touch "${USER_HOME}/.gitignore_global"
+echo "*.swp" >> "${USER_HOME}/.gitignore_global"
+echo "*.swo" >>  "${USER_HOME}/.gitignore_global"
+git config --global core.excludesfile "${USER_HOME}/.gitignore_global"
 
 # ZSH
 chsh -s $(which zsh)
 cp config/.zprofile "$USER_HOME/.zprofile"
 cp config/.zshrc "$USER_HOME/.zshrc"
+
 
 # fcitx 5
 # 1. /etc/environment
@@ -36,11 +44,18 @@ origin_to_upstream "${USER_HOME}/.local/share/"
 cd -
 
 # WM
-cp config/hyprland.conf "$USER_HOME/.config/hypr/hyprland.conf"
-cp config/config "$USER_HOME/.config/sway/config"
+cp "${SCRIPT_DIR}/config/hyprland.conf" "${USER_HOME}/.config/hypr/hyprland.conf"
+cp "${SCRIPT_DIR}/config/config" "${USER_HOME}/.config/sway/config"
 
+
+# SearxNG
+# https://docs.searxng.org/admin/installation-searxng.html#create-user
+cp "${SCRIPT_DIR}/config/searxng.service" /etc/systemd/system/searxng.service
+sudo systemctl enable searxng
 
 # qutebrowser
+## $BROWSER
+echo 'export BROWSER=qutebrowser' >> "${USER_HOME}/.zshrc"
 cp config/config.py "$USER_HOME/.config/qutebrowser/config.py"
 cp config/qutebrowser.desktop "${USER_HOME}/.local/share/applications/qutebrowser.desktop"
 cd "${USER_HOME}"
@@ -63,6 +78,7 @@ else
 # sudo ldconfig
 
 # Symbolic Link
+sudo rm /usr/bin/qutebrowser
 sudo ln -s "${USER_HOME}/qutebrowser/.venv/bin/qutebrowser" /usr/bin/qutebrowser
 
 cd -

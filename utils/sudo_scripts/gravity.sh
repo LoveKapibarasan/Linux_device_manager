@@ -20,7 +20,7 @@ if [ -z "$MODE" ]; then
 fi
 
 # 共通パス
-DB_DIR="$USER_HOME/Linux_device_manager/white_list_3/db"
+DB_DIR="${USER_HOME}/Linux_device_manager/white_list_3/db"
 PIHOLE_DB="/etc/pihole/gravity.db"
 CONTAINER_NAME="pihole"
 

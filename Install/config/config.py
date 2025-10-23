@@ -15,11 +15,10 @@ c.tabs.show = "never"
 
 # ホームディレクトリを自動解決
 home = os.path.expanduser("~")
-
-# 起動時に開くページ
+ 
 c.url.start_pages = [f"file://{home}/Linux_device_manager/Install/config/index.html"]
 
-# 新しいタブを開いたときのデフォルトページも設定する場合
+# New Tab
 c.url.default_page = f"file://{home}/Linux_device_manager/Install/config/index.html"
 
 c.content.pdfjs = True # enable to see pdf
@@ -27,8 +26,6 @@ c.content.pdfjs = True # enable to see pdf
 # WebGL
 c.content.webgl = True
 # WARNING: Only --use-gl=angle is supported on this platform.
-
-
 # Remove this when you use Rasberry Pi
 # Vulkanを有効化
 c.qt.args = [
@@ -52,3 +49,5 @@ c.qt.args = [
 c.content.tls.certificate_errors = 'block'
 
 c.content.autoplay = True
+# Search Engine
+c.url.searchengines = {"DEFAULT": "http://127.0.0.1:8888/search"}

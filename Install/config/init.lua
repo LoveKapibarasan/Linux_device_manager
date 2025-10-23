@@ -14,10 +14,6 @@ build = ":TSUpdate",
 "nvim-tree/nvim-tree.lua",
 dependencies = { "nvim-tree/nvim-web-devicons" },
 },
-{
-"akinsho/toggleterm.nvim", -- Terminal 管理
-config = true
-},
   { "folke/tokyonight.nvim", lazy = false, priority = 1000 }, 
 })
 
@@ -45,16 +41,6 @@ require("nvim-tree").setup {
   }
 }
 
-
--- ToggleTerm 設定
-require("toggleterm").setup {
-size = 20,
-open_mapping = [[<c-t>]], -- Ctrl+ t でトグル
-shade_terminals = true,
-direction = "horizontal",
-}
-
-
 -- キーマッピング
 -- Ctrl + h
 vim.keymap.set('n', '<C-h>', function()
@@ -63,7 +49,6 @@ vim.keymap.set('n', '<C-h>', function()
   -- gitignore 無視ファイルのトグル
   require("nvim-tree.api").tree.toggle_gitignore_filter()
 end, { noremap = true, silent = true })
-
 
 
 -- Ctrl + n
@@ -88,7 +73,7 @@ vim.g.clipboard = {
 -- Line Number
 vim.opt.number = true
 
--- 標準テーマ morning を使う
+-- Color Schema
 vim.cmd("colorscheme tokyonight")
 
 -- intro message を非表示にする
@@ -97,15 +82,6 @@ vim.opt.shortmess:append "I"
 -- ファイル保存を義務化
 vim.o.hidden = false
 
--- Recover and Delete
-vim.api.nvim_create_autocmd("SwapExists", {
-  callback = function()
-    vim.cmd("recover")                    -- 自動で recover する
-    vim.fn.delete(vim.v.swapname)         -- recover に使った swap を削除
-    vim.notify("Swap recovered and deleted: " .. vim.v.swapname)
-  end,
-})
-
--- swap ファイルをカレントディレクトリに置く
+-- Swap Location
 vim.opt.directory = "."
 

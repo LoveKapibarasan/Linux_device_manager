@@ -1,6 +1,5 @@
 chmodsh,find ~ -type f -name "*.sh" -exec chmod +x {} \;
 firefox,env MOZ_ENABLE_WAYLAND=1 firefox --kiosk &
-qute,cd ~/qutebrowser && .venv/bin/python3 -m qutebrowser
 clip,wl-copy
 paste,wl-paste
 @cp,fc -ln -1 | wl-copy

@@ -1,143 +1,152 @@
 ########################################
-
 # Restricted Profiles
 # Chatgpt
-(^|\.)chatgpt\.com$
-(^|\.)openai\.com$
-(^|\.)cdn\.oaistatic\.com$
-(^|\.)lh3\.googleusercontent\.com$
-(^|\.)oaiusercontent\.com$
+# .*chatgpt\.com$
+# .*openai\.com$
+.*cdn\.oaistatic\.com$
+.*oaiusercontent\.com$
 
 # Claude
-(^|\.)claude\.ai$
-(^|\.)honeycomb\.io$
-(^|\.)stripe\.com$
-(^|\.)anthropic\.com$
-(^|\.)stripe\.network$
-(^|\.)intercom\.io$
-(^|\.)claude\.com$
+.*claude\.ai$
+.*honeycomb\.io$
+.*stripe\.com$
+.*anthropic\.com$
+.*stripe\.network$
+.*intercom\.io$
+.*claude\.com$
+.*js\.intercomcdn\.com$
 
 # oth
-(^|\.)elearning\.oth-regensburg\.de$
-(^|\.)oth-regensburg\.de$
-(^|\.)hs\-regensburg\.de$
+.*elearning\.oth-regensburg\.de$
+.*oth-regensburg\.de$
+.*hs\-regensburg\.de$
 
 # System
-(^|\.)ipv4only\.arpa$
-(^|\.)example\.org$
-(^|\.)example\.com$
-(^|\.)neverssl.com$
-(^|\.)timeapi.*
-(^|\.)ntp\.org$
-(^|\.)archlinux\.org$
+.*ipv4only\.arpa$
+.*example\.org$
+.*example\.com$
+.*neverssl.com$
+.*timeapi.*
+.*ntp\.org$
+.*archlinux\.org$
 workgroup
 
 # Captive Portal
-(^|\.)hotspot\.vodafone\.de$
-(^|\.)impervadns\.net$
-(^|\.)detectportal\.firefox\.com$
+.*hotspot\.vodafone\.de$
+.*impervadns\.net$
+.*detectportal\.firefox\.com$
 
 # VSCode
-(^|\.)vscode-unpkg\.net$
-(^|\.)open\-vsx\.org$
-(^|\.)vscode\-cdn\.net$
-(^|\.)visualstudio\.com$
-(^|\.)exp-tas\.com$
+# .*vscode-unpkg\.net$
+# .*open\-vsx\.org$
+# .*vscode\-cdn\.net$
+# .*visualstudio\.com$
+# .*exp-tas\.com$
 
 # Python
-(^|\.)pypi\.org$
-(^|\.)pythonhosted\.org$
-(^|\.)python\.org$
+.*pypi\.org$
+.*pythonhosted\.org$
+.*python\.org$
 
 
 # Nordvpn
-(^|\.)nordvpn\.com$
-(^|\.)nordcdn\.com$
+# .*nordvpn\.com$
+# .*nordcdn\.com$
 
 # Pihole
-(^|\.)pi\-hole\.net$
+.*pi\-hole\.net$
 
 # Github
-(^|\.)github\.com$
-(^|\.)githubusercontent\.com$
-(^|\.)githubassets\.com$
+.*github\.com$
+.*github\.io$
+.*githubusercontent\.com$
+.*githubassets\.com$
 
 # npm
-(^|\.)npmjs\.org$
-(^|\.)npmjs\.com$
-(^|\.)registry\.npmjs\.org$
-(^|\.)nodejs\.org$
-
-
+.*npmjs\.org$
+.*npmjs\.com$
+.*registry\.npmjs\.org$
+.*nodejs\.org$
 
 ##############################################
 
 # firefox
-(^|\.)mozilla\.org$
-(^|\.)mozilla\.com$
-(^|\.)mozilla\.net$
-(^|\.)fastly-edge\.com$
-(^|\.)firefox\.com$
+.*mozilla\.org$
+.*mozilla\.com$
+.*mozilla\.net$
+.*fastly-edge\.com$
+.*firefox\.com$
 
 
 # microsoft
-(^|\.)aadcdn\.(msftauth|msauth)\.net$
-(^|\.)microsoft\.com$
-(^|\.)office\.com$
-(^|\.)office\.net$
-(^|\.)msn\.com$
-(^|\.)cloud\.microsoft$
-(^|\.)pushnp\.svc\.ms$
-(^|\.)officeapps\.live\.com$
+.*aadcdn\.(msftauth|msauth)\.net$
+.*microsoft\.com$
+.*office\.com$
+.*office\.net$
+.*msn\.com$
+.*cloud\.microsoft$
+.*pushnp\.svc\.ms$
+.*officeapps\.live\.com$
 
 # Outlook
-(^|\.)outlook\.live\.com$
-(^|\.)outlook\.com$
-(^|\.)microsoftonline\.com$
-(^|\.)static\.microsoft$
-(^|\.)dropboxstatic\.com$
+.*outlook\.live\.com$
+.*outlook\.com$
+.*microsoftonline\.com$
+.*static\.microsoft$
+.*dropboxstatic\.com$
 
 # Shogi
-(^|\.)cloudfront\.net$
-(^|\.)gstatic\.com$
-(^|\.)unity3d\.com$
-(^|\.)googleapis\.com$
-(^|\.)heroz\.jp$
-(^|\.)doubleclick\.net$ 
-(^|\.)challenges\.cloudflare\.com$ 
-(^|\.)shogi\-extend\.com$ 
-(^|\.)googlechromelabs\.github\.io$
-(^|\.)sunfish\-shogi\.github\.io
+.*cloudfront\.net$
+.*gstatic\.com$
+# .*unity3d\.com$
+.*googleapis\.com$
+# .*heroz\.jp$
+.*doubleclick\.net$ 
+## shogi extend
+.*shogi\-extend\.com$ 
 
+# cloudflare
+.*cloudflare\.com
 
 # Google
-(^|\.)accounts\.google.com$
-(^|\.)googleusercontent\.com$
-(^|\.)gstatic\.com$
-(^|\.)googleapis\.com$
-(^|\.)cdn\.jsdelivr\.net$
+.*accounts\.google.com$
+.*googleusercontent\.com$
+.*gstatic\.com$
+.*googleapis\.com$
+.*cdn\.jsdelivr\.net$
+.*googletagmanager\.com
 
 # Gmail
-(^|\.)mail\.google\.com$
+.*mail\.google\.com$
 
 # Google Map
-(^|\.)maps.google\.com$
-(^|\.)ogs\.google\.com$
-(^|\.)clients\d+\.google\.com$
-(^|\.)apis\.google.com$
-(^|\.)mozgcp\.net$
-(^|\.)google\.com/maps(/.*)?$
+.*maps.google\.com$
+.*ogs\.google\.com$
+.*clients\d+\.google\.com$
+.*apis\.google.com$
+.*mozgcp\.net$
+.*google\.com/maps(/.*)?$
 
+# Wise
+.*wise\.com
+.*mixpanel\.com
+.*callsign\.com
 
+# Lyca
+.*callsign\.com
 
 # Bluehost
-(^|\.)bluehost\.com$
-(^|\.)lovekapibarasan\.org
+.*bluehost\.com$
+.*lovekapibarasan\.org
+.*lovekapibarasan\.com
 
 # raspberrypi
-(^|\.)piwheels\.org$
-(^|\.)raspberrypi\.com$
-(^|\.)debian\.org$
+# .*piwheels\.org$
+#.*raspberrypi\.com$
+.*debian\.org$
 
 # Others
-^.*aicharge.*com.*$
+.*aicharge.*com.*$
+
+# Pihole
+.*api\.ftl

@@ -4,7 +4,8 @@
 
 `(.+\.)`
 
-`.+` = one or more of any character
+`.+` = one or more of any characters
+`.*` = zero or more of any characters
 
 `\.` = a literal dot (.)
 
