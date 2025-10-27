@@ -10,6 +10,18 @@ echo
 read -p "Enter email: " email
 echo
 
+# Fix ownership of all files in .ssh directory
+sudo chown user:user /home/user/.ssh/*
+
+# Set correct permissions for the private key (must be readable only by you)
+chmod 600 /home/user/.ssh/id_ed25519
+
+# Set correct permissions for the public key (if it exists)
+chmod 644 /home/user/.ssh/id_ed25519.pub
+
+# Optional: Set correct permissions for the .ssh directory itself
+chmod 700 /home/user/.ssh
+
 cd 
 
 git config --global user.name ""$username""
