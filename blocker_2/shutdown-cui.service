@@ -2,7 +2,7 @@
 Description=shutdown-cui
 
 [Service]
-ExecStart=/opt/shutdown_cui/venv/bin/python /opt/shutdown_cui/shutdown_cui.py
+ExecStart=/opt/shutdown_cui/.venv/bin/python /opt/shutdown_cui/shutdown_cui.py
 Restart=always
 RestartSec=1
 User=root

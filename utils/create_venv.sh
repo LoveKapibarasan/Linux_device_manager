@@ -8,8 +8,8 @@ for dir in sudo_python_scripts/*/; do
   cd "$dir" || continue
 
   # create virtual environment if it doesn’t exist
-  if [ ! -d "venv" ]; then
-    python -m venv venv
+  if [ ! -d ".venv" ]; then
+    python -m venv .venv
   fi
 
   # activate venv and install requirements
