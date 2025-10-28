@@ -21,6 +21,7 @@ cp config/.zshrc "$USER_HOME/.zshrc"
 # fcitx 5
 # 1. /etc/environment
 sudo cp config/environment /etc/environment
+cp config/profile "${USER_HOME}/.config/fcitx5/"
 
 # Vim
 echo 'set clipboard=unnamedplus' > ~/.vimrc

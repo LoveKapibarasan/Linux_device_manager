@@ -190,6 +190,7 @@ disable_resolved() {
   # Socket activation of resolved	
   sudo systemctl mask systemd-resolved-varlink.socket
   sudo systemctl mask systemd-resolved-monitor.socket
+  sudo systemctl stop systemd-resolved
   sudo systemctl disable systemd-resolved.service
   sudo systemctl mask systemd-resolved.service
   sudo mv /usr/lib/systemd/systemd-resolved /usr/lib/systemd/systemd-resolved.disabled
@@ -220,6 +221,8 @@ else
 fi
   sudo cat /etc/NetworkManager/NetworkManager.conf
   sudo systemctl restart NetworkManager
+  # check
+  sudo lsof -i :53
 }
 
 # ==== デバイス入力 & 確認関数 ====

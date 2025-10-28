@@ -13,8 +13,8 @@ https://packages.microsoft.com/repos/code stable main" \
 | sudo tee /etc/apt/sources.list.d/vscode.list
 
 ## 1. Github CLI 公開鍵を取得
-curl -fsSL htcodetps://cli.github.com/packages/githubcli-archive-keyring.gpg | \
-  sudo dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg
+# Download and add the GitHub CLI repository key
+curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo gpg --dearmor -o /usr/share/keyrings/githubcli-archive-keyring.gpg
 
 sudo chmod go+r /usr/share/keyrings/githubcli-archive-keyring.gpg
 
