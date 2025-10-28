@@ -2,13 +2,38 @@
 
 # add code repo
 
-sudo apt update && sudo apt upgrade
+sudo apt update -y && sudo apt upgrade -y
 
-sudo apt install git curl
+sudo apt install git vim-gtk3 curl -y
+
+sudo apt install python3 python3-pip python3-venv -y
+
 
 # pihole
 curl -sSL https://install.pi-hole.net | bash
 
 # fcitx5
 sudo apt install fcitx5 fcitx5-config-qt fcitx5-frontend-gtk3 fcitx5-frontend-gtk4 fcitx5-frontend-qt5 fcitx5-modules fcitx5-mozc -y
-fcitx5-configtool
+
+im-config -n fcitx5
+
+mkdir -p ~/.config/autostart
+cat > ~/.config/autostart/fcitx5.desktop << 'EOF'
+[Desktop Entry]
+Name=Fcitx 5
+GenericName=Input Method
+Comment=Start Input Method
+Exec=fcitx5
+Icon=fcitx
+Terminal=false
+Type=Application
+Categories=System;Utility;
+StartupNotify=false
+X-GNOME-Autostart-Phase=Applications
+X-GNOME-AutoRestart=false
+X-GNOME-Autostart-Notify=false
+X-KDE-autostart-after=panel
+EOF
+
+
+sudo passwd root

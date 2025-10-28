@@ -1,7 +1,7 @@
-#!/bin/bash
-# gravity db 
+# gravity db
 
-SQLite
+* `/etc/pihole/gravity.db`
+* SQLite
 ```bash
 sudo hexdump -C *.db | head
 sqlite3 gravity.db

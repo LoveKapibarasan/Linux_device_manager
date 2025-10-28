@@ -5,7 +5,7 @@ import requests
 import os
 from datetime import datetime
 from datetime import time as dtime
-from utils import notify, shutdown_all, suspend_all, kill_wms, protect_usage_file, read_usage_file, update_usage_file, is_ntp_synced, toggle_eth
+from utils import notify, shutdown_all, suspend_all,  protect_usage_file, read_usage_file, update_usage_file, is_ntp_synced
 
 # === Time Unit Constants ===
 UNIT = 60
@@ -25,41 +25,6 @@ def load_config(path="config.json"):
             config[key][tkey] = dtime(hh, mm)
     return config
 
-def get_now_from_api(timezone: str = "Etc/UTC") -> datetime | None:
-    """
-    Try multiple public time APIs and return the current datetime.
-    Supports:
-      - worldtimeapi.org
-      - timeapi.io
-      - worldclockapi.com
-    """
-    if is_ntp_synced():
-        return datetime.now()
-    endpoints = [
-        # WorldTimeAPI (https, recommended over http)
-        f"https://worldtimeapi.org/api/timezone/{timezone}",
-        # TimeAPI.io
-        f"https://timeapi.io/api/Time/current/zone?timeZone={timezone}",
-    ]
-
-    for url in endpoints:
-        try:
-            resp = requests.get(url, timeout=5)
-            resp.raise_for_status()
-            data = resp.json()
-
-            if "datetime" in data:  # worldtimeapi.org
-                return datetime.fromisoformat(data["datetime"].replace("Z", "+00:00"))
-
-            elif "dateTime" in data:  # timeapi.io
-                return datetime.fromisoformat(data["dateTime"].replace("Z", "+00:00"))
-
-        except Exception as e:
-            notify(f"Failed to fetch time from {url}: {e}")
-            continue
-    # If all APIs fail
-    notify("All external time APIs failed, falling back to None.")
-    return None
 
 
 class UsageManager:
@@ -86,13 +51,11 @@ class UsageManager:
             return 0
     
     def _get_now(self) -> datetime:
-        tz_name = self.config["timezone"]
-        if tz_name is None:
-            notify("timezone is none")
         # Busy wait
         now = None
         while now is None:
-            now = get_now_from_api(tz_name)
+            if is_ntp_synced():
+                return datetime.now()
             if now is None:
                 time.sleep(60)
         return now
@@ -162,7 +125,6 @@ def start_loop():
             # Night blocking time check
             if usage.is_night_block_time() or usage.is_limit_exceeded():
                 try:
-                    toggle_eth(False)
                     shutdown_all()
                 except Exception as e:
                     notify(f"Shutdown failed {str(e)}")
@@ -171,8 +133,6 @@ def start_loop():
             # Pomodoro block time check
             if usage.is_pomodoro_block_time():
                 try:
-                    toggle_eth(False)
-                    kill_wms(["sway", "Hyprland"])
                     suspend_all()
                 except Exception as e:
                     notify(f"Suspend failed {str(e)}")
@@ -182,7 +142,6 @@ def start_loop():
                 usage.notify_remaining_time()
             
             usage.add_minutes()
-            toggle_eth(True)
 
         except Exception as e:
             notify(f"Error happens: {str(e)}")
