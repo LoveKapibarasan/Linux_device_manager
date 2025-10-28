@@ -25,4 +25,10 @@
 [Youtube](https://youtube.com)
 
 [Amazon](https://amazon.com)
-* amazon + country (e.g. `amazon.jp`, `amazon.de`)
+* amazon + country code (e.g. `amazon.jp`, `amazon.de`)
+
+[eBay](https://www.ebay.com)
+* ebay + country code
+* USA
+* B to C or C to C online market place.
+* Aukution style.

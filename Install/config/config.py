@@ -50,4 +50,4 @@ c.content.tls.certificate_errors = 'block'
 
 c.content.autoplay = True
 # Search Engine
-c.url.searchengines = {"DEFAULT": "http://127.0.0.1:8888/search"}
+c.url.searchengines = {"DEFAULT": "http://127.0.0.1:8888/search?q={}"}

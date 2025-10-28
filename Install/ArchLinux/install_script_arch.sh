@@ -6,6 +6,7 @@
 # 1. change keyboard layout
 echo "Japanese = jp106" 
 echo "Deutsch = de"
+echo "English = en"
 read -p "Enter keyboard layout you want to use: " keyboard
 
 loadkeys "$keyboard"
