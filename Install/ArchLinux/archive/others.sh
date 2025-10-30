@@ -27,6 +27,9 @@ zcat < install-tl-unx.tar.gz | tar xf -
 cd install-tl-2*
 perl ./install-tl --no-interaction
 
+# R
+pacman -S r --noconfirm
+
 # VPN
 pacman -S openfortivpn --noconfirm
 # https://aur.archlinux.org/packages/forticlient

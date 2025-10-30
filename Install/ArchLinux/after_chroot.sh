@@ -30,7 +30,6 @@ pacman-key --populate archlinux
 
 # 9. GRUB setting(UEFI)
 pacman -S grub efibootmgr dosfstools os-prober mtools  --noconfirm
-GRUB = GRand Unified Bootloader
 read -p "Enter GRUB name: " name
 grub-install --target=x86_64-efi \
 	--efi-directory=/boot/efi \
