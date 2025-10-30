@@ -1,6 +1,6 @@
 #!/bin/bash
 
-source ../util.sh
+source "${SCRIPT_DIR}/../util.sh"
 root_check
 
 USER_HOME=$(get_user_home)
@@ -14,27 +14,27 @@ git config --global core.excludesfile "${USER_HOME}/.gitignore_global"
 
 # ZSH
 chsh -s $(which zsh)
-cp config/.zprofile "$USER_HOME/.zprofile"
-cp config/.zshrc "$USER_HOME/.zshrc"
+cp "${SCRIPT_DIR}/config/.zprofile" "$USER_HOME/.zprofile"
+cp "${SCRIPT_DIR}/config/.zshrc" "$USER_HOME/.zshrc"
 
 
 # fcitx 5
 # 1. /etc/environment
-sudo cp config/environment /etc/environment
-cp config/profile "${USER_HOME}/.config/fcitx5/"
+sudo cp "${SCRIPT_DIR}/config/environment" /etc/environment
+cp "${SCRIPT_DIR}/config/profile" "${USER_HOME}/.config/fcitx5/"
 
 # Vim
 echo 'set clipboard=unnamedplus' > ~/.vimrc
 ## Neovim
 read -p "Enter your username: " username
 git clone -o upstream git@github.com:neovim/neovim.git "${USER_HOME}/neovim"
-cp config/init.lua "$USER_HOME/.config/nvim/init.lua"
+cp "${SCRIPT_DIR}/config/init.lua" "$USER_HOME/.config/nvim/init.lua"
 chown "${username}" "$USER_HOME/.config/nvim/init.lua"
 
 cd "${USER_HOME}/neovim"
 make CMAKE_BUILD_TYPE=Release
 sudo make install
-git clone git@github.com:folke/lazy.nvim.git "${USER_HOME}/.local/share/nvim/lazy/lazy.nvim"
+git clone -o upstream git@github.com:folke/lazy.nvim.git "${USER_HOME}/.local/share/nvim/lazy/lazy.nvim"
 read -p  "Enter your username for nvim repository ownership: " username
 chown -R "${username}:${username}" "/home/${username}/.local/share/nvim"
 chown -R "${username}:${username}"  "/home/${username}/neovim"
@@ -57,8 +57,8 @@ sudo systemctl enable searxng
 # qutebrowser
 ## $BROWSER
 echo 'export BROWSER=qutebrowser' >> "${USER_HOME}/.zshrc"
-cp config/config.py "$USER_HOME/.config/qutebrowser/config.py"
-cp config/qutebrowser.desktop "${USER_HOME}/.local/share/applications/qutebrowser.desktop"
+cp "${SCRIPT_DIR}/config/config.py" "$USER_HOME/.config/qutebrowser/config.py"
+cp "${SCRIPT_DIR}/config/qutebrowser.desktop" "${USER_HOME}/.local/share/applications/qutebrowser.desktop"
 cd "${USER_HOME}"
 git clone -o upstream git@github.com:qutebrowser/qutebrowser.git "${USER_HOME}/qutebrowser"
 cd "${USER_HOME}/qutebrowser"
@@ -111,4 +111,4 @@ curl -fsSL https://ollama.com/install.sh | sh
 
 # Alacritty
 mkdir -p "${USER_HOME}/.config/alacritty/" 
-cp config/alacritty.toml "${USER_HOME}/.config/alacritty/alacritty.toml"
+cp "${SCRIPT_DIR}/config/alacritty.toml" "${USER_HOME}/.config/alacritty/alacritty.toml"

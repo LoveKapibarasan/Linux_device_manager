@@ -170,7 +170,6 @@ enable_resolved() {
   sudo rm -f /etc/resolv.conf
    sudo systemctl unmask systemd-resolved
   sudo systemctl enable systemd-resolved --now
-  sudo sed -i 's/hosts: mymachines files/hosts: mymachines resolve [!UNAVAIL=return] files/' /etc/nsswitch.conf
 sudo tee /etc/resolv.conf >/dev/null <<EOF
 nameserver 1.1.1.1
 nameserver 8.8.8.8

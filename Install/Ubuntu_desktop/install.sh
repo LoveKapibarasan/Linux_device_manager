@@ -4,9 +4,11 @@
 
 sudo apt update -y && sudo apt upgrade -y
 
-sudo apt install git vim-gtk3 curl -y
+sudo apt install git git-lfs vim-gtk3 curl zsh btop -y
 
-sudo apt install python3 python3-pip python3-venv -y
+sudo apt install python3 python3-pip python3-venv \ 
+npm \ 
+clang libfuse2 lld build-essential 7zip -y
 
 
 # pihole
