@@ -26,7 +26,9 @@ cd
 
 git config --global user.name ""$username""
 git config --global user.email ""$email""
+git config pull.rebase false
 git config --list
+
 
 git clone git@github.com:LoveKapibarasan/Linux_device_manager.git
 git clone git@github.com:LoveKapibarasan/utils_python.git

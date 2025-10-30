@@ -4,6 +4,8 @@
 
 sudo apt update -y && sudo apt upgrade -y
 
+sudo do-release-upgrade -d
+
 sudo apt install git git-lfs vim-gtk3 curl zsh btop -y
 
 sudo apt install python3 python3-pip python3-venv \ 
