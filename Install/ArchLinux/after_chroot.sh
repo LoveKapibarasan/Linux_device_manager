@@ -27,17 +27,18 @@ pacman-key --populate archlinux
 # Dangerous:
 # sed -i 's/#SigLevel=Never.*/SigLevel=Never' /etc/pacman.conf
 
-
+pacman -S dosfttools mtools --noconfirm
 # 9. GRUB setting(UEFI)
-pacman -S grub efibootmgr dosfstools os-prober mtools  --noconfirm
+pacman -S grub efibootmgr os-prober --noconfirm
+mkdir -p /boot/EFI/
 read -p "Enter GRUB name: " name
-grub-install --target=x86_64-efi \
-	--efi-directory=/boot/efi \
-	--bootloader-id="$name"  
-grub-mkconfig -o /boot/grub/grub.cfg
+# grub-install --target=x86_64-efi \
+#	--efi-directory=/boot/EFI \
+#	--bootloader-id="$name"  
+# grub-mkconfig -o /boot/grub/grub.cfg
 
-# pacman -S refind --noconfirm
-# refind-install
+pacman -S refind --noconfirm
+refind-install
 
 # lsblk -f
 # read -p "Enter root prtition: " RFS
