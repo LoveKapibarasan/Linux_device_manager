@@ -13,6 +13,9 @@ npm \
 clang libfuse2 lld build-essential 7zip -y
 
 
+# Change keyboard input
+# Settings → Region & Language → Input Sources
+
 # pihole
 curl -sSL https://install.pi-hole.net | bash
 
