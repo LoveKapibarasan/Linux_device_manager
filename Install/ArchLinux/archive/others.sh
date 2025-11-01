@@ -46,3 +46,6 @@ nordvpn set autoconnect on
 yay -S mozillavpn
 
 
+# RabbitMQ
+sudo pacman -S rabbitmq erlang
+sudo systemctl enable --now rabbitmq
