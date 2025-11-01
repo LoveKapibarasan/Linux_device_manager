@@ -1,7 +1,6 @@
 import time
 import json
 import subprocess
-import requests
 import os
 from datetime import datetime
 from datetime import time as dtime

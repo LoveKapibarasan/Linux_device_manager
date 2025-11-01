@@ -10,11 +10,15 @@ sudo apt install git git-lfs vim-gtk3 curl zsh btop -y
 
 sudo apt install python3 python3-pip python3-venv \ 
 npm \ 
-clang libfuse2 lld build-essential 7zip -y
-
+clang libfuse2 lld build-essential 7zip \
+docker.io docker-compose -y
+sudo systemctl enable --now docker
+sudo usermod -aG docker $USER
 
 # Change keyboard input
 # Settings → Region & Language → Input Sources
+gsettings set org.gnome.desktop.input-sources sources "[('xkb', 'us'), ('xkb', 'de')]"
+gsettings set org.gnome.desktop.wm.keybindings switch-input-source "['<Super>space']"
 
 # pihole
 curl -sSL https://install.pi-hole.net | bash
