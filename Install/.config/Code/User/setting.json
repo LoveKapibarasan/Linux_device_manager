@@ -1,0 +1,11 @@
+{
+  "vim": {
+    "vimrc": {
+      "path": "/home/username/.vimrc",
+      "enable": true
+    }
+  },
+  "files": {
+    "autoSave": "afterDelay"
+  }
+}

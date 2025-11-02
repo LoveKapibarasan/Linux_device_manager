@@ -16,10 +16,10 @@ c.tabs.show = "never"
 # ホームディレクトリを自動解決
 home = os.path.expanduser("~")
  
-c.url.start_pages = [f"file://{home}/Linux_device_manager/Install/config/index.html"]
+c.url.start_pages = [f"file://{home}/.config/qutebrowser/index.html"]
 
 # New Tab
-c.url.default_page = f"file://{home}/Linux_device_manager/Install/config/index.html"
+c.url.default_page = f"file://{home}/.config/qutebrowser/index.html"
 
 c.content.pdfjs = True # enable to see pdf
 

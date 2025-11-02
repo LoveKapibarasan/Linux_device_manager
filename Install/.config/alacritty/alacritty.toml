@@ -11,4 +11,5 @@ family = "Noto Sans Mono CJK JP"
 background = "#1e1e1e"
 foreground = "#d4d4d4"
 
-
+[general]
+import = ["~/.config/alacritty/themes/themes/baitong.toml"]

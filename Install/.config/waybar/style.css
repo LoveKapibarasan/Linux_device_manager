@@ -1,0 +1,86 @@
+/* 全体 */
+window {
+    background-color: rgba(17, 17, 27, 0.8);
+    color: #cdd6f4;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+/* 左側（ワークスペース） */
+#workspaces {
+    padding: 5px 10px;
+    background-color: rgba(0, 0, 0, 0.3);
+    margin: 5px;
+    border-radius: 8px;
+}
+
+#workspaces button {
+    padding: 5px 10px;
+    margin: 0 3px;
+    border-radius: 5px;
+    background-color: rgba(100, 100, 100, 0.5);
+    color: #cdd6f4;
+}
+
+#workspaces button.active {
+    background-color: #89dceb;  /* アクティブ時の色 */
+    color: #000;
+    font-weight: bold;
+}
+
+#workspaces button:hover {
+    background-color: #a6e3a1;  /* ホバー時 */
+}
+
+/* 中央（ウィンドウ名） */
+#window {
+    padding: 5px 10px;
+    color: #cdd6f4;
+}
+
+/* 右側（時計など） */
+#clock {
+    padding: 5px 10px;
+    margin-right: 10px;
+    background-color: rgba(137, 220, 235, 0.2);
+    border-radius: 8px;
+    color: #89dceb;
+}
+
+#memory {
+    padding: 5px 10px;
+    background-color: rgba(166, 227, 161, 0.2);
+    border-radius: 8px;
+    color: #a6e3a1;
+}
+
+#cpu {
+    padding: 5px 10px;
+    background-color: rgba(203, 166, 247, 0.2);
+    border-radius: 8px;
+    color: #cba6f7;
+}
+/* hover = on mouse */
+#cpu:hover {
+    background-color: rgba(203, 166, 247, 0.4);
+}
+#pulseaudio {
+    padding: 5px 10px;
+    margin: 5px 3px;
+    background-color: rgba(230, 126, 34, 0.2);  /* オレンジ系 */
+    border-radius: 8px;
+    color: #e67e22;
+    font-weight: bold;
+}
+
+#pulseaudio:hover {
+    background-color: rgba(230, 126, 34, 0.4);
+    color: #fff;
+}
+
+/* ミュート状態 */
+#pulseaudio.muted {
+    background-color: rgba(100, 100, 100, 0.3);
+    color: #888;
+    text-decoration: line-through;
+}

@@ -49,3 +49,7 @@ yay -S mozillavpn
 # RabbitMQ
 sudo pacman -S rabbitmq erlang
 sudo systemctl enable --now rabbitmq
+
+# MFA
+# https://archlinux.org/packages/extra/x86_64/oath-toolkit/
+sudo pacman -S oath-toolkit

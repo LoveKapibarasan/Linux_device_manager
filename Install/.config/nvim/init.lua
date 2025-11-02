@@ -38,7 +38,7 @@ require("nvim-tree").setup {
   },
   view = {
     width = 30,
-  }
+  },
 }
 
 -- キーマッピング
@@ -85,3 +85,12 @@ vim.o.hidden = false
 -- Swap Location
 vim.opt.directory = "."
 
+-- タブラインの表示設定
+vim.opt.showtabline = 2      -- 常にタブラインを表示（1=タブが2個以上で表示）
+
+-- タブラインのハイライト設定
+vim.cmd[[
+  highlight TabLine guibg=#1e1e1e guifg=#858585
+  highlight TabLineSel guibg=#0087af guifg=#ffffff
+  highlight TabLineFill guibg=#1e1e1e
+]]
