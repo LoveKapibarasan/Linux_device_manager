@@ -38,7 +38,24 @@ require("nvim-tree").setup {
   },
   view = {
     width = 30,
-  }
+  },
+  on_attach = function(bufnr)
+    local api = require("nvim-tree.api")
+    
+    -- マウス左クリック時の動作を設定
+    vim.keymap.set("n", "<LeftMouse>", function()
+      -- クリックされたファイルを取得
+      local node = api.tree.get_node_under_cursor()
+      
+      -- ファイルだったらタブで開く
+      if node and node.type == "file" then
+        vim.cmd("tabnew " .. node.absolute_path)
+      -- フォルダだったら展開/閉じる
+      else
+        api.node.open.edit()
+      end
+    end, { buffer = bufnr, noremap = true, silent = true })
+  end,
 }
 
 -- キーマッピング
@@ -85,3 +102,12 @@ vim.o.hidden = false
 -- Swap Location
 vim.opt.directory = "."
 
+-- タブラインの表示設定
+vim.opt.showtabline = 2      -- 常にタブラインを表示（1=タブが2個以上で表示）
+
+-- タブラインのハイライト設定
+vim.cmd[[
+  highlight TabLine guibg=#1e1e1e guifg=#858585
+  highlight TabLineSel guibg=#0087af guifg=#ffffff
+  highlight TabLineFill guibg=#1e1e1e
+]]

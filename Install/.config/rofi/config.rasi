@@ -1,0 +1,9 @@
+configuration {
+  modes: "window,drun,run";
+  font: "Noto Sans 12";
+  display-drun: "Applications";
+  display-run: "Run";
+  display-window: "Windows";
+  width: 50;
+  lines: 15;
+}
