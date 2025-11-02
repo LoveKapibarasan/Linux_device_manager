@@ -12,10 +12,3 @@ for ext in "${extensions[@]}"; do
   code --install-extension "$ext"
 done
 
-# VSCode
-jq --arg path "$HOME/.vimrc" \
-   '.vim.vimrc.path = $path
-    | .vim.vimrc.enable = true
-    | .files.autoSave = "afterDelay"' \
-   ~/.config/Code/User/settings.json > /tmp/settings.json && \
-mv /tmp/settings.json ~/.config/Code/User/settings.json

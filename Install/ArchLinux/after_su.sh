@@ -85,7 +85,7 @@ sudo pacman -S zathura zathura-pdf-poppler qpdf pdfjs --noconfirm
 ### Image Viewer VLC
 sudo pacman -S imv mpv ffmpeg --noconfirm
 
-### USB
+## USB
 sudo pacman -S udiskie --noconfirm
 
 # 4. yay
