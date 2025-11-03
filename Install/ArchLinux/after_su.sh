@@ -86,7 +86,7 @@ sudo pacman -S zathura zathura-pdf-poppler qpdf pdfjs --noconfirm
 sudo pacman -S imv mpv ffmpeg --noconfirm
 
 ## USB
-sudo pacman -S udiskie --noconfirm
+sudo pacman -S udiskie gvfs gvfs-mtp udisks2 --noconfirm
 
 # 4. yay
 cd $(get_user_home)
