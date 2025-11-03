@@ -26,7 +26,7 @@ cd
 
 git config --global user.name ""$username""
 git config --global user.email ""$email""
-git config pull.rebase false
+git config --global pull.rebase false
 git config --list
 
 
