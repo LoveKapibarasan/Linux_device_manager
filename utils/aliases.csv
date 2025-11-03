@@ -1,6 +1,0 @@
-chmodsh,find ~ -type f -name "*.sh" -exec chmod +x {} \;
-firefox,env MOZ_ENABLE_WAYLAND=1 firefox --kiosk &
-clip,wl-copy
-paste,wl-paste
-@cp,fc -ln -1 | wl-copy
-@o,xdg-open

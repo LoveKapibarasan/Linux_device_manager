@@ -1,4 +1,4 @@
-scale() {
+scale_sway() {
   local SCALE=${1:-1}
   local CONFIG="$HOME/.config/sway/config"
 
