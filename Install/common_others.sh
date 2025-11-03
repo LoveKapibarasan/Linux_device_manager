@@ -27,13 +27,11 @@ git config --global core.excludesfile "${USER_HOME}/.gitignore_global"
 
 # ZSH
 chsh -s $(which zsh)
-cp "${SCRIPT_DIR}/config/.zprofile" "$USER_HOME/.zprofile"
-cp "${SCRIPT_DIR}/config/.zshrc" "$USER_HOME/.zshrc"
+cp "${SCRIPT_DIR}/.config/.zprofile" "$USER_HOME/.zprofile"
+cp "${SCRIPT_DIR}/.config/.zshrc" "$USER_HOME/.zshrc"
 
 
-# Vim
-echo 'set clipboard=unnamedplus' > ~/.vimrc
-## Neovim
+# Neovim
 read -p "Enter your username: " username
 git clone -o upstream git@github.com:neovim/neovim.git "${USER_HOME}/neovim"
 chown "${username}" "$USER_HOME/.config/nvim/init.lua"
@@ -46,6 +44,8 @@ read -p  "Enter your username for nvim repository ownership: " username
 chown -R "${username}:${username}" "/home/${username}/.local/share/nvim"
 chown -R "${username}:${username}"  "/home/${username}/neovim"
 mkdir -p "${USER_HOME}/.config/nvim"
+
+# Alacritty
 mkdir -p "${USER_HOME}/.config/alacritty/themes"
 git clone -o upstream https://github.com/alacritty/alacritty-theme "${USER_HOME}/.config/alacritty/themes"
 cd -
@@ -56,32 +56,11 @@ cd -
 
 # qutebrowser
 # https://qutebrowser.org/doc/install.html#tox
-echo 'export BROWSER=qutebrowser' >> "${USER_HOME}/.zshrc"
 cd "${USER_HOME}" && git clone -o upstream git@github.com:qutebrowser/qutebrowser.git "${USER_HOME}/qutebrowser"
-cd "${USER_HOME}/qutebrowser"
-cd qutebrowser
 
 # Symbolic Link
 sudo rm /usr/bin/qutebrowser
 sudo ln -s "${USER_HOME}/qutebrowser/.venv/bin/qutebrowser" /usr/bin/qutebrowser
-
-cd -
-
-# FortVPN
-echo "openfortivpn"
-read -p "Username: " username
-echo
-read -p "Password: " password
-echo
-mkdir -p /etc/openfortivpn
-cat <<EOF | sudo tee -a /etc/openfortivpn/config > /dev/null
-host = sslvpn.oth-regensburg.de
-port = 443
-realm = vpn-default
-trusted-cert = 364fb4fa107e591626b3919f0e7f8169e9d2097974f3e3d55e56c7c756a1f94a
-username = $username
-password = $password
-EOF
 
 # Zathura
 mkdir -p ~/.config/zathura   

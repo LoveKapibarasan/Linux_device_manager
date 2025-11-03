@@ -22,3 +22,4 @@ gpl() {
     git status
   fi
 }
+gpl
