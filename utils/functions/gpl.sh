@@ -8,6 +8,10 @@ gpl() {
   git add .
   git commit -m "$msg"
 
+  if git rev-parse --abbrev-ref @{upstream} >/dev/null 2>&1; then
+	git pull --no-rebase upstream main
+  fi
+
   # Run pull without rebase
   if git pull --no-rebase; then
     # Check if the last commit is a merge commit
@@ -15,7 +19,8 @@ gpl() {
       echo "Merge commit detected. Please check the status."
       git status
     else
-      git push
+	# Only origin main is allowed    
+      git push origin main
     fi
   else
     echo "git pull failed."
