@@ -20,6 +20,10 @@ sudo usermod -aG docker $USER
 gsettings set org.gnome.desktop.input-sources sources "[('xkb', 'us'), ('xkb', 'de')]"
 gsettings set org.gnome.desktop.wm.keybindings switch-input-source "['<Super>space']"
 
+# Display
+# Settings → Displays → Scale
+gsettings set org.gnome.desktop.interface scaling-factor 2
+
 # pihole
 curl -sSL https://install.pi-hole.net | bash
 

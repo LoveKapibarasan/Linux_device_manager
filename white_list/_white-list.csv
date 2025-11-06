@@ -43,6 +43,9 @@ workgroup
 # .*visualstudio\.com$
 # .*exp-tas\.com$
 
+# Copilot
+.*githubcopilot\.com$
+
 # Python
 .*pypi\.org$
 .*pythonhosted\.org$
