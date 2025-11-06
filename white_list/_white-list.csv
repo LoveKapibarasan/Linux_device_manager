@@ -131,9 +131,9 @@ workgroup
 .*google\.com/maps(/.*)?$
 
 # Wise
-.*wise\.com
-.*mixpanel\.com
-.*callsign\.com
+.*wise\.com$
+.*mixpanel\.com$
+.*callsign\.com$
 
 # Lyca
 .*callsign\.com
@@ -153,3 +153,8 @@ workgroup
 
 # Pihole
 .*api\.ftl
+
+
+# Perplexity
+.*perplexity\.ai$
+.*fscdn\.eppo\.cloud$
