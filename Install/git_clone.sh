@@ -27,6 +27,8 @@ cd
 git config --global user.name ""$username""
 git config --global user.email ""$email""
 git config --global pull.rebase false
+# Line Change
+git config --global core.autocrlf input
 git config --list
 
 

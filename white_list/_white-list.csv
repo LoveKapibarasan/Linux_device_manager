@@ -1,8 +1,8 @@
 ########################################
 # Restricted Profiles
 # Chatgpt
-# .*chatgpt\.com$
-# .*openai\.com$
+.*chatgpt\.com$
+.*openai\.com$
 .*cdn\.oaistatic\.com$
 .*oaiusercontent\.com$
 
@@ -20,6 +20,8 @@
 .*elearning\.oth-regensburg\.de$
 .*oth-regensburg\.de$
 .*hs\-regensburg\.de$
+.*outlook\.com$
+.*outlook\.office\.com$
 
 # System
 .*ipv4only\.arpa$
@@ -37,11 +39,11 @@ workgroup
 .*detectportal\.firefox\.com$
 
 # VSCode
-# .*vscode-unpkg\.net$
-# .*open\-vsx\.org$
-# .*vscode\-cdn\.net$
-# .*visualstudio\.com$
-# .*exp-tas\.com$
+.*vscode-unpkg\.net$
+.*open\-vsx\.org$
+.*vscode\-cdn\.net$
+.*visualstudio\.com$
+.*exp-tas\.com$
 
 # Copilot
 .*githubcopilot\.com$
@@ -101,9 +103,9 @@ workgroup
 # Shogi
 .*cloudfront\.net$
 .*gstatic\.com$
-# .*unity3d\.com$
+.*unity3d\.com$
 .*googleapis\.com$
-# .*heroz\.jp$
+.*heroz\.jp$
 .*doubleclick\.net$ 
 ## shogi extend
 .*shogi\-extend\.com$ 
@@ -133,7 +135,6 @@ workgroup
 # Wise
 .*wise\.com$
 .*mixpanel\.com$
-.*callsign\.com$
 
 # Lyca
 .*callsign\.com
@@ -144,17 +145,20 @@ workgroup
 .*lovekapibarasan\.com
 
 # raspberrypi
-# .*piwheels\.org$
-#.*raspberrypi\.com$
+.*piwheels\.org$
+.*raspberrypi\.com$
 .*debian\.org$
 
 # Others
-.*aicharge.*com.*$
+.*aicharge\.com$
 
 # Pihole
-.*api\.ftl
+.*api\.ftl$
 
 
 # Perplexity
 .*perplexity\.ai$
 .*fscdn\.eppo\.cloud$
+
+# Windows
+.*chocolatey\.org$
