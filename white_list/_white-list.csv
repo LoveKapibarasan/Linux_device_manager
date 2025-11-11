@@ -28,8 +28,13 @@
 .*neverssl.com$
 .*timeapi.*
 .*ntp\.org$
+
+## ArchLinux
 .*archlinux\.org$
 workgroup
+
+## Ubuntu
+.*ubuntu\.com$
 
 # Captive Portal
 .*hotspot\.vodafone\.de$
