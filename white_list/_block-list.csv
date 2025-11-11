@@ -1,1 +1,4 @@
+# pihole
 ^.+$
+# Adguard
+/.*/$denyallow=ai|net
