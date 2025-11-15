@@ -1,5 +1,4 @@
 {
-  "timezone": "Europe/Berlin",
   "weekday": {
     "DAILY_LIMIT_HOURS": 9,
     "POMODORO_START": 55,
