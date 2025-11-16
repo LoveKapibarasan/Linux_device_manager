@@ -8,3 +8,4 @@ output.csv
 **.db
 **.exe
 dist/
+build/
