@@ -33,6 +33,9 @@
 .*archlinux\.org$
 workgroup
 
+# Windows
+.*windows\.com$
+
 # Captive Portal
 .*hotspot\.vodafone\.de$
 .*impervadns\.net$

@@ -2,7 +2,7 @@
 # su -c ./script.sh
 
 # Import functions
-. ../util.sh
+source ../util.sh
 
 root_check
 

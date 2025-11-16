@@ -1,12 +1,10 @@
 import subprocess
-import pwd
 import os
 import re
 import json
 from datetime import datetime
 import shlex # a Python standard library module for safely splitting and quoting command-line strings.
 import platform
-import psutil
 import getpass
 from typing import TypedDict
 from datetime import date, datetime
@@ -15,46 +13,22 @@ SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 
 USAGE_FILE = os.path.join(SCRIPT_DIR, "usage_file.json")
 
-def get_logged_in_users():
-    """
-    Returns a list of usernames currently logged in (systemd-logind).
-    """
-    try:
-        os_name = platform.system()
-        if "Windows" in os_name:
-            return [getpass.getuser()]
-        out = subprocess.check_output(
-            ["loginctl", "list-users", "--no-legend"],
-            text=True
-        ).strip().splitlines()
+LOG_FILE = os.path.join(os.path.expanduser("~"), "notify.log")
 
-        users = []
-        for line in out:
-            parts = line.split()
-            if len(parts) >= 2:
-                users.append(parts[1])  # username
-        return users
-    except subprocess.CalledProcessError:
-        return []
+if platform.system() != "Windows":
+    import pwd
 
 def notify(content):
     timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     message = f"[{timestamp}] {content}"
 
-    print(message, flush=True)  
-    os_name = platform.system()
-    for user in get_logged_in_users():
-        try:
-            if "Windows" in os_name:
-                home = os.path.expanduser("~")
-            else:
-                home = pwd.getpwnam(user).pw_dir
-            log_file = os.path.join(home, "notify.log")
-            with open(log_file, "a") as f:
-                f.write(message + "\n")
+    print(message, flush=True)
 
-        except Exception as e:
-            print(f"Failed to write log for {user}: {e}")
+    try:
+        with open(LOG_FILE, "a") as f:
+            f.write(message + "\n")
+    except Exception as e:
+        print(f"Failed to write log: {e}")
 
 def shutdown_all():
     if not is_ntp_synced():
@@ -80,8 +54,12 @@ def suspend_all():
 
     try:
         if "Windows" in os_name:
-            # Windows のサスペンドは subprocess で動かないことがあるので psutil を使用
-            psutil.suspend()
+            subprocess.run([
+                            "powershell",
+                            "-Command",
+                            "Add-Type -AssemblyName System.Windows.Forms; "
+                            "[System.Windows.Forms.Application]::SetSuspendState('Suspend', $false, $false)"
+                        ], check=True)
         else:
             notify(f"Default suspend for: {os_name}")
             subprocess.run(["systemctl", "suspend"], check=True)
@@ -144,28 +122,30 @@ def read_usage_file():
         notify(f"Unknown error happened at read_usage_file(): {e}")
         return {"date": None, "seconds": 0}
 
-
 def is_ntp_synced() -> bool:
     # timedatectl show --property=NTPSynchronized --value
-    # date
     try:
         os_name = platform.system()
         if "Windows" in os_name:
-            out = subprocess.check_output(
-                ["w32tm", "/query", "/status"],
-                text=True,
-                stderr=subprocess.DEVNULL  # ノイズを避ける
-            ).lower()
+            result = subprocess.run(
+                        ["w32tm", "/query", "/status"],
+                        capture_output=True, text=True, check=True
+                    )
+            out = result.stdout
             for line in out.splitlines():
-                if "stratum" in line:
+                if "Stratum" in line:
                     try:
                         notify("stratum is found.")
-                        value = int(line.split(":")[1].strip())
-                        notify(f"Info: value ={value}")
-                        return value < 16
+                        value_str = line.split(":")[1].strip().split()[0]  # remove :0(unspecified)
+                        value = int(value_str)
+                        notify(f"Info: value = {value}")
+                        if value == 0:
+                            subprocess.run(["w32tm", "/resync"], check=False)
+                        return 0 < value < 16
                     except Exception as e:
                         notify(f"Unknown error happened at is_ntp_synced(): {e}")
                         return False
+            notify("is_ntp_synced returns False.")
             return False
         else:
             out = subprocess.check_output(
@@ -174,6 +154,6 @@ def is_ntp_synced() -> bool:
             ).strip()
             return "y" in out.lower()
     except Exception as e:
-        notify(f"Error at is_ntp_synced{e}")
+        notify(f"Error at is_ntp_synced: {e}")
         return False
 
