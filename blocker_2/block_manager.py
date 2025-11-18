@@ -2,6 +2,7 @@ import time
 import json
 import subprocess
 import os
+import sys
 from datetime import datetime
 from datetime import time as dtime
 from utils import notify, shutdown_all, suspend_all,  protect_usage_file, read_usage_file, update_usage_file, is_ntp_synced
@@ -11,7 +12,11 @@ UNIT = 60
 
 
 def load_config(path="config.json"):
-    base_dir = os.path.dirname(os.path.abspath(__file__))
+    if getattr(sys, 'frozen', False):
+        # PyInstaller で一つの exe にまとめた場合
+         base_dir = sys._MEIPASS
+    else:
+        base_dir = os.path.dirname(os.path.abspath(__file__))
     full_path = os.path.join(base_dir, path)
     notify(f"Config file is read from {full_path}")
     with open(full_path, "r", encoding="utf-8") as f:
@@ -50,14 +55,12 @@ class UsageManager:
             return 0
     
     def _get_now(self) -> datetime:
-        # Busy wait
-        now = None
-        while now is None:
+        # Busy wait until NTP is synced
+        while True:
             if is_ntp_synced():
                 return datetime.now()
-            if now is None:
-                time.sleep(60)
-        return now
+            notify("Waiting NTP..")
+            time.sleep(60)
 
     def _load_profile(self):
         try:

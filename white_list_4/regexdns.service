@@ -1,0 +1,15 @@
+[Unit]
+Description=Regex-based DNS filter proxy
+After=network.target dnsmasq.service
+Wants=dnsmasq.service
+
+[Service]
+ExecStart=/opt/regexdns/.venv/bin/python /opt/regexdns/regexdns.py
+Restart=always
+RestartSec=5
+User=root
+Group=root
+WorkingDirectory=/opt/regexdns
+
+[Install]
+WantedBy=multi-user.target

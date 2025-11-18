@@ -5,3 +5,7 @@ venv/
 __pycache__/
 output.txt
 output.csv
+**.db
+**.exe
+dist/
+build/
