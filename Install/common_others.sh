@@ -68,3 +68,6 @@ echo "set selection-clipboard clipboard" >> "${USER_HOME}/.config/zathura/zathur
 
 # Ollama
 curl -fsSL https://ollama.com/install.sh | sh
+
+# Pihole
+curl -sSL https://install.pi-hole.net | sudo bash

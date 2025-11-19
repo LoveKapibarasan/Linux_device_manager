@@ -4,7 +4,7 @@
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 # https://docs.pi-hole.net/database/domain-database/#domain-tables-domainlist
 # Import functions
-source "${SCRIPT_DIR}../../util.sh"
+source "${SCRIPT_DIR}/../../util.sh"
 source "${SCRIPT_DIR}/add_domain.sh"
 
 root_check
@@ -13,8 +13,9 @@ root_check
 filter_hash  "${SCRIPT_DIR}/../../black_list/_black-list.csv"  "${SCRIPT_DIR}/../../black_list/black-list.csv" 
 filter_hash  "${SCRIPT_DIR}/../../white_list/_white-list.csv"   "${SCRIPT_DIR}/../../white_list/white-list.csv"  
 
-
-
+if [ ! -f "${SCRIPT_DIR}/gravity_template.db" ]; then
+    cp /etc/pihole/gravity.db "${SCRIPT_DIR}/gravity_template.db"
+fi
 
 # === 1 ===
 # regex blacklist: type=3

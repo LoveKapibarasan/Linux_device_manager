@@ -1,73 +1,82 @@
 import subprocess
-import pwd
 import os
 import re
 import json
 from datetime import datetime
 import shlex # a Python standard library module for safely splitting and quoting command-line strings.
 import platform
+import getpass
 from typing import TypedDict
 from datetime import date, datetime
 
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 
-USAGE_FILE = "/opt/shutdown_cui/usage_file.json"
+USAGE_FILE = os.path.join(SCRIPT_DIR, "usage_file.json")
 
-def get_logged_in_users():
-    """
-    Returns a list of usernames currently logged in (systemd-logind).
-    """
-    try:
-        out = subprocess.check_output(
-            ["loginctl", "list-users", "--no-legend"],
-            text=True
-        ).strip().splitlines()
+LOG_FILE = os.path.join(os.path.expanduser("~"), "notify.log")
 
-        users = []
-        for line in out:
-            parts = line.split()
-            if len(parts) >= 2:
-                users.append(parts[1])  # username
-        return users
-    except subprocess.CalledProcessError:
-        return []
+if platform.system() != "Windows":
+    import pwd
 
 def notify(content):
     timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     message = f"[{timestamp}] {content}"
 
-    print(message, flush=True)  
+    print(message, flush=True)
 
-    for user in get_logged_in_users():
-        try:
-            home = pwd.getpwnam(user).pw_dir
-            log_file = os.path.join(home, "notify.log")
-            with open(log_file, "a") as f:
-                f.write(message + "\n")
-            os.chmod(log_file, 0o744)
-
-        except KeyError:
-            print(f"[ERROR] User {user} not found in passwd database")
-        except Exception as e:
-            print(f"[ERROR] Failed to write log for {user}: {e}")
+    try:
+        with open(LOG_FILE, "a") as f:
+            f.write(message + "\n")
+    except Exception as e:
+        print(f"Failed to write log: {e}")
 
 def shutdown_all():
-    if is_ntp_synced():
-        try:
-            subprocess.run(["systemctl", "poweroff", "-i"], check=True)# --force --force
-        except Exception as e:
-            notify(f"Failed shutdown_all: {e}")
+    if not is_ntp_synced():
+        return
+
+    os_name = platform.system()
+
+    try:
+        if "Windows" in os_name:
+            subprocess.run(["shutdown", "/s", "/t", "0"], check=True)
+
+        else:
+            notify(f"Default Linux shutdown for : {os_name}")
+            subprocess.run(["systemctl", "poweroff", "-i"], check=True)
+    except Exception as e:
+        notify(f"Failed shutdown_all: {e}")
 
 def suspend_all():
-    if is_ntp_synced():
-        try:
-            subprocess.run(["systemctl", "suspend", "-i"], check=True)
-        except Exception as e:
-            notify(f"Suspend failed: {e}.")
+    if not is_ntp_synced():
+        return
+
+    os_name = platform.system()
+
+    try:
+        if "Windows" in os_name:
+            subprocess.run([
+                            "powershell",
+                            "-Command",
+                            "Add-Type -AssemblyName System.Windows.Forms; "
+                            "[System.Windows.Forms.Application]::SetSuspendState('Suspend', $false, $false)"
+                        ], check=True)
+        else:
+            notify(f"Default suspend for: {os_name}")
+            subprocess.run(["systemctl", "suspend"], check=True)
+
+    except Exception as e:
+        notify(f"Suspend failed: {e}")
+
            
 
 def cancel_shutdown():
     try:
-        subprocess.run(["shutdown", "-c"], check=False) # check = False(Ignore command failule message)
+        os_name = platform.system()
+        if os_name == "Windows":
+            # /a = abort shutdown
+            subprocess.run(["shutdown", "/a"], check=False)
+        else:
+            subprocess.run(["shutdown", "-c"], check=False) # check = False(Ignore command failule message)
         notify("Pending shutdowns cancelled.")
     except Exception as e:
         notify(f"Failed to cancel shutdown: {e}")
@@ -79,6 +88,16 @@ def protect_usage_file(today: date | datetime) -> None:
             os.makedirs(os.path.dirname(USAGE_FILE), exist_ok=True)
             with open(USAGE_FILE, "w") as f:
                 json.dump({"date": today.isoformat(), "seconds": 0}, f)
+        os_name = platform.system()
+        if "Windows" in os_name:
+            # Delete all
+            subprocess.run(["icacls", USAGE_FILE, "/inheritance:r"], check=False)
+            subprocess.run(["icacls", USAGE_FILE, "/remove:g", "Users"], check=False)
+
+            # Administrator + SYSTEM: F
+            subprocess.run(["icacls", USAGE_FILE, "/grant:r", "Administrator:(F)"], check=False)
+            subprocess.run(["icacls", USAGE_FILE, "/grant:r", "SYSTEM:(F)"], check=False)
+            return
         subprocess.run(["chown", "root:root", USAGE_FILE])
         subprocess.run(["chmod", "600", USAGE_FILE])
     except Exception as e:
@@ -99,21 +118,42 @@ def read_usage_file():
     try:
         with open(USAGE_FILE) as f:
             return json.load(f)
-    except (FileNotFoundError, json.JSONDecodeError):
-        notify("Unknown error happened ad read_usage_file()")
+    except Exception as e:
+        notify(f"Unknown error happened at read_usage_file(): {e}")
         return {"date": None, "seconds": 0}
-
 
 def is_ntp_synced() -> bool:
     # timedatectl show --property=NTPSynchronized --value
-    # date
     try:
-        out = subprocess.check_output(
-            ["timedatectl", "show", "--property=NTPSynchronized", "--value"],
-            text=True
-        ).strip()
-        return "y" in out.lower()
+        os_name = platform.system()
+        if "Windows" in os_name:
+            result = subprocess.run(
+                        ["w32tm", "/query", "/status"],
+                        capture_output=True, text=True, check=True
+                    )
+            out = result.stdout
+            for line in out.splitlines():
+                if "Stratum" in line:
+                    try:
+                        notify("stratum is found.")
+                        value_str = line.split(":")[1].strip().split()[0]  # remove :0(unspecified)
+                        value = int(value_str)
+                        notify(f"Info: value = {value}")
+                        if value == 0:
+                            subprocess.run(["w32tm", "/resync"], check=False)
+                        return 0 < value < 16
+                    except Exception as e:
+                        notify(f"Unknown error happened at is_ntp_synced(): {e}")
+                        return False
+            notify("is_ntp_synced returns False.")
+            return False
+        else:
+            out = subprocess.check_output(
+                ["timedatectl", "show", "--property=NTPSynchronized", "--value"],
+                text=True
+            ).strip()
+            return "y" in out.lower()
     except Exception as e:
-        notify(f"Error at is_ntp_synced{e}")
+        notify(f"Error at is_ntp_synced: {e}")
         return False
 

@@ -2,10 +2,12 @@
 Description=shutdown-cui
 
 [Service]
-ExecStart=/opt/shutdown_cui/.venv/bin/python /opt/shutdown_cui/shutdown_cui.py
+ExecStart=/opt/shutdown-cui/.venv/bin/python /opt/shutdown-cui/shutdown-cui.py
 Restart=always
 RestartSec=1
 User=root
+Group=root
+WorkingDirectory=/opt/shutdown-cui
 
 [Install]
 WantedBy=multi-user.target
