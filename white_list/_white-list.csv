@@ -1,5 +1,3 @@
-########################################
-# Restricted Profiles
 # Chatgpt
 .*chatgpt\.com$
 .*openai\.com$
@@ -53,7 +51,7 @@ workgroup
 .*exp-tas\.com$
 
 # Copilot
-.*githubcopilot\.com$
+.*github.*$
 
 # Python
 .*pypi\.org$
@@ -79,8 +77,6 @@ workgroup
 .*npmjs\.com$
 .*registry\.npmjs\.org$
 .*nodejs\.org$
-
-##############################################
 
 # firefox
 .*mozilla\.org$
@@ -137,7 +133,6 @@ workgroup
 .*clients\d+\.google\.com$
 .*apis\.google.com$
 .*mozgcp\.net$
-.*google\.com/maps(/.*)?$
 
 # Wise
 .*wise\.com$
@@ -161,7 +156,6 @@ workgroup
 
 # Pihole
 .*api\.ftl$
-
 
 # Perplexity
 .*perplexity\.ai$
