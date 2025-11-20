@@ -9,13 +9,13 @@ sudo apt install wireguard -y
 wg genkey | tee server_private.key | wg pubkey > server_public.key
 
 wg genkey | tee client_private.key | wg pubkey > client_public.key
-
+wg genkey | tee client_private_win.key | wg pubkey > client_public_win.key
 
 # ip link add dev server type wireguard
 # ip link set up dev server
 
 # Use 10.10 to avoid conflict
-
+echo "Down server before editing this file."
 sudo tee /etc/wireguard/server.conf <<EOF
 [Interface]
 # server virtual interface address
@@ -23,11 +23,14 @@ Address = 10.10.0.1/24
 ListenPort = 51820
 SaveConfig = true
 PrivateKey = $(cat server_private.key)
-PostUp = iptables -A FORWARD -i %i -j ACCEPT; iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE
-PostDown = iptables -D FORWARD -i %i -j ACCEPT; iptables -t nat -D POSTROUTING -o eth0 -j MASQUERADE
+PostUp = iptables -A FORWARD -i %i -j ACCEPT; iptables -t nat -A POSTROUTING -o ens5 -j MASQUERADE
+PostDown = iptables -D FORWARD -i %i -j ACCEPT; iptables -t nat -D POSTROUTING -o ens5 -j MASQUERADE
 [Peer]
 PublicKey = $(cat client_public.key)
 AllowedIPs = 10.10.0.2/32 # Client Virtual IP address
+[Peer]
+PublicKey = $(cat client_public_win.key)
+AllowedIPs = 10.10.0.3/32
 EOF
 
 # %i: like eth0 check with `sudo wg`
@@ -46,7 +49,7 @@ DNS=${DNS_IP}
 [Peer]
 PublicKey = $(cat server_public.key)
 # IP route that should pass into VPN
-AllowedIPs = 10.10.0.1/32
+AllowedIPs = 10.10.0.1/32 # All Traffic via Tunnel 0.0.0.0/0
 Endpoint = ${DNS_IP}:51820
 PersistentKeepalive = 25
 EOF

@@ -3,7 +3,10 @@
 curl ifconfig.me
 
 
-
+```powershell
+# Daemon WireGuard
+& "C:\Program Files\WireGuard\wireguard.exe" /installtunnelservice "C:\Program Files\WireGuard\Data\Configurations\tmp.conf.dpapi"
+```
 
 ```bash
 sudo wg-quick down "$interface"
