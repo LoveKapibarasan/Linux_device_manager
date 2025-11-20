@@ -35,6 +35,8 @@ workgroup
 
 # Windows
 .*windows\.com$
+# Windows Github
+.*nelreports\.net
 
 # Captive Portal
 .*hotspot\.vodafone\.de$
