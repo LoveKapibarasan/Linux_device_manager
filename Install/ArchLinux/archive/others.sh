@@ -8,7 +8,7 @@ fprintd-enroll $USER -f right-index-finger
 pacman -S cheese libreoffice-fresh --noconfirm
 
 # PostgreSQL
-pacman -S postgresql
+pacman -S postgresql postgis --noconfirm
 systemctl enable --now postgresql
 
 # HP Printer
@@ -47,9 +47,12 @@ yay -S mozillavpn
 
 
 # RabbitMQ
-sudo pacman -S rabbitmq erlang
-sudo systemctl enable --now rabbitmq
+pacman -S rabbitmq erlang
+systemctl enable --now rabbitmq
 
 # MFA
 # https://archlinux.org/packages/extra/x86_64/oath-toolkit/
 sudo pacman -S oath-toolkit
+
+# pnpm
+sudo pacman -S pnpm
