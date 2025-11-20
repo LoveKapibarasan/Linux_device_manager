@@ -1,3 +1,8 @@
+
+```powershell
+$env:TOTP_SECRET=
+```
+
 ```bash
 go get github.com/pquerna/otp
 
