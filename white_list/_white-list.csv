@@ -53,7 +53,7 @@ workgroup
 .*exp-tas\.com$
 
 # Copilot
-.*githubcopilot\.com$
+^api\.individual\.githubcopilot\.com$
 
 # Python
 .*pypi\.org$
