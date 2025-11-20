@@ -8,6 +8,10 @@ extensions=(
   "james-yu.latex-workshop"
   "github.copilot"
   "github.copilot-chat"
+  "ms-python.python"
+  "ms-python.vscode-pylance"
+  "ms-python.debugpy"
+  "ms-python.vscode-python-envs"
 )
 
 for ext in "${extensions[@]}"; do

@@ -9,3 +9,4 @@ output.csv
 **.exe
 dist/
 build/
+**.pem

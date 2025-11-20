@@ -19,11 +19,15 @@ export NVM_DIR="$HOME/.nvm"
 export PATH="$HOME/Linux_device_manager/utils/scripts:$PATH"
 
 # Alias settings
+# !! Do not add space !!
 # alias firefox=firefox --kiosk &
 alias clip='wl-copy'
 alias paste='wl-paste'
 alias cp_before='fc -ln -1 | wl-copy'
 alias open='xdg-open'
+alias hsc1='hyprctl keyword monitor DP-1,preferred,auto,1.0'
+alias hsc2='hyprctl keyword monitor DP-1,preferred,auto,2.0'
+alias avante='nvim -c "lua vim.defer_fn(function()require(\"avante.api\").zen_mode()end, 100)"'
 
 # Load Functions
 for f_file in "$HOME/Linux_device_manager/utils/functions"/*; do
