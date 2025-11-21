@@ -1,11 +1,12 @@
 {
   "vim": {
     "vimrc": {
-      "path": "/home/username/.vimrc",
+      "path": "/home/user/.vimrc",
       "enable": true
     }
   },
   "files": {
     "autoSave": "afterDelay"
-  }
+  },
+  "latex-workshop.view.pdf.viewer": "external"
 }

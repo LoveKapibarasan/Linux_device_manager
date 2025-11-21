@@ -1,0 +1,25 @@
+
+
+# Load Functions
+for f_file in "$HOME/Linux_device_manager/utils/functions"/*; do
+    if [ -f "$f_file" ]; then
+        source "$f_file"
+    fi
+done
+export PATH="$HOME/Linux_device_manager/utils/scripts:$PATH"
+
+
+# Load NVIM
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
+
+# Alias settings
+# !! Do not add space !!
+
+alias clip='wl-copy'
+alias paste='wl-paste'
+alias cp_before='fc -ln -1 | wl-copy'
+alias open='xdg-open'
+
