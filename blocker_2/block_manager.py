@@ -127,6 +127,7 @@ def start_loop():
             # Night blocking time check
             if usage.is_night_block_time() or usage.is_limit_exceeded():
                 try:
+                    notify("shutdown time")
                     shutdown_all()
                 except Exception as e:
                     notify(f"Shutdown failed {str(e)}")
@@ -135,6 +136,7 @@ def start_loop():
             # Pomodoro block time check
             if usage.is_pomodoro_block_time():
                 try:
+                    notify("suspend time")
                     suspend_all()
                 except Exception as e:
                     notify(f"Suspend failed {str(e)}")

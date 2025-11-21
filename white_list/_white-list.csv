@@ -35,8 +35,10 @@ workgroup
 
 ## Ubuntu
 .*ubuntu\.com$
+
 # Windows
 .*windows\.com$
+.*nelreports\.net
 
 # Captive Portal
 .*hotspot\.vodafone\.de$
@@ -134,17 +136,21 @@ workgroup
 .*apis\.google.com$
 .*mozgcp\.net$
 
+# LLM Notebook
+.*notebooklm\.google\.com$
+
+
 # Wise
 .*wise\.com$
 .*mixpanel\.com$
 
 # Lyca
-.*callsign\.com
+.*callsign\.com$
 
 # Bluehost
 .*bluehost\.com$
-.*lovekapibarasan\.org
-.*lovekapibarasan\.com
+.*lovekapibarasan\.org$
+.*lovekapibarasan\.com$
 
 # raspberrypi
 .*piwheels\.org$

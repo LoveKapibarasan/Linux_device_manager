@@ -26,6 +26,7 @@ gsettings set org.gnome.desktop.interface scaling-factor 2
 
 # pihole
 curl -sSL https://install.pi-hole.net | bash
+sudo apt install sqlite3 -y
 
 # fcitx5
 sudo apt install fcitx5 fcitx5-config-qt fcitx5-frontend-gtk3 fcitx5-frontend-gtk4 fcitx5-frontend-qt5 fcitx5-modules fcitx5-mozc -y

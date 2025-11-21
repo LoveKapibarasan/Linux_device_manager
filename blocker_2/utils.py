@@ -46,6 +46,9 @@ def shutdown_all():
     except Exception as e:
         notify(f"Failed shutdown_all: {e}")
 
+import subprocess
+import platform
+
 def suspend_all():
     if not is_ntp_synced():
         return
@@ -54,18 +57,32 @@ def suspend_all():
 
     try:
         if "Windows" in os_name:
-            subprocess.run([
-                            "powershell",
-                            "-Command",
-                            "Add-Type -AssemblyName System.Windows.Forms; "
-                            "[System.Windows.Forms.Application]::SetSuspendState('Suspend', $false, $false)"
-                        ], check=True)
+            # 現在のセッションを取得
+            result = subprocess.run(
+                ["query", "session"], capture_output=True, text=True
+            )
+            sessions = result.stdout.strip().splitlines()
+
+            # 自分のセッションIDを特定
+            current_session_id = None
+            for line in sessions[1:]:  # 1行目はヘッダ
+                parts = line.split()
+                if "Active" in parts:
+                    current_session_id = parts[2]  # セッションIDは3列目
+                    break
+
+            if current_session_id:
+                subprocess.run(["logoff", current_session_id], check=True)
+            else:
+                notify("No active session found to log off.")
+
         else:
             notify(f"Default suspend for: {os_name}")
             subprocess.run(["systemctl", "suspend"], check=True)
 
     except Exception as e:
         notify(f"Suspend failed: {e}")
+
 
            
 
