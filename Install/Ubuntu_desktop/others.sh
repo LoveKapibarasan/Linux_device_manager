@@ -42,5 +42,8 @@ sudo apt install android-tools-adb android-tools-fastboot -y
 sudo apt install ubuntu-desktop -y
 gdm3
 
+# DBUS X11
+sudo apt install dbus-x11 -y
+
 # Oath
 sudo apt-get install oathtool -y
