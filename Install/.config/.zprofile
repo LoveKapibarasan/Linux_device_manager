@@ -1,6 +1,13 @@
-if [ -z "$SSH_AUTH_SOCK" ] || [ ! -S "$SSH_AUTH_SOCK" ]; then
-    eval "$(ssh-agent -s)" > /dev/null
-    ssh-add ~/.ssh/id_ed25519 2>/dev/null
+if [ -f "$HOME/.shellprofile" ]; then
+  source "$HOME/.shellprofile"
+else
+  echo "No .shellprofile found in home directory."
+fi
+
+if [ -f ~/.zshrc ]; then
+  source ~/.zshrc
+else
+  echo "No .zshrc found in home directory."
 fi
 
 if [[ -z $SSH_CONNECTION ]] && [[ -z $DISPLAY ]] && [[ -z $WAYLAND_DISPLAY ]]; then
@@ -13,12 +20,4 @@ if [[ -z $SSH_CONNECTION ]] && [[ -z $DISPLAY ]] && [[ -z $WAYLAND_DISPLAY ]]; t
     exec bash
   fi
 fi
-
-export GTK_IM_MODULE=fcitx
-export QT_IM_MODULE=fcitx
-export XMODIFIERS=@im=fcitx
-export SDL_IM_MODULE=fcitx
-export GLFW_IM_MODULE=fcitx
-
-
 
