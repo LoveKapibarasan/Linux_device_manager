@@ -169,3 +169,6 @@ workgroup
 
 # Windows
 .*chocolatey\.org$
+
+# AWS
+.*amazonaws\.com$

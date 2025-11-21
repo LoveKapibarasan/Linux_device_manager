@@ -22,6 +22,9 @@ done
 ip link add dev server type wireguard
 ip link set up dev server
 
+sudo iptables -I FORWARD -i server -j ACCEPT
+sudo iptables -I FORWARD -o server -j ACCEPT
+
 # Build peer configurations dynamically
 PEER_CONFIG=""
 IP_COUNTER=2
@@ -89,6 +92,8 @@ EOF
 done
 
 sudo chmod 600 /etc/wireguard/server.conf
+
+# !! Make sure the correct public-private key pairs !!
 
 
 # Packet Forwarding
