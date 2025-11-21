@@ -44,3 +44,6 @@ gdm3
 
 # Oath
 sudo apt-get install oathtool -y
+
+# Wireguard
+sudo apt install wireguard -y
