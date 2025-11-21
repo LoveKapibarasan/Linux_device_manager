@@ -37,3 +37,10 @@ gpgkey=https://rpm.opera.com/rpmrepo.key
 enabled=1
 RPMREPO
 sudo dnf install opera-stable -y
+
+
+# Root
+su -
+passwd
+# !! Wheel !!
+gpasswd -d user wheel
