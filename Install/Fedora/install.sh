@@ -59,7 +59,7 @@ LOGIN_THEMA=Infinity-SDDM
 tar -xf ~/Downloads/*LOGIN_THEMA*.tar.*z
 sudo mv *LOGIN_THEMA* /usr/share/sddm/themes/
 sudo sed -i "s/^#*Current=.*/Current=${LOGIN_THEMA}/" /etc/sddm.conf
-
+sudo dnf install kf5-plasma-devel kf5-kdeclarative-devel -y
 
 # Root
 su -
