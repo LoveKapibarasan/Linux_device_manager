@@ -125,6 +125,8 @@ workgroup
 .*googleapis\.com$
 .*cdn\.jsdelivr\.net$
 .*googletagmanager\.com
+^dl\.google\.com$
+
 
 # Gmail
 .*mail\.google\.com$
