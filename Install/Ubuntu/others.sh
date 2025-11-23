@@ -47,3 +47,6 @@ sudo apt install dbus-x11 -y
 
 # Oath
 sudo apt-get install oathtool -y
+
+# Wireguard
+sudo apt install wireguard -y
