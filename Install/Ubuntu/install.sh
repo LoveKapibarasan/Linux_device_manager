@@ -34,7 +34,7 @@ sudo apt install fcitx5 fcitx5-config-qt fcitx5-frontend-gtk3 fcitx5-frontend-gt
 im-config -n fcitx5
 
 # Input Extensions
-sudo apt install gnome-shell-extension-kimpanel -y
+sudo apt install fcitx-module-kimpanel -y
 gnome-extensions enable kimpanel@kde.org
 
 mkdir -p ~/.config/autostart
