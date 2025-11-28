@@ -1,12 +1,33 @@
 
 
+
 # Load Functions
-for f_file in "$HOME/Linux_device_manager/utils/functions"/*; do
-    if [ -f "$f_file" ]; then
-        source "$f_file"
+LINUX_DEVICE_MANAGER_DIRS=(
+    "$HOME/Linux_device_manager"
+    "$HOME/IdeaProjects/Linux_device_manager"
+)
+
+for base_dir in "${LINUX_DEVICE_MANAGER_DIRS[@]}"; do
+    if [ -d "$base_dir" ]; then
+        # Load functions
+        functions_dir="$base_dir/utils/functions"
+        if [ -d "$functions_dir" ]; then
+            for f_file in "$functions_dir"/*; do
+                if [ -f "$f_file" ]; then
+                    source "$f_file"
+                fi
+            done
+        fi
+
+        # Add scripts to PATH
+        scripts_dir="$base_dir/utils/scripts"
+        if [ -d "$scripts_dir" ]; then
+            export PATH="$scripts_dir:$PATH"
+        fi
+
+        break  # 最初に見つかったディレクトリを使用
     fi
 done
-export PATH="$HOME/Linux_device_manager/utils/scripts:$PATH"
 
 
 # Load NVIM
