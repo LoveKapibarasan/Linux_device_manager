@@ -56,3 +56,6 @@ sudo pacman -S oath-toolkit
 
 # pnpm
 sudo pacman -S pnpm
+
+# dbeaver
+sudo pacman -S dveaver

@@ -26,23 +26,23 @@ c.content.pdfjs = True # enable to see pdf
 # WebGL
 c.content.webgl = True
 # WARNING: Only --use-gl=angle is supported on this platform.
-# Remove this when you use Rasberry Pi
-# Vulkanを有効化
+# Error: Backend texture is not a Vulkan texture
+# Disable or Enable Vulkan
 c.qt.args = [
-    'ignore-gpu-blocklist',
-    'enable-gpu-rasterization',
-    'enable-unsafe-webgpu',
-    'use-gl=angle',
-    'use-vulkan',
-    'enable-features=Vulkan',
+    #'ignore-gpu-blocklist',
+    #'enable-gpu-rasterization',
+    #'enable-unsafe-webgpu',
+    #'use-gl=angle',
+    #'use-vulkan',
+    #'enable-features=Vulkan',
     # Innner HTML
-    '--disable-features=TrustedDOMTypes',
-    # Audio
-    '--autoplay-policy=no-user-gesture-required',
-  '--disable-features=AudioServiceOutOfProcess',
-  '--disable-features=AudioServiceSandbox',
-  '--enable-features=AudioWorkletRealtimeThread',
-  '--disable-blink-features=BlockCredentialedSubresources',
+    #'--disable-features=TrustedDOMTypes',
+    ### Audio
+    #'--autoplay-policy=no-user-gesture-required',
+    #'--disable-features=AudioServiceOutOfProcess',
+    #'--disable-features=AudioServiceSandbox',
+    #'--enable-features=AudioWorkletRealtimeThread',
+    #'--disable-blink-features=BlockCredentialedSubresources',
 ]
 
 
