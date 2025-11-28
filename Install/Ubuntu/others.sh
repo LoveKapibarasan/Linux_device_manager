@@ -63,6 +63,8 @@ git clone -o upstream https://github.com/Genymobile/scrcpy
 cd scrcpy
 ./install_release.sh
 
+# or sudo snap install scrcpy
+
 # Syncthing
 sudo apt install syncthing -y
 syncthing &
