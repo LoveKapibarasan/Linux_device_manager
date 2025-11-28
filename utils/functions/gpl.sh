@@ -5,8 +5,8 @@ gpl() {
     msg="Auto Commit"
   fi
 
-  git add .
-  git commit -m "$msg"
+git add .
+git diff --cached --quiet || git commit -m "$msg"
 
 if git remote get-url upstream >/dev/null 2>&1; then
     git pull --no-rebase upstream main
