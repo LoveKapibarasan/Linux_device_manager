@@ -71,3 +71,9 @@ curl -fsSL https://ollama.com/install.sh | sh
 
 # Pihole
 curl -sSL https://install.pi-hole.net | sudo bash
+
+# Android Studio
+sudo apt install openjdk-17-jdk -y
+tar -xzf android-studio*linux.tar.gz
+cd android-studio
+./bin/studio.sh

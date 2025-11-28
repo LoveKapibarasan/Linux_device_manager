@@ -80,6 +80,9 @@ workgroup
 .*registry\.npmjs\.org$
 .*nodejs\.org$
 
+# Docker
+.*docker\.io$
+
 # firefox
 .*mozilla\.org$
 .*mozilla\.com$
@@ -160,7 +163,7 @@ workgroup
 .*debian\.org$
 
 # Others
-.*aicharge\.com$
+.*ai.*charge\.com$
 
 # Pihole
 .*api\.ftl$
