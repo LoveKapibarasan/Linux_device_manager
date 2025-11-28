@@ -36,9 +36,6 @@ read -p "Enter your username: " username
 git clone -o upstream git@github.com:neovim/neovim.git "${USER_HOME}/neovim"
 chown "${username}" "$USER_HOME/.config/nvim/init.lua"
 
-cd "${USER_HOME}/neovim"
-make CMAKE_BUILD_TYPE=Release
-sudo make install
 git clone -o upstream git@github.com:folke/lazy.nvim.git "${USER_HOME}/.local/share/nvim/lazy/lazy.nvim"
 read -p  "Enter your username for nvim repository ownership: " username
 chown -R "${username}:${username}" "/home/${username}/.local/share/nvim"

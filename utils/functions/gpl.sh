@@ -8,11 +8,15 @@ gpl() {
   git add .
   git commit -m "$msg"
 
-  if git rev-parse --abbrev-ref @{upstream} >/dev/null 2>&1; then
-	git pull --no-rebase upstream main
-  fi
+if git remote get-url upstream >/dev/null 2>&1; then
+    git pull --no-rebase upstream main
+fi
 
-  # Run pull without rebase
+# origin が存在しない場合は return
+if ! git remote get-url origin >/dev/null 2>&1; then
+    return
+fi  
+# Run pull without rebase
   if git pull --no-rebase; then
     # Check if the last commit is a merge commit
     if git log -1 --pretty=%B | grep -q '^Merge'; then

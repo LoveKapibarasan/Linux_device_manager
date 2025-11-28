@@ -64,7 +64,8 @@ sudo pacman -S base-devel gvim wget btop usbutils\
     python python-pip python-setuptools python-wheel python-docs\
     nodejs npm nvm \
     docker docker-compose \
-    apparmor  --noconfirm
+    neovim --no-confirm
+    # apparmor
 
 sudo systemctl enable --now docker
 sudo systemctl enable --now apparmor
