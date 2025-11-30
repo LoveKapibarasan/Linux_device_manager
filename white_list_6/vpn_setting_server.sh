@@ -43,31 +43,30 @@ Address = ${WG_Server}/24
 ListenPort = 51820
 SaveConfig = true
 PrivateKey = $(cat server_private.key)
+
 # Enable IP packet transfer
 PostUp = sysctl -w net.ipv4.ip_forward=1
-# Enable packet forwarding
-PostUp = iptables -A FORWARD -i "$wg_server_interface" -j ACCEPT
-PostUp = iptables -A FORWARD -o "$wg_server_interface" -j ACCEPT
 
-# NAT: Rewrite sender with AWS public IP
+# DNS転送
+PostUp = iptables -t nat -A PREROUTING -i ${wg_server_interface} -p udp --dport 53 -j DNAT --to-destination ${HOME_PC}:53
+PostUp = iptables -t nat -A PREROUTING -i ${wg_server_interface} -p tcp --dport 53 -j DNAT --to-destination ${HOME_PC}:53
+
+# SNAT
+PostUp = iptables -t nat -A POSTROUTING -d ${HOME_PC} -p udp --dport 53 -j MASQUERADE
+PostUp = iptables -t nat -A POSTROUTING -d ${HOME_PC} -p tcp --dport 53 -j MASQUERADE
+
+# 一般的なマスカレード
 PostUp = iptables -t nat -A POSTROUTING -o ${interface_name} -j MASQUERADE
 
-# DNAT
-PostUp = iptables -t nat -A PREROUTING -i ${interface_name} -p tcp --dport 80 -j DNAT --to-destination ${HOME_PC}:80
-PostUp = iptables -t nat -A PREROUTING -i ${interface_name} -p tcp --dport 443 -j DNAT --to-destination ${HOME_PC}:443
-PostUp = iptables -t nat -A PREROUTING -i ${interface_name} -p tcp --dport 8080 -j DNAT --to-destination ${HOME_PC}:8080
-PostUp = iptables -t nat -A PREROUTING -i ${interface_name} -p tcp --dport 53 -j DNAT --to-destination ${HOME_PC}:53
-PostUp = iptables -t nat -A PREROUTING -i ${interface_name} -p udp --dport 53 -j DNAT --to-destination ${HOME_PC}:53
-
 PostDown = sysctl -w net.ipv4.ip_forward=0
-PostDown = iptables -D FORWARD -i "$wg_server_interface" -j ACCEPT
-PostDown = iptables -D FORWARD -o "$wg_server_interface" -j ACCEPT
+
+PostDown = iptables -t nat -D PREROUTING -i ${wg_server_interface} -p udp --dport 53 -j DNAT --to-destination ${HOME_PC}:53
+PostDown = iptables -t nat -D PREROUTING -i ${wg_server_interface} -p tcp --dport 53 -j DNAT --to-destination ${HOME_PC}:53
+
+PostDown = iptables -t nat -D POSTROUTING -d ${HOME_PC} -p udp --dport 53 -j MASQUERADE
+PostDown = iptables -t nat -D POSTROUTING -d ${HOME_PC} -p tcp --dport 53 -j MASQUERADE
+
 PostDown = iptables -t nat -D POSTROUTING -o ${interface_name} -j MASQUERADE
-PostDown = iptables -t nat -D PREROUTING -i ${interface_name} -p tcp --dport 80 -j DNAT --to-destination ${HOME_PC}:80
-PostDown = iptables -t nat -D PREROUTING -i ${interface_name} -p tcp --dport 443 -j DNAT --to-destination ${HOME_PC}:443
-PostDown = iptables -t nat -D PREROUTING -i ${interface_name} -p tcp --dport 8080 -j DNAT --to-destination ${HOME_PC}:8080
-PostDown = iptables -t nat -D PREROUTING -i ${interface_name} -p tcp --dport 53 -j DNAT --to-destination ${HOME_PC}:53
-PostDown = iptables -t nat -D PREROUTING -i ${interface_name} -p udp --dport 53 -j DNAT --to-destination ${HOME_PC}:53
 
 ${PEER_CONFIG}
 EOF
@@ -78,9 +77,10 @@ EOF
 # 4. send via wg0
 
 
-sudo chmod 600 /etc/wireguard/"$wg_server_interface".conf
-sudo systemctl enable wg-quick@"$wg_server_interface"
-sudo systemctl start wg-quick@"$wg_server_interface"
+sudo chmod 600 "/etc/wireguard/${wg_server_interface}.conf"
+sudo systemctl "enable wg-quick@${wg_server_interface}"
+sudo systemctl "start wg-quick@${wg_server_interface}"
+sudo wg-quick up "${wg_server_interface}"
 
 # Port UDP 51820
 # 10.0.0.x is problematic for AWS.

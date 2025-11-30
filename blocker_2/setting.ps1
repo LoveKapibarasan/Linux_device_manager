@@ -114,5 +114,5 @@ Pop-Location
 # NTP
 # w32tm /config /update /manualpeerlist:"time.windows.com,0x1" /syncfromflags:manual
 # w32tm /resync
-
+net start w32time
 
