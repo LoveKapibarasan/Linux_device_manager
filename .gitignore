@@ -10,3 +10,4 @@ output.csv
 dist/
 build/
 **.pem
+**.key

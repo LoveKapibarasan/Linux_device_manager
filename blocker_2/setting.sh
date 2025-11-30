@@ -2,7 +2,6 @@
 
 SERVICE_NAME=shutdown-cui.service
 APP_DIR=/opt/shutdown-cui
-SERVICE_PATH="/etc/systemd/system/${SERVICE_NAME}"
 USER_HOME=$(get_user_home)
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 
@@ -19,8 +18,7 @@ reset_service "${SERVICE_NAME}"
 # Clean log files
 rm "${USER_HOME}/notify.log"
 
-sudo cp ${SERVICE_NAME} ${SERVICE_PATH}
-
+sudo cp ${SERVICE_NAME} "/etc/systemd/system/${SERVICE_NAME}"
 
 sudo rm -rf "$APP_DIR"
 sudo mkdir -p "$APP_DIR"

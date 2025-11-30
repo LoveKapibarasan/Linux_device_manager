@@ -36,13 +36,15 @@ Copy-Item "$SCRIPT_DIR\*" $DEST -Recurse -Force
 
 Set-Location $DEST
 
-if (-not (Test-Path ".venv")) {
-    python -m venv .venv
+if (Test-Path ".venv") {
+    Remove-Item ".venv" -Recurse -Force
 }
+python -m venv .venv
+
 & .\.venv\Scripts\Activate.ps1
-pip install -r requirements.txt
+& .\.venv\Scripts\pip.exe install -r requirements.txt
 & .\.venv\Scripts\python.exe -m pip install --upgrade pip
-pyinstaller --onefile --add-data "config.json;." shutdown-cui.py
+& .\.venv\Scripts\pyinstaller.exe --onefile --add-data "config.json;." shutdown-cui.py  # ← 修正
 
 # create new service
 Write-Host "Creating service..."
