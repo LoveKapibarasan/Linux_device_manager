@@ -102,9 +102,10 @@ services:
       - PUID=1000
       - PGID=1000
       - TZ=Europe/Berlin
+      - SERVERURL=10.10.0.1
     volumes:
       # !! Place config here
-      - /etc/wireguard/wg0.conf:/config
+      - /etc/wireguard:/config
       - /lib/modules:/lib/modules
     # sysctls:
     #   - net.ipv4.conf.all.src_valid_mark=1
