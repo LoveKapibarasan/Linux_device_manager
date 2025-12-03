@@ -2,7 +2,7 @@ FROM node:22-alpine
 
 WORKDIR /app
 
-COPY . .
+COPY shogihome/ ./
 
 # 依存関係をインストール
 RUN npm ci
