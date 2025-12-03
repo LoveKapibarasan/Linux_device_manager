@@ -104,7 +104,7 @@ services:
       - TZ=Europe/Berlin
     volumes:
       # !! Place config here
-      - /etc/wireguard/wg0:/config
+      - /etc/wireguard/wg0.conf:/config
       - /lib/modules:/lib/modules
     # sysctls:
     #   - net.ipv4.conf.all.src_valid_mark=1
