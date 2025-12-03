@@ -138,12 +138,15 @@ services:
         restart: always
 
   gitlab-runner:
-        image: 'gitlab/gitlab-runner:latest'
-        container_name: gitlab-runner
-        volumes:
+      image: 'gitlab/gitlab-runner:latest'
+      container_name: gitlab-runner
+      volumes:
           - /var/run/docker.sock:/var/run/docker.sock
           - ./runner/config:/etc/gitlab-runner
-        restart: always
+      restart: always
+  shogi-home:
+    build: .
+    network_mode: host
 
 volumes:
   valkey-data2:
