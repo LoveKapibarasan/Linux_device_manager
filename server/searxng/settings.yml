@@ -7,7 +7,7 @@ server:
   image_proxy: true
   # https://github.com/searxng/searxng/blob/master/searx/settings.yml
   port: 8081
-  bind_address: "127.0.0.1"
+  bind_address: "0.0.0.0"
 redis:
   url: redis://redis:6379/0
 
