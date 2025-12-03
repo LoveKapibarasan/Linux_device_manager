@@ -1,11 +1,9 @@
 
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 # .env
-set -a
-source .env
-set +a
+source "${SCRIPT_DIR}/.env"
 
 USERNAME=ubuntu
-SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 KEY_FILE=key.pem
 KEY_PATH="${SCRIPT_DIR}/${KEY_FILE}"
 

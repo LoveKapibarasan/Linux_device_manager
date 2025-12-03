@@ -1,0 +1,115 @@
+services:
+  nginx:
+    image: nginx:1.29.3
+    # for alloy
+    container_name: nginx
+    #ports:
+    #  - "8080:80"
+    #  - "80:80"
+    #  - "443:443"
+    network_mode: host
+    volumes:
+      # custom domain config
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro
+      # - ./nginx.conf:/etc/nginx/sites-available/xxx:ro is for service version??
+      # Mount Let's Encrypt certificates
+      - /etc/letsencrypt:/etc/letsencrypt:ro
+    depends_on:
+      - searxng
+    restart: unless-stopped
+
+  redis:
+    container_name: redis
+    image: docker.io/valkey/valkey:8-alpine
+    command: valkey-server --save 30 1 --loglevel warning
+    restart: unless-stopped
+    networks:
+      - searxng
+    volumes:
+      - valkey-data2:/data
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "1m"
+        max-file: "1"
+# https://github.com/searxng/searxng-docker/blob/master/
+  searxng:
+    container_name: searxng
+    image: docker.io/searxng/searxng:latest
+    restart: unless-stopped
+    # ports:
+    #   # https://github.com/searxng/searxng-docker/issues/20
+    #   - "127.0.0.1:8081:8081"
+    network_mode: host
+    volumes:
+      - ./searxng:/etc/searxng:rw
+      - searxng-data:/var/cache/searxng:rw
+    environment:
+      - SEARXNG_BASE_URL=https://${SEARXNG_HOSTNAME:-localhost}/
+      - BIND_ADDRESS=0.0.0.0:8081
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "1m"
+        max-file: "1"
+  pihole:
+      container_name: pihole
+      image: pihole/pihole:latest
+      #ports:
+        # DNS Ports
+      #  - "53:53/tcp"
+      #  - "53:53/udp"
+        # Default HTTP Port
+      #  - "80:80/tcp"
+        # Default HTTPs Port. FTL will generate a self-signed certificate
+      #  - "443:443/tcp"
+        # Uncomment the below if using Pi-hole as your DHCP Server
+        #- "67:67/udp"
+        # Uncomment the line below if you are using Pi-hole as your NTP server
+        #- "123:123/udp"
+      environment:
+        # Set the appropriate timezone for your location from
+        # https://en.wikipedia.org/wiki/List_of_tz_database_time_zones, e.g:
+        TZ: 'Europe/Berlin'
+        # Set a password to access the web interface. Not setting one will result in a random password being assigned
+        FTLCONF_webserver_api_password: 'correct horse battery staple'
+        # If using Docker's default `bridge` network setting the dns listening mode should be set to 'ALL'
+        FTLCONF_dns_listeningMode: 'ALL'
+      network_mode: host
+      # Volumes store your data between container upgrades
+      # https://gist.github.com/kaczmar2/027fd6f64f4e4e7ebbb0c75cb3409787
+      volumes:
+        # For persisting Pi-hole's databases and common configuration file
+        - './etc-pihole:/etc/pihole'
+        # Uncomment the below if you have custom dnsmasq config files that you want to persist. Not needed for most starting fresh with Pi-hole v6. If you're upgrading from v5 you and have used this directory before, you should keep it enabled for the first v6 container start to allow for a complete migration. It can be removed afterwards. Needs environment variable FTLCONF_misc_etc_dnsmasq_d: 'true'
+        #- './etc-dnsmasq.d:/etc/dnsmasq.d'
+      cap_add:
+        # See https://github.com/pi-hole/docker-pi-hole#note-on-capabilities
+        # Required if you are using Pi-hole as your DHCP server, else not needed
+        - NET_ADMIN
+        # Required if you are using Pi-hole as your NTP client to be able to set the host's system time
+        - SYS_TIME
+        # Optional, if Pi-hole should get some more processing time
+        - SYS_NICE
+      restart: unless-stopped
+  wireguard:
+    image: linuxserver/wireguard:latest
+    container_name: wireguard
+    cap_add:
+      - NET_ADMIN
+      - SYS_MODULE
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Asia/Tokyo
+    volumes:
+      - ./wireguard-client/config:/config
+      - /lib/modules:/lib/modules
+    sysctls:
+      - net.ipv4.conf.all.src_valid_mark=1
+    restart: unless-stopped
+    network_mode: host
+
+volumes:
+  valkey-data2:
+  searxng-data:
