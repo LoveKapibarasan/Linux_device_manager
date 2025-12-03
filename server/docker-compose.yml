@@ -14,6 +14,7 @@ services:
       # - ./nginx.conf:/etc/nginx/sites-available/xxx:ro is for service version??
       # Mount Let's Encrypt certificates
       - /etc/letsencrypt:/etc/letsencrypt:ro
+      - ./shogihome/docs/webapp:/usr/share/nginx/html/shogihome:ro
     depends_on:
       - searxng
     restart: unless-stopped
@@ -144,9 +145,7 @@ services:
           - /var/run/docker.sock:/var/run/docker.sock
           - ./runner/config:/etc/gitlab-runner
       restart: always
-  shogi-home:
-    build: .
-    network_mode: host
+
 
 volumes:
   valkey-data2:
