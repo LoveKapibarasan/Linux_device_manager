@@ -6,7 +6,10 @@ server:
   limiter: false  # enable this when running the instance for a public usage on the internet
   image_proxy: true
   # https://github.com/searxng/searxng/blob/master/searx/settings.yml
-  port: 8888
+  port: 8081
   bind_address: "127.0.0.1"
 redis:
   url: redis://redis:6379/0
+
+
+# Memo: settins.yml(Plural)
