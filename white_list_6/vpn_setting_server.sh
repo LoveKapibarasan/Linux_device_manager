@@ -50,11 +50,16 @@ PostUp = sysctl -w net.ipv4.ip_forward=1
 # DNS転送
 PostUp = iptables -t nat -A PREROUTING -i ${wg_server_interface} -p udp --dport 53 -j DNAT --to-destination ${HOME_PC}:53
 PostUp = iptables -t nat -A PREROUTING -i ${wg_server_interface} -p tcp --dport 53 -j DNAT --to-destination ${HOME_PC}:53
+# Interface Automatically change
+PostUp = iptables -t nat -A PREROUTING -i ${wg_server_interface} -p tcp --dport 3309 -j DNAT --to-destination ${WIN_IP}:3309
+PostUp = iptables -t nat -A PREROUTING -d ${IP} -p tcp --dport 80 -j DNAT --to-destination ${HOME_PC}:80
+PostUp = iptables -t nat -A PREROUTING -d ${IP} -p tcp --dport 8080 -j DNAT --to-destination ${HOME_PC}:8080
+PostUp = iptables -t nat -A PREROUTING -d ${IP} -p tcp --dport 53 -j DNAT --to-destination ${HOME_PC}:53
+PostUp = iptables -t nat -A PREROUTING -d ${IP} -p udp --dport 53 -j DNAT --to-destination ${HOME_PC}:53
 
 # SNAT
 PostUp = iptables -t nat -A POSTROUTING -d ${HOME_PC} -p udp --dport 53 -j MASQUERADE
 PostUp = iptables -t nat -A POSTROUTING -d ${HOME_PC} -p tcp --dport 53 -j MASQUERADE
-
 # 一般的なマスカレード
 PostUp = iptables -t nat -A POSTROUTING -o ${interface_name} -j MASQUERADE
 
@@ -62,10 +67,15 @@ PostDown = sysctl -w net.ipv4.ip_forward=0
 
 PostDown = iptables -t nat -D PREROUTING -i ${wg_server_interface} -p udp --dport 53 -j DNAT --to-destination ${HOME_PC}:53
 PostDown = iptables -t nat -D PREROUTING -i ${wg_server_interface} -p tcp --dport 53 -j DNAT --to-destination ${HOME_PC}:53
+PostDown = iptables -t nat -D PREROUTING -d ${IP} -p tcp --dport 80 -j DNAT --to-destination ${HOME_PC}:80
+PostDown = iptables -t nat -D PREROUTING -d ${IP} -p tcp --dport 8080 -j DNAT --to-destination ${HOME_PC}:8080
+PostDown = iptables -t nat -D PREROUTING -d ${IP} -p tcp --dport 53 -j DNAT --to-destination ${HOME_PC}:53
+PostDown = iptables -t nat -D PREROUTING -d ${IP} -p udp --dport 53 -j DNAT --to-destination ${HOME_PC}:53
 
 PostDown = iptables -t nat -D POSTROUTING -d ${HOME_PC} -p udp --dport 53 -j MASQUERADE
 PostDown = iptables -t nat -D POSTROUTING -d ${HOME_PC} -p tcp --dport 53 -j MASQUERADE
 
+PostDown = iptables -t nat -D PREROUTING -i ${wg_server_interface} -p tcp --dport 3309 -j DNAT --to-destination ${WIN_IP}:3309
 PostDown = iptables -t nat -D POSTROUTING -o ${interface_name} -j MASQUERADE
 
 ${PEER_CONFIG}
