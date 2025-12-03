@@ -28,5 +28,9 @@ sudo systemctl daemon-reload
 sudo systemctl restart ssh.socket
 sudo ss -tlnp | grep -E ':(22|2222)'
 
+
+git clone -o upstream git@github.com:sunfish-shogi/shogihome.git
+
+
 mkdir -p "$HOME/Linux_device_manager/server/etc-pihole"
 sudo mv "$HOME/Linux_device_manager/white_list_3/db/gravity_current.db" "$HOME/Linux_device_manager/server/etc-pihole/gravity.db"

@@ -1,12 +1,8 @@
 FROM node:22-alpine
 
-# Gitをインストール
-RUN apk add --no-cache git
-
 WORKDIR /app
 
-# リポジトリをクローン
-RUN git clone https://github.com/sunfish-shogi/shogihome.git .
+COPY . .
 
 # 依存関係をインストール
 RUN npm ci
