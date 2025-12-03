@@ -45,7 +45,6 @@ services:
       - searxng-data:/var/cache/searxng:rw
     environment:
       - SEARXNG_BASE_URL=http://${SEARXNG_HOSTNAME:-localhost}/
-      - BIND_ADDRESS=0.0.0.0:8081
     logging:
       driver: "json-file"
       options:

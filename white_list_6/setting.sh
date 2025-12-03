@@ -25,4 +25,5 @@ sudo vim /etc/ssh/sshd_config
 # Add 'Port 22' and 'Port 2222'
 
 
-
+# Permission Error
+sudo chown -R $USER:$USER searxng/
