@@ -27,4 +27,5 @@ sudo vim /etc/ssh/sshd_config
 
 # Permission Error
 sudo chown -R $USER:$USER searxng/
+docker compose logs searxng | grep "Listening"
 # secret_key: "$(openssl rand -hex 32)"  # change this!!!

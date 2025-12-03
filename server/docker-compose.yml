@@ -44,7 +44,7 @@ services:
       - ./searxng:/etc/searxng:rw
       - searxng-data:/var/cache/searxng:rw
     environment:
-      - SEARXNG_BASE_URL=http://${SEARXNG_HOSTNAME:-localhost}/\
+      - SEARXNG_BASE_URL=http://${SEARXNG_HOSTNAME:-localhost}/
   # https://github.com/searxng/searxng-docker/blob/master/README.md
       - BIND_ADDRESS=0.0.0.0:8081
     logging:
