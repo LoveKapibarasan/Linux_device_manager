@@ -27,3 +27,4 @@ sudo vim /etc/ssh/sshd_config
 
 # Permission Error
 sudo chown -R $USER:$USER searxng/
+# secret_key: "$(openssl rand -hex 32)"  # change this!!!

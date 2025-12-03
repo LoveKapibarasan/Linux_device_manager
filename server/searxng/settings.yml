@@ -8,7 +8,9 @@ server:
   # https://github.com/searxng/searxng/blob/master/searx/settings.yml
   port: 8081
   bind_address: "0.0.0.0"
-redis:
+
+# redis: <-- Old
+valkey:
   url: redis://redis:6379/0
 
 
