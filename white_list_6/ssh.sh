@@ -1,9 +1,7 @@
 #!/bin/bash
 
 # .env
-set -a
 source .env
-set +a
 
 # Space
 IPs=($IPS)
@@ -35,3 +33,4 @@ ssh -v -i "${KEY_PATH}" "${USERNAME}@${IP}"
 # Are you sure you want to continue connecting (yes)? 
 
 # http://ip4:port/
+
