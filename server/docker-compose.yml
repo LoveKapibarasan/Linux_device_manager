@@ -46,7 +46,10 @@ services:
       # https://github.com/searxng/searxng-docker/blob/master/README.md
     environment:
       - SEARXNG_BASE_URL=http://${SEARXNG_HOSTNAME:-localhost}/
+      # https://github.com/searxng/searxng-docker/issues/423
       - BIND_ADDRESS=0.0.0.0:8081
+      - GRANIAN_HOST=0.0.0.0
+      - GRANIAN_PORT=8081
     logging:
       driver: "json-file"
       options:
