@@ -20,9 +20,6 @@ scp -i "${KEY_PATH}" "$SCRIPT_DIR/../white_list_3/db/gravity_current.db" "${USER
 sudo systemctl stop systemd-resolved
 sudo systemctl mask systemd-resolved
 
-# Open Port 2222
-sudo vim /etc/ssh/sshd_config
-# Add 'Port 22' and 'Port 2222'
 
 
 # Permission Error

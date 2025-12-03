@@ -11,3 +11,19 @@ docker compose up wireguard -d
 
 # Default Gateway Setting to reset
 sudo ip route add default via 10.0.0.1
+
+# Open Port 2222
+### sudo vim /etc/ssh/sshd_config
+
+sudo mkdir -p /etc/systemd/system/ssh.socket.d
+sudo bash -c 'cat > /etc/systemd/system/ssh.socket.d/listen.conf <<EOF
+[Socket]
+ListenStream=
+ListenStream=0.0.0.0:22
+ListenStream=[::]:22
+ListenStream=0.0.0.0:2222
+ListenStream=[::]:2222
+EOF'
+sudo systemctl daemon-reload
+sudo systemctl restart ssh.socket
+sudo ss -tlnp | grep -E ':(22|2222)'
