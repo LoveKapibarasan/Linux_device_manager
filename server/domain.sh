@@ -18,9 +18,20 @@ if sudo lsof -i :80; then
     exit 1
 fi
 
-# Turn off cloudflare proxy ( visitor → Cloudflare → server )
+# Test Server
+sudo python3 -m http.server 80
+
+# Note:  Turn off cloudflare proxy ( visitor → Cloudflare → server )
+
+# Test from router
+curl -v http://10.10.0.2/.well-known/acme-challenge/test
+# Logs
+sudo tail -100 /var/log/letsencrypt/letsencrypt.log
 
 sudo certbot certonly --standalone -d $DOMAIN
+# sudo certbot certonly --standalone --http-01-address 10.10.0.2 -d $DOMAIN
+## Nginx
+# sudo certbot certonly --webroot -w /var/www/html -d lovekapibarasan.org
 
 # Set up automatic renewal(Default 90 days expiry)
 sudo systemctl enable certbot.timer

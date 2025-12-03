@@ -75,6 +75,10 @@ services:
         FTLCONF_webserver_api_password: 'correct horse battery staple'
         # If using Docker's default `bridge` network setting the dns listening mode should be set to 'ALL'
         FTLCONF_dns_listeningMode: 'ALL'
+        # https://docs.pi-hole.net/docker/configuration/
+        FTLCONF_dns_upstreams: '8.8.8.8;1.1.1.1'
+        FTLCONF_webserver_port: '8082,443s'
+        FTLCONF_debug_api: 'true'
       network_mode: host
       # Volumes store your data between container upgrades
       # https://gist.github.com/kaczmar2/027fd6f64f4e4e7ebbb0c75cb3409787
@@ -104,13 +108,38 @@ services:
       - TZ=Europe/Berlin
       - SERVERURL=10.10.0.1
     volumes:
-      # !! Place config here
+      # /config/wg0.conf
       - /etc/wireguard:/config
       - /lib/modules:/lib/modules
     # sysctls:
     #   - net.ipv4.conf.all.src_valid_mark=1
     restart: unless-stopped
     network_mode: host
+   # https://dev.to/teetoflame/setting-up-a-gitlab-server-community-edition-and-a-gitlab-runner-using-docker-compose-ob6
+  gitlab-server:
+        image: 'gitlab/gitlab-ce:latest'
+        container_name: gitlab-server
+        hostname: 'gitlab.example.com'
+        environment:
+          GITLAB_OMNIBUS_CONFIG: |
+            external_url 'http://gitlab.lovekapibarasan.org:8088'  # Put the IP of your server
+            gitlab_rails['initial_root_password'] = "$initial_password"  # Set your initial root password here
+        # ports:
+        #  - '8088:8088'  # Expose GitLab on port 8088
+        network_mode: host
+        volumes:
+          - ./config:/etc/gitlab  # Persist GitLab configuration
+          - ./logs:/var/log/gitlab  # Persist GitLab logs
+          - ./data:/var/opt/gitlab  # Persist GitLab data
+        restart: always
+
+  gitlab-runner:
+        image: 'gitlab/gitlab-runner:latest'
+        container_name: gitlab-runner
+        volumes:
+          - /var/run/docker.sock:/var/run/docker.sock
+          - ./runner/config:/etc/gitlab-runner
+        restart: always
 
 volumes:
   valkey-data2:

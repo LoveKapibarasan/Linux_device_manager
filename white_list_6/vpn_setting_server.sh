@@ -48,20 +48,11 @@ PrivateKey = $(cat server_private.key)
 PostUp = sysctl -w net.ipv4.ip_forward=1
 
 # DNS転送
-PostUp = iptables -t nat -A PREROUTING -i ${wg_server_interface} -p udp --dport 53 -j DNAT --to-destination ${HOME_PC}:53
-PostUp = iptables -t nat -A PREROUTING -i ${wg_server_interface} -p tcp --dport 53 -j DNAT --to-destination ${HOME_PC}:53
-# Interface Automatically change
-PostUp = iptables -t nat -A PREROUTING -i ${wg_server_interface} -p tcp --dport 3309 -j DNAT --to-destination ${WIN_IP}:3309
-PostUp = iptables -t nat -A PREROUTING -d ${IP} -p tcp --dport 80 -j DNAT --to-destination ${HOME_PC}:80
-PostUp = iptables -t nat -A PREROUTING -d ${IP} -p tcp --dport 8080 -j DNAT --to-destination ${HOME_PC}:8080
-PostUp = iptables -t nat -A PREROUTING -d ${IP} -p tcp --dport 53 -j DNAT --to-destination ${HOME_PC}:53
-PostUp = iptables -t nat -A PREROUTING -d ${IP} -p udp --dport 53 -j DNAT --to-destination ${HOME_PC}:53
+PostUp = iptables -t nat -A PREROUTING -p tcp --dport 53 -j DNAT --to-destination ${HOME_PC}:53
+PostUp = iptables -t nat -A PREROUTING -p udp --dport 53 -j DNAT --to-destination ${HOME_PC}:53
 
 # SNAT
-PostUp = iptables -t nat -A POSTROUTING -d ${HOME_PC} -p udp --dport 53 -j MASQUERADE
-PostUp = iptables -t nat -A POSTROUTING -d ${HOME_PC} -p tcp --dport 53 -j MASQUERADE
-# 一般的なマスカレード
-PostUp = iptables -t nat -A POSTROUTING -o ${interface_name} -j MASQUERADE
+PostUp = iptables -t nat -A POSTROUTING -j MASQUERADE
 
 PostDown = sysctl -w net.ipv4.ip_forward=0
 
@@ -72,11 +63,8 @@ PostDown = iptables -t nat -D PREROUTING -d ${IP} -p tcp --dport 8080 -j DNAT --
 PostDown = iptables -t nat -D PREROUTING -d ${IP} -p tcp --dport 53 -j DNAT --to-destination ${HOME_PC}:53
 PostDown = iptables -t nat -D PREROUTING -d ${IP} -p udp --dport 53 -j DNAT --to-destination ${HOME_PC}:53
 
-PostDown = iptables -t nat -D POSTROUTING -d ${HOME_PC} -p udp --dport 53 -j MASQUERADE
-PostDown = iptables -t nat -D POSTROUTING -d ${HOME_PC} -p tcp --dport 53 -j MASQUERADE
 
-PostDown = iptables -t nat -D PREROUTING -i ${wg_server_interface} -p tcp --dport 3309 -j DNAT --to-destination ${WIN_IP}:3309
-PostDown = iptables -t nat -D POSTROUTING -o ${interface_name} -j MASQUERADE
+PostDown = iptables -t nat -D POSTROUTING -j MASQUERADE
 
 ${PEER_CONFIG}
 EOF
@@ -100,7 +88,7 @@ IP_COUNTER=2
 for os in $OS_LIST; do
     os_lower=$(echo "$os" | tr '[:upper:]' '[:lower:]')
     
-    sudo tee "/etc/wireguard/client_${os_lower}.conf" <<EOF
+sudo tee "/etc/wireguard/client_${os_lower}.conf" <<EOF
 [Interface]
 PrivateKey = $(cat "client_private_${os_lower}.key")
 # Server ${WG_Server}/24 → Client 10.10.0.2/24, 10.10.0.3/24...
@@ -132,5 +120,13 @@ if ! grep -q "net.ipv4.ip_forward = 1" /etc/sysctl.conf; then
 fi
 sudo sysctl -p
 
-
 sudo wg show all
+
+# All NAT Table rules
+sudo iptables -t nat -L -n -v
+# -L: List
+# -n: no name resolution
+# -v: verbose
+
+# Clean
+## sudo iptables -t nat -F
