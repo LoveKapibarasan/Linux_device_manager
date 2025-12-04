@@ -12,9 +12,6 @@ docker compose up wireguard -d
 # Default Gateway Setting to reset
 sudo ip route add default via 10.0.0.1
 
-# Open Port 2222
-### sudo vim /etc/ssh/sshd_config
-
 sudo mkdir -p /etc/systemd/system/ssh.socket.d
 sudo bash -c 'cat > /etc/systemd/system/ssh.socket.d/listen.conf <<EOF
 [Socket]
@@ -28,8 +25,28 @@ sudo systemctl daemon-reload
 sudo systemctl restart ssh.socket
 sudo ss -tlnp | grep -E ':(22|2222)'
 
-# From Host
-EMAIL=''
-IP=''
-ssh-keygen -t ed25519 -C "$EMAIL" -f ~/.ssh/home_server -N ''
-type $env:USERPROFILE\.ssh\home_server.pub | ssh user@$IP "mkdir -p ~/.ssh && cat >> ~/.ssh/authorized_keys"
+ssh-keygen -t ed25519 -C "xxx@yyy"
+ssh-copy-id -p 2222 -i ~/.ssh/server.pub user@$server_ip
+sudo nano /etc/ssh/sshd_config
+# PermitRootLogin no
+# PasswordAuthentication no
+# PubkeyAuthentication yes
+# Port 22
+# Port 2222
+
+# Shogihome
+git clone -o upstream git@github.com:sunfish-shogi/shogihome.git
+
+# Pihole
+mkdir -p "$HOME/Linux_device_manager/server/etc-pihole"
+sudo mv "$HOME/Linux_device_manager/white_list_3/db/gravity_current.db" "$HOME/Linux_device_manager/server/etc-pihole/gravity.db"
+### Stop systemd-resolved
+sudo systemctl stop systemd-resolved
+sudo systemctl mask systemd-resolved
+
+
+# Searxng
+### Permission Error
+sudo chown -R $USER:$USER searxng/
+docker compose logs searxng | grep "Listening"
+### secret_key: "$(openssl rand -hex 32)"  # change this!!!

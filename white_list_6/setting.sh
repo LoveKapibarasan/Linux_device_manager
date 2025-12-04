@@ -16,13 +16,3 @@ git clone https://github.com/LoveKapibarasan/Linux_device_manager.git
 scp -i "${KEY_PATH}" "$SCRIPT_DIR/.env"  "${USERNAME}@${DNS_IP}:/home/${USERNAME}/Linux_device_manager/white_list_6/"
 scp -i "${KEY_PATH}" "$SCRIPT_DIR/../white_list_3/db/gravity_current.db" "${USERNAME}@${DNS_IP}:/home/${USERNAME}"
 
-# Stop systemd-resolved
-sudo systemctl stop systemd-resolved
-sudo systemctl mask systemd-resolved
-
-
-
-# Permission Error
-sudo chown -R $USER:$USER searxng/
-docker compose logs searxng | grep "Listening"
-# secret_key: "$(openssl rand -hex 32)"  # change this!!!

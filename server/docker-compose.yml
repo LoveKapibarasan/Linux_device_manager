@@ -14,6 +14,7 @@ services:
       # - ./nginx.conf:/etc/nginx/sites-available/xxx:ro is for service version??
       # Mount Let's Encrypt certificates
       - /etc/letsencrypt:/etc/letsencrypt:ro
+      - ./shogihome/docs/webapp:/usr/share/nginx/html/shogihome:ro
     depends_on:
       - searxng
     restart: unless-stopped
@@ -127,7 +128,7 @@ services:
         environment:
           GITLAB_OMNIBUS_CONFIG: |
             external_url 'http://localhost:8088'  # Put the IP of your server
-            gitlab_rails['initial_root_password'] = "$initial_password"  # Set your initial root password here
+            gitlab_rails['initial_root_password'] =  "$(openssl rand -hex 32)"  # Set your initial root password here
         # ports:
         #  - '8088:8088'  # Expose GitLab on port 8088
         network_mode: host
@@ -138,13 +139,122 @@ services:
         restart: always
 
   gitlab-runner:
-        image: 'gitlab/gitlab-runner:latest'
-        container_name: gitlab-runner
-        volumes:
+      image: 'gitlab/gitlab-runner:latest'
+      container_name: gitlab-runner
+      volumes:
           - /var/run/docker.sock:/var/run/docker.sock
           - ./runner/config:/etc/gitlab-runner
-        restart: always
+      restart: always
+
+  vaultwarden:
+    image: vaultwarden/server:latest
+    container_name: vaultwarden
+    restart: unless-stopped
+    network_mode: host
+    environment:
+      # https://github.com/dani-garcia/vaultwarden/discussions/4497
+        - DOMAIN=https://password.lovekapibarasan.org
+        - ROCKET_PORT=8083
+    volumes:
+      - ./vw-data/:/data/
+    # ports:
+    #  - 80:80
+  db:
+      image: mysql:latest
+      volumes:
+        - db_data:/var/lib/mysql
+      restart: always
+      environment:
+        MYSQL_ROOT_PASSWORD: somewordpress
+        MYSQL_DATABASE: wordpress
+        MYSQL_USER: wordpress
+        MYSQL_PASSWORD: wordpress
+
+  wordpress:
+      depends_on:
+        - db
+      image: wordpress:latest
+      # ports:
+      #  - "8080:80"
+      network_mode: host
+      restart: always
+      environment:
+        WORDPRESS_DB_HOST: db:3306
+        WORDPRESS_DB_USER: wordpress
+        WORDPRESS_DB_PASSWORD: wordpress
+        WORDPRESS_DB_NAME: wordpress
+      volumes:
+        - wordpress_data:/var/www/html
+
+# https://github.com/dockur/samba/blob/master/compose.yml
+  samba:
+    image: dockurr/samba
+    container_name: samba
+    environment:
+      NAME: "Data" # Folder name
+      USER: "samba" # user name
+      PASS: "secret"
+      # Read and Write
+      RW: true      # Optional, default true
+      UID: 1000    # Optional, default 1000
+      GID: 1000    # Optional, default 1000
+    # ports:
+    #  - 445:445
+    network_mode: host
+    volumes:
+      - ./samba:/storage
+    restart: always
+
+# https://blog.estampie.work/archives/3343
+  mailserver:
+    image: docker.io/mailserver/docker-mailserver:latest
+    container_name: mailserver
+    env_file: mailserver.env
+    hostname: mail.example.com
+    # ports:
+    #  - "25:25"     # SMTP
+    #  - "143:143"   # IMAP
+    #  - "587:587"   # SMTP submission
+    #  - "993:993"   # IMAPS
+    volumes:
+      - ./data/maildata:/var/mail
+      - ./data/mailstate:/var/mail-state
+      - ./data/maillogs:/var/log/mail
+      - ./config:/tmp/docker-mailserver
+      - /etc/localtime:/etc/localtime:ro
+    network_mode: host
+    cap_add:
+      - NET_ADMIN
+    restart: unless-stopped
+    stop_grace_period: 1m
+    healthcheck:
+      test: "ss --listening --ipv4 --tcp | grep --silent ':smtp' || exit 1"
+      timeout: 3s
+      retries: 0
+
+  # Webメールクライアント (Roundcube)
+  roundcube:
+    image: roundcube/roundcubemail:latest
+    container_name: roundcube
+    # ports:
+    #  - "8080:80"
+    environment:
+      - ROUNDCUBEMAIL_DEFAULT_HOST=mailserver
+      - ROUNDCUBEMAIL_DEFAULT_PORT=143
+      - ROUNDCUBEMAIL_SMTP_SERVER=mailserver
+      - ROUNDCUBEMAIL_SMTP_PORT=587
+      - ROUNDCUBEMAIL_UPLOAD_MAX_FILESIZE=10M
+    volumes:
+      - ./data/roundcube:/var/www/html
+    depends_on:
+      - mailserver
+      - roundcube-db
+    restart: unless-stopped
+    network_mode: host
+
 
 volumes:
   valkey-data2:
   searxng-data:
+  db_data:
+  wordpress_data:
