@@ -150,6 +150,7 @@ services:
     image: vaultwarden/server:latest
     container_name: vaultwarden
     restart: unless-stopped
+    network_mode: host
     environment:
       # https://github.com/dani-garcia/vaultwarden/discussions/4497
         - DOMAIN=https://password.lovekapibarasan.org
