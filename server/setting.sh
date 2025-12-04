@@ -27,3 +27,9 @@ EOF'
 sudo systemctl daemon-reload
 sudo systemctl restart ssh.socket
 sudo ss -tlnp | grep -E ':(22|2222)'
+
+# From Host
+EMAIL=''
+IP=''
+ssh-keygen -t ed25519 -C "$EMAIL" -f ~/.ssh/home_server -N ''
+type $env:USERPROFILE\.ssh\home_server.pub | ssh user@$IP "mkdir -p ~/.ssh && cat >> ~/.ssh/authorized_keys"
