@@ -146,6 +146,19 @@ services:
           - ./runner/config:/etc/gitlab-runner
       restart: always
 
+  vaultwarden:
+    image: vaultwarden/server:latest
+    container_name: vaultwarden
+    restart: unless-stopped
+    environment:
+      # https://github.com/dani-garcia/vaultwarden/discussions/4497
+        - DOMAIN=https://password.lovekapibarasan.org
+        - ROCKET_PORT=8083
+    volumes:
+      - ./vw-data/:/data/
+    # ports:
+    #  - 80:80
+
 
 volumes:
   valkey-data2:
