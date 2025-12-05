@@ -77,3 +77,4 @@ sudo vim /etc/resolv.conf
 
 # After
 docker restart pihole
+

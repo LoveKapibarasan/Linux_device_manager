@@ -13,7 +13,7 @@ build/
 **.key
 !white_list_3/db/gravity_template.db
 wg0.conf
-
+init-db.sql
 
 
 server/shogihome
