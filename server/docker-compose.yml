@@ -181,7 +181,6 @@ services:
       image: wordpress:latest
       ports:
        - "8090:80"
-      network_mode: host
       restart: always
       environment:
         WORDPRESS_DB_HOST: db:3306
