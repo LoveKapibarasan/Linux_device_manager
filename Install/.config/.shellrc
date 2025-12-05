@@ -43,4 +43,4 @@ alias clip='wl-copy'
 alias paste='wl-paste'
 alias cp_before='fc -ln -1 | wl-copy'
 alias open='xdg-open'
-
+alias python='python3' # ln -s /usr/bin/python3 /usr/local/bin/python
