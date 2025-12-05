@@ -177,3 +177,4 @@ workgroup
 
 # AWS
 .*amazonaws\.com$
+.*aws\.amazon\.com$
