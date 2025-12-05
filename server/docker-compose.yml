@@ -231,7 +231,6 @@ services:
       - ./config:/tmp/docker-mailserver
       - /etc/localtime:/etc/localtime:ro
       - /etc/letsencrypt:/etc/letsencrypt:ro
-    network_mode: host
     cap_add:
       - NET_ADMIN
     restart: always
