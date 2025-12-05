@@ -33,6 +33,10 @@ sudo nano /etc/ssh/sshd_config
 # PubkeyAuthentication yes
 # Port 22
 # Port 2222
+sudo sed -i 's/^PasswordAuthentication yes/PasswordAuthentication no/' /etc/ssh/sshd_config.d/50-cloud-init.conf
+# Check
+sudo sshd -T | grep pubkeyauth
+sudo sshd -T | grep passwordauthentication
 
 # Shogihome
 git clone -o upstream git@github.com:sunfish-shogi/shogihome.git

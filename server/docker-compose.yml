@@ -170,7 +170,7 @@ services:
     restart: always
     command: --port=3306
     environment:
-      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
+      DB_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
       WORDPRESS_DB_PASSWORD: ${WORDPRESS_DB_PASSWORD}
       ROUNDCUBE_DB_PASSWORD: ${ROUNDCUBE_DB_PASSWORD}
     entrypoint: >
@@ -178,7 +178,7 @@ services:
       cat > /docker-entrypoint-initdb.d/init-db.sh << 'EOF'
       #!/bin/bash
       set -e
-      mysql -uroot -p\"\$MYSQL_ROOT_PASSWORD\" <<-EOSQL
+      mysql -uroot -p\"\$DB_ROOT_PASSWORD\" <<-EOSQL
           CREATE DATABASE IF NOT EXISTS roundcube;
           CREATE USER IF NOT EXISTS 'roundcube'@'%' IDENTIFIED BY '\$ROUNDCUBE_DB_PASSWORD';
           GRANT ALL PRIVILEGES ON roundcube.* TO 'roundcube'@'%';
