@@ -212,10 +212,12 @@ services:
     restart: always
 
 # https://blog.estampie.work/archives/3343
+# https://docker-mailserver.github.io/docker-mailserver/latest/usage/
   mailserver:
     image: docker.io/mailserver/docker-mailserver:latest
     container_name: mailserver
-    hostname: mail.example.com
+    hostname: lovekapibarasan.org
+    env_file: mailserver.env
     # ports:
     #  - "25:25"     # SMTP
     #  - "143:143"   # IMAP
@@ -227,10 +229,11 @@ services:
       - ./data/maillogs:/var/log/mail
       - ./config:/tmp/docker-mailserver
       - /etc/localtime:/etc/localtime:ro
+      - /etc/letsencrypt:/etc/letsencrypt:ro
     network_mode: host
     cap_add:
       - NET_ADMIN
-    restart: unless-stopped
+    restart: always
     stop_grace_period: 1m
     healthcheck:
       test: "ss --listening --ipv4 --tcp | grep --silent ':smtp' || exit 1"

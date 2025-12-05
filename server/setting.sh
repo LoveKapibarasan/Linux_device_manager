@@ -69,12 +69,15 @@ docker compose logs searxng | grep "Listening"
 # DB
 chmod +x init-db.sh
 
+# Mail Server
+docker exec -it mailserver setup email add user@example.com
+
 # DEBUG
 sudo apt install traceroute
 traceroute docker.io
-# Use outer DNS server temporally
+## Use outer DNS server temporally
 sudo vim /etc/resolv.conf
-
-# After
+## After
 docker restart pihole
+
 
