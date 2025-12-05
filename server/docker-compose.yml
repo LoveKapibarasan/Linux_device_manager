@@ -174,25 +174,25 @@ services:
       WORDPRESS_DB_PASSWORD: ${WORDPRESS_DB_PASSWORD}
       ROUNDCUBE_DB_PASSWORD: ${ROUNDCUBE_DB_PASSWORD}
     entrypoint: >
-      bash -c "
-      cat > /docker-entrypoint-initdb.d/init-db.sh << 'EOF'
+      bash -c '
+      cat > /docker-entrypoint-initdb.d/init-db.sh <<EOF
       #!/bin/bash
       set -e
-      mysql -uroot -p\"\$DB_ROOT_PASSWORD\" <<-EOSQL
+      mysql -uroot -p"$$MYSQL_ROOT_PASSWORD" <<EOSQL
           CREATE DATABASE IF NOT EXISTS roundcube;
-          CREATE USER IF NOT EXISTS 'roundcube'@'%' IDENTIFIED BY '\$ROUNDCUBE_DB_PASSWORD';
-          GRANT ALL PRIVILEGES ON roundcube.* TO 'roundcube'@'%';
-          
+          CREATE USER IF NOT EXISTS "roundcube"@"%" IDENTIFIED BY "${ROUNDCUBE_DB_PASSWORD}";
+          GRANT ALL PRIVILEGES ON roundcube.* TO "roundcube"@"%";
+    
           CREATE DATABASE IF NOT EXISTS wordpress;
-          CREATE USER IF NOT EXISTS 'wordpress'@'%' IDENTIFIED BY '\$WORDPRESS_DB_PASSWORD';
-          GRANT ALL PRIVILEGES ON wordpress.* TO 'wordpress'@'%';
-      
+          CREATE USER IF NOT EXISTS "wordpress"@"%" IDENTIFIED BY "${WORDPRESS_DB_PASSWORD}";
+          GRANT ALL PRIVILEGES ON wordpress.* TO "wordpress"@"%";
+    
           FLUSH PRIVILEGES;
       EOSQL
       EOF
       chmod +x /docker-entrypoint-initdb.d/init-db.sh &&
       exec docker-entrypoint.sh mariadbd --port=3306
-      "
+      '
 
   wordpress:
       depends_on:
