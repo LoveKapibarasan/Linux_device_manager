@@ -216,13 +216,14 @@ services:
   mailserver:
     image: docker.io/mailserver/docker-mailserver:latest
     container_name: mailserver
-    hostname: lovekapibarasan.org
     env_file: mailserver.env
-    # ports:
-    #  - "25:25"     # SMTP
-    #  - "143:143"   # IMAP
-    #  - "587:587"   # SMTP submission
-    #  - "993:993"   # IMAPS
+    hostname: mail.lovekapibarasan.org  # FQDNに変更
+    ports:
+      - "25:25"      # SMTP
+      - "143:143"    # IMAP
+      - "587:587"    # Submission
+      - "465:465"    # SMTPS
+      - "993:993"    # IMAPS
     volumes:
       - ./data/maildata:/var/mail
       - ./data/mailstate:/var/mail-state

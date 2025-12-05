@@ -71,6 +71,7 @@ chmod +x init-db.sh
 
 # Mail Server
 ## tmp, domain
+## !! in 2 minutes !!
 docker exec -it mailserver setup email add user@example.com
 ## postmaster(mail admin, receives spam mail info) --> user@example.com
 docker exec -it mailserver setup alias add postmaster@example.com user@example.com
