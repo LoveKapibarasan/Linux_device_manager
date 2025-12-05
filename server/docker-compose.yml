@@ -163,7 +163,7 @@ services:
   # 共通DB
   db:
     image: mariadb:latest
-    container_name: shared_mariadb
+    container_name: db
     network_mode: host
     volumes:
       - db_data:/var/lib/mysql
