@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
 
+## On-Premises = 「敷地内に」 Server
+### (Premise= 前提、仮定)
+
 sudo apt install docker-compose docker.io -y
 sudo usermod -aG docker $USER
 newgrp docker
@@ -33,6 +36,10 @@ sudo nano /etc/ssh/sshd_config
 # PubkeyAuthentication yes
 # Port 22
 # Port 2222
+sudo sed -i 's/^PasswordAuthentication yes/PasswordAuthentication no/' /etc/ssh/sshd_config.d/50-cloud-init.conf
+# Check
+sudo sshd -T | grep pubkeyauth
+sudo sshd -T | grep passwordauthentication
 
 # Shogihome
 git clone -o upstream git@github.com:sunfish-shogi/shogihome.git
@@ -44,9 +51,29 @@ sudo mv "$HOME/Linux_device_manager/white_list_3/db/gravity_current.db" "$HOME/L
 sudo systemctl stop systemd-resolved
 sudo systemctl mask systemd-resolved
 
+# Vaultwarden
+## account -> security -> 2FA
 
 # Searxng
 ### Permission Error
 sudo chown -R $USER:$USER searxng/
 docker compose logs searxng | grep "Listening"
 ### secret_key: "$(openssl rand -hex 32)"  # change this!!!
+
+# 1. Firefox:
+## https://domain/search?q=%s
+## https://domain/autocomplete?q=%s
+# 2. Edge
+## edge://settings/searchEngines -> Make as default
+
+# DB
+chmod +x init-db.sh
+
+# DEBUG
+sudo apt install traceroute
+traceroute docker.io
+# Use outer DNS server temporally
+sudo vim /etc/resolv.conf
+
+# After
+docker restart pihole
