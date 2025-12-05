@@ -22,3 +22,5 @@ server/data/
 server/logs/
 server/runner/
 server/config/
+server/vw-data/
+server/samba/

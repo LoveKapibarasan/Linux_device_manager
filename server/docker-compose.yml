@@ -207,9 +207,9 @@ services:
         WORDPRESS_DB_USER: wordpress
         WORDPRESS_DB_PASSWORD: ${WORDPRESS_DB_PASSWORD}
         WORDPRESS_DB_NAME: wordpress
-        APACHE_LISTEN_PORT: 8090
       volumes:
         - wordpress_data:/var/www/html
+        - ./ports.conf:/etc/apache2/ports.conf:ro
 
 # https://github.com/dockur/samba/blob/master/compose.yml
   samba:
