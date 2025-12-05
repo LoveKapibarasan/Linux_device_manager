@@ -207,6 +207,7 @@ services:
         WORDPRESS_DB_USER: wordpress
         WORDPRESS_DB_PASSWORD: ${WORDPRESS_DB_PASSWORD}
         WORDPRESS_DB_NAME: wordpress
+        APACHE_LISTEN_PORT: 8090
       volumes:
         - wordpress_data:/var/www/html
 
@@ -233,7 +234,6 @@ services:
   mailserver:
     image: docker.io/mailserver/docker-mailserver:latest
     container_name: mailserver
-    env_file: mailserver.env
     hostname: mail.example.com
     # ports:
     #  - "25:25"     # SMTP

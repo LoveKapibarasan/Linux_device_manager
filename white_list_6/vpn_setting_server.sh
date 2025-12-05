@@ -48,8 +48,8 @@ PrivateKey = $(cat server_private.key)
 PostUp = sysctl -w net.ipv4.ip_forward=1
 
 # DNAT (2222, 80, 8080, 443, 53, 3389)
-PostUp = iptables -t nat -A PREROUTING -p tcp --dport 53 -j DNAT --to-destination ${HOME_PC}:53
-PostUp = iptables -t nat -A PREROUTING -p udp --dport 53 -j DNAT --to-destination ${HOME_PC}:53
+PostUp = iptables -t nat -A PREROUTING -i ${wg_server_interface} -p tcp --dport 53 -j DNAT --to-destination ${HOME_PC}:53
+PostUp = iptables -t nat -A PREROUTING -i ${wg_server_interface} -p udp --dport 53 -j DNAT --to-destination ${HOME_PC}:53
 
 # SNAT
 PostUp = iptables -t nat -A POSTROUTING -j MASQUERADE

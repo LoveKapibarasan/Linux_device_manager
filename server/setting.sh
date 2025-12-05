@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
 
+## On-Premises = 「敷地内に」 Server
+### (Premise= 前提、仮定)
+
 sudo apt install docker-compose docker.io -y
 sudo usermod -aG docker $USER
 newgrp docker
@@ -65,3 +68,12 @@ docker compose logs searxng | grep "Listening"
 
 # DB
 chmod +x init-db.sh
+
+# DEBUG
+sudo apt install traceroute
+traceroute docker.io
+# Use outer DNS server temporally
+sudo vim /etc/resolv.conf
+
+# After
+docker restart pihole
