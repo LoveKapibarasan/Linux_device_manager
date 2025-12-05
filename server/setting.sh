@@ -70,7 +70,20 @@ docker compose logs searxng | grep "Listening"
 chmod +x init-db.sh
 
 # Mail Server
+## tmp, domain
 docker exec -it mailserver setup email add user@example.com
+## postmaster(mail admin, receives spam mail info) --> user@example.com
+docker exec -it mailserver setup alias add postmaster@example.com user@example.com
+## DKIM
+docker exec -it mailserver setup config dkim
+cat ./docker-data/dms/config/opendkim/keys/example.com/mail.txt
+## Add TXT record
+### TXT mail._domainkey.example.com v=DKIM1; h=sha256; k=rsa; p=MIIBIjANBg...(selector 'mail' is free to choose)
+## SPF (Sender Policy Framework)
+### example.com. IN TXT "v=spf1 ip4:192.0.2.10 ip4:192.0.2.20 -all"
+docker exec mailserver setup email list
+## DMARC (Domain-based Message Authentication, Reporting and Conformance)
+### _dmarc.example.com. IN TXT "v=DMARC1; p=quarantine; rua=mailto:dmarc@example.com"
 
 # DEBUG
 sudo apt install traceroute
