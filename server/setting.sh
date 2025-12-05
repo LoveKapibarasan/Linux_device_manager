@@ -58,3 +58,6 @@ docker compose logs searxng | grep "Listening"
 ## https://domain/autocomplete?q=%s
 # 2. Edge
 ## edge://settings/searchEngines -> Make as default
+
+# DB
+chmod +x init-db.sh
