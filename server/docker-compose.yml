@@ -271,7 +271,7 @@ services:
       ROUNDCUBEMAIL_DEFAULT_HOST: ssl://lovekapibarasan.org # mail.domain.com
       ROUNDCUBEMAIL_SMTP_SERVER: ssl://lovekapibarasan.org
     volumes:
-      - roundcube_date:/var/www/html
+      - roundcube_data:/var/www/html
     depends_on:
       - mailserver
       - db
@@ -286,6 +286,7 @@ services:
 
 
 volumes:
+  roundcube_data:  # Define the volume here
   valkey-data2:
   searxng-data:
   db_data:
