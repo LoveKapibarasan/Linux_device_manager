@@ -171,9 +171,9 @@ services:
     restart: always
     command: --port=3306
     environment:
-      DB_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
-      WORDPRESS_DB_PASSWORD: ${WORDPRESS_DB_PASSWORD}
+      MARIADB_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}  # MYSQL_ → MARIADB_
       ROUNDCUBE_DB_PASSWORD: ${ROUNDCUBE_DB_PASSWORD}
+      WORDPRESS_DB_PASSWORD: ${WORDPRESS_DB_PASSWORD}
 
   wordpress:
       depends_on:
