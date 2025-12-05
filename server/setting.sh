@@ -44,9 +44,17 @@ sudo mv "$HOME/Linux_device_manager/white_list_3/db/gravity_current.db" "$HOME/L
 sudo systemctl stop systemd-resolved
 sudo systemctl mask systemd-resolved
 
+# Vaultwarden
+## account -> security -> 2FA
 
 # Searxng
 ### Permission Error
 sudo chown -R $USER:$USER searxng/
 docker compose logs searxng | grep "Listening"
 ### secret_key: "$(openssl rand -hex 32)"  # change this!!!
+
+# 1. Firefox:
+## https://domain/search?q=%s
+## https://domain/autocomplete?q=%s
+# 2. Edge
+## edge://settings/searchEngines -> Make as default

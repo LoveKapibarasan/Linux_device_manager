@@ -128,7 +128,7 @@ services:
         environment:
           GITLAB_OMNIBUS_CONFIG: |
             external_url 'http://localhost:8088'  # Put the IP of your server
-            gitlab_rails['initial_root_password'] =  "$(openssl rand -hex 32)"  # Set your initial root password here
+            gitlab_rails['initial_root_password'] =  "$gitlab_root_pass"  # Set your initial root password here
         # ports:
         #  - '8088:8088'  # Expose GitLab on port 8088
         network_mode: host

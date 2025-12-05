@@ -116,3 +116,5 @@ Pop-Location
 # w32tm /resync
 net start w32time
 
+w32tm /register
+
