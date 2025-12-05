@@ -244,8 +244,8 @@ services:
   roundcube:
     image: roundcube/roundcubemail:latest
     container_name: roundcube
-    # ports:
-    #  - "8080:80"
+    ports:
+      - "8085:80"
     environment:
       ROUNDCUBEMAIL_DB_TYPE: mysql # MariaDB is originated from mysql
       ROUNDCUBEMAIL_DB_HOST: 127.0.0.1:3306
@@ -258,8 +258,6 @@ services:
       - mailserver
       - db
     restart: unless-stopped
-    network_mode: host
-
 
 volumes:
   valkey-data2:
