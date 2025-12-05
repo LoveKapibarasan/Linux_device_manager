@@ -164,12 +164,12 @@ services:
   db:
     image: mariadb:latest
     container_name: db
-    network_mode: host
+    ports:
+      - "3306:3306"
     volumes:
       - db_data:/var/lib/mysql
       - ./init-db.sql:/docker-entrypoint-initdb.d/init-db.sql:ro
     restart: always
-    command: --port=3306
     environment:
       MARIADB_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}  # MYSQL_ → MARIADB_
       ROUNDCUBE_DB_PASSWORD: ${ROUNDCUBE_DB_PASSWORD}
@@ -179,18 +179,20 @@ services:
       depends_on:
         - db
       image: wordpress:latest
-      # ports:
-      #  - "8080:80"
+      ports:
+       - "8090:80"
       network_mode: host
       restart: always
       environment:
-        WORDPRESS_DB_HOST: 127.0.0.1:3306
+        WORDPRESS_DB_HOST: db:3306
         WORDPRESS_DB_USER: wordpress
         WORDPRESS_DB_PASSWORD: ${WORDPRESS_DB_PASSWORD}
         WORDPRESS_DB_NAME: wordpress
       volumes:
         - wordpress_data:/var/www/html
-        - ./ports.conf:/etc/apache2/ports.conf:ro
+        #- ./ports.conf:/etc/apache2/ports.conf:ro
+      networks:
+        - network
 
 # https://github.com/dockur/samba/blob/master/compose.yml
   samba:
@@ -239,6 +241,8 @@ services:
       test: "ss --listening --ipv4 --tcp | grep --silent ':smtp' || exit 1"
       timeout: 3s
       retries: 5
+    networks:
+      - network
 
   # Webメールクライアント (Roundcube)
   roundcube:
@@ -247,16 +251,21 @@ services:
     ports:
       - "8085:80"
     environment:
-      ROUNDCUBEMAIL_DB_TYPE: mysql # MariaDB is originated from mysql
-      ROUNDCUBEMAIL_DB_HOST: 127.0.0.1:3306
+      ROUNDCUBEMAIL_DB_TYPE: mysql # MariaDB is originated from mySQL
+      ROUNDCUBEMAIL_DB_HOST: db
       ROUNDCUBEMAIL_DB_USER: roundcube
       ROUNDCUBEMAIL_DB_PASSWORD: ${ROUNDCUBE_DB_PASSWORD}
       ROUNDCUBEMAIL_DB_NAME: roundcube
-      ROUNDCUBEMAIL_DEFAULT_HOST: ssl://lovekapibarasan.org # mail.domain.com
-      ROUNDCUBEMAIL_SMTP_SERVER: ssl://lovekapibarasan.org
+      ROUNDCUBEMAIL_DEFAULT_HOST: tls://mailserver
+      ROUNDCUBEMAIL_DEFAULT_PORT: 993
+      ROUNDCUBEMAIL_SMTP_SERVER: tls://mailserver
+      ROUNDCUBEMAIL_SMTP_PORT: 587
+      APACHE_SERVER_NAME: mail.lovekapibarasan.org
     depends_on:
       - mailserver
       - db
+    networks:
+      - network
     restart: unless-stopped
 
 volumes:
@@ -264,3 +273,7 @@ volumes:
   searxng-data:
   db_data:
   wordpress_data:
+
+networks:
+  network:
+    driver: bridge
