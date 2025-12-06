@@ -156,9 +156,13 @@ def is_ntp_synced() -> bool:
                         value_str = line.split(":")[1].strip().split()[0]  # remove :0(unspecified)
                         value = int(value_str)
                         notify(f"Info: value = {value}")
-                        if value == 0:
-                            subprocess.run(["w32tm", "/resync"], check=False)
-                        return 0 < value < 16
+                        if value <= 0 or value >= 16:
+                            subprocess.run(["powershell", "-Command", "Start-Service w32time"], check=False)
+                            time.sleep(2)
+                            subprocess.run(["w32tm", "/resync", "/force"], check=False)
+                            return False
+                        else:
+                            return 0 < value < 16
                     except Exception as e:
                         notify(f"Unknown error happened at is_ntp_synced(): {e}")
                         return False

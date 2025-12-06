@@ -115,7 +115,7 @@ Pop-Location
 # w32tm /config /update /manualpeerlist:"time.windows.com,0x1" /syncfromflags:manual
 net start w32time
 # Add this to task scheduler
-w32tm /resync /force
+Start-Service w32time && w32tm /resync /force
 
 w32tm /register
 

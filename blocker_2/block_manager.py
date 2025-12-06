@@ -35,6 +35,7 @@ class UsageManager:
     def __init__(self):
         self.config = load_config()
         self.profile = self._load_profile()
+        self.is_ntp_synced_cache = False
         
         protect_usage_file(self._get_now().date())
 
@@ -57,7 +58,7 @@ class UsageManager:
     def _get_now(self) -> datetime:
         # Busy wait until NTP is synced
         while True:
-            if is_ntp_synced():
+            if is_ntp_synced() or self.is_ntp_synced_cache:
                 return datetime.now()
             notify("Waiting NTP..")
             time.sleep(60)
