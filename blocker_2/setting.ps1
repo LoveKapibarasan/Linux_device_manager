@@ -14,7 +14,7 @@ if (-not $nssm) {
 taskkill /f /im "$BASE_NAME.exe"
 
 
-# 1. Stop & Remove existing service (ignore errors)
+# Stop & Remove existing service (ignore errors)
 & $nssm stop $svc 2>$null
 & $nssm remove $svc confirm 2>$null
 
@@ -44,20 +44,18 @@ python -m venv .venv
 & .\.venv\Scripts\Activate.ps1
 & .\.venv\Scripts\pip.exe install -r requirements.txt
 & .\.venv\Scripts\python.exe -m pip install --upgrade pip
-& .\.venv\Scripts\pyinstaller.exe --onefile --add-data "config.json;." shutdown-cui.py  # ← 修正
+# Compile
+& .\.venv\Scripts\pyinstaller.exe shutdown-cui.spec
 
 # create new service
 Write-Host "Creating service..."
 
-
-
 Write-Host "Using NSSM: $nssm"
 
-# 2. Install new service
+# Install new service
 & $nssm install $svc "$DEST\dist\$BASE_NAME.exe"
 
-
-# 3. Configure logging
+# Configure logging
 $logDir="$DEST\logs"
 New-Item -ItemType Directory -Path $logDir | Out-Null
 
@@ -77,40 +75,4 @@ New-Item -ItemType Directory -Path $logDir | Out-Null
 # Check
 & $nssm dump $svc
 
-
-<#
-# 1. !! no - !!
-# 2. need .exe(p2exe)
-# 3. need some API to be implemented
-
-Start-Sleep -Seconds 2
-sc.exe stop shutdowncui 2>$null
-Start-Sleep -Seconds 2
-sc.exe delete shutdowncui 2>$null
-Start-Sleep -Seconds 2
-
-if (-not (Get-Command Invoke-ps2exe -ErrorAction SilentlyContinue)) {
-    Write-Host "Installing p2exe..."
-    Install-Module -Name ps2exe -Scope CurrentUser -Force -Confirm:$false
-}
-Invoke-ps2exe -inputFile "$DEST\start_win.ps1" -outputFile "$DEST\start_win.exe" -noConsole
-
-sc.exe create shutdowncui "binPath=$DEST\win_start.exe" "DisplayName= $BASE_NAME-service" "start=auto"
-
-sc.exe failure $BASE_NAME reset= 86400 actions= restart/5000
-
-# check
-sc.exe qc shutdowncui
-
-# Start now
-Start-Service shutdowncui
-
-# Log
-Get-Service shutdowncui
-#>
-
 Pop-Location
-
-# NTP
-# w32tm /config /update /manualpeerlist:"time.windows.com,0x1" /syncfromflags:manual
-net start w32time

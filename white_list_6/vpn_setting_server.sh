@@ -47,7 +47,7 @@ PrivateKey = $(cat server_private.key)
 # Enable IP packet transfer
 PostUp = sysctl -w net.ipv4.ip_forward=1
 
-# DNAT (2222, 80, 8080, 443, 53, 3389)
+# DNAT (22, 80, 8080, 443, 51820), (53, 2222, 3389, 993)
 PostUp = iptables -t nat -A PREROUTING -i ${wg_server_interface} -p tcp --dport 53 -j DNAT --to-destination ${HOME_PC}:53
 PostUp = iptables -t nat -A PREROUTING -i ${wg_server_interface} -p udp --dport 53 -j DNAT --to-destination ${HOME_PC}:53
 

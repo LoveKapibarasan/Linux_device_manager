@@ -3,14 +3,21 @@ import os
 import re
 import json
 from datetime import datetime
+import time
 import shlex # a Python standard library module for safely splitting and quoting command-line strings.
 import platform
 import getpass
+import sys
 from typing import TypedDict
 from datetime import date, datetime
 
-SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+def get_base_dir():
+    if getattr(sys, 'frozen', False):
+        return os.path.dirname(os.path.dirname(sys.executable))
+    else:
+        return os.path.dirname(os.path.abspath(__file__))
 
+SCRIPT_DIR = get_base_dir()
 USAGE_FILE = os.path.join(SCRIPT_DIR, "usage_file.json")
 
 LOG_FILE = os.path.join(os.path.expanduser("~"), "notify.log")
@@ -31,11 +38,7 @@ def notify(content):
         print(f"Failed to write log: {e}")
 
 def shutdown_all():
-    if not is_ntp_synced():
-        return
-
     os_name = platform.system()
-
     try:
         if "Windows" in os_name:
             subprocess.run(["shutdown", "/s", "/t", "0"], check=True)
@@ -46,15 +49,9 @@ def shutdown_all():
     except Exception as e:
         notify(f"Failed shutdown_all: {e}")
 
-import subprocess
-import platform
 
 def suspend_all():
-    if not is_ntp_synced():
-        return
-
     os_name = platform.system()
-
     try:
         if "Windows" in os_name:
             # 現在のセッションを取得
@@ -82,9 +79,6 @@ def suspend_all():
 
     except Exception as e:
         notify(f"Suspend failed: {e}")
-
-
-           
 
 def cancel_shutdown():
     try:
