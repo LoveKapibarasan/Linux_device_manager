@@ -117,6 +117,7 @@ class UsageManager:
         time.sleep(5)
 
 def start_loop():
+    usage = UsageManager()
     while True:
         try:
             # Night blocking time check

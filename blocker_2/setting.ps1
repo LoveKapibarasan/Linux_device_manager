@@ -12,7 +12,7 @@ if (-not $nssm) {
 
 # kill before
 taskkill /f /im "$BASE_NAME.exe"
-
+Start-Sleep -Seconds 2
 
 # Stop & Remove existing service (ignore errors)
 & $nssm stop $svc 2>$null
