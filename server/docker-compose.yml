@@ -292,6 +292,7 @@ services:
     environment:
       - SPEECH_KEY=${SPEECH_KEY}
       - SPEECH_REGION=${SPEECH_REGION}
+      - DEMO_MODE=true
 
 volumes:
   valkey-data2:
