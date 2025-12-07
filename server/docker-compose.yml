@@ -237,6 +237,9 @@ services:
       - /etc/letsencrypt:/etc/letsencrypt:ro
     cap_add:
       - NET_ADMIN
+    environment:
+      - SSL_TYPE=letsencrypt
+      - TLS_LEVEL=intermediate  # modernの場合は古いクライアントで問題が出る
     restart: always
     stop_grace_period: 1m
     healthcheck:
