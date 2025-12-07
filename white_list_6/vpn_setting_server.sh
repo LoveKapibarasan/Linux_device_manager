@@ -93,7 +93,7 @@ sudo tee "/etc/wireguard/client_${os_lower}.conf" <<EOF
 PrivateKey = $(cat "client_private_${os_lower}.key")
 # Server ${WG_Server}/24 → Client 10.10.0.2/24, 10.10.0.3/24...
 Address = 10.10.0.${IP_COUNTER}/24
-
+DNS = ${WG_Server}
 [Peer]
 PublicKey = $(cat server_public.key)
 # IP route that should pass into VPN

@@ -138,10 +138,35 @@ def is_ntp_synced() -> bool:
     try:
         os_name = platform.system()
         if "Windows" in os_name:
-            result = subprocess.run(
-                        ["w32tm", "/query", "/status"],
-                        capture_output=True, text=True, check=True
+            try:
+                # Check service status
+                status_result = subprocess.run(
+                    ["sc", "query", "w32time"],
+                    capture_output=True, text=True, check=False
+                )
+
+                # If service is not running, start it
+                if "Stratum" not in status_result.stdout:
+                    notify("Windows Time service is not running. Starting it...")
+                    subprocess.run(
+                        ["powershell", "-Command", "Start-Service w32time"],
+                        check=False
                     )
+                    time.sleep(3)  # Give it time to start
+
+                    # Force a resync after starting
+                    subprocess.run(["w32tm", "/resync", "/force"], check=False)
+                    time.sleep(2)
+
+            except Exception as e:
+                notify(f"Error starting w32time service: {e}")
+                return False
+
+            # Now query the status
+            result = subprocess.run(
+                ["w32tm", "/query", "/status"],
+                capture_output=True, text=True, check=False  # Use check=False
+            )
             out = result.stdout
             for line in out.splitlines():
                 if "Stratum" in line:
@@ -151,8 +176,6 @@ def is_ntp_synced() -> bool:
                         value = int(value_str)
                         notify(f"Info: value = {value}")
                         if value <= 0 or value >= 16:
-                            subprocess.run(["powershell", "-Command", "Start-Service w32time"], check=False)
-                            time.sleep(2)
                             subprocess.run(["w32tm", "/resync", "/force"], check=False)
                             return False
                         else:

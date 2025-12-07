@@ -21,3 +21,10 @@ curl ifconfig.me
 ip a
 # IP Routes
 sudo ip route show
+
+# Ubuntu
+## NAT setting
+## DNS server
+
+# Android
+## Always on VPN && Do not block non-DNS connection && DNS server
