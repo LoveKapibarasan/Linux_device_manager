@@ -229,9 +229,9 @@ services:
       - "465:465"    # SMTPS
       - "993:993"    # IMAPS
     volumes:
-      - ./data/maildata:/var/mail
+      - ./data/maildata:/var/mail # mail data
       - ./data/mailstate:/var/mail-state
-      - ./data/maillogs:/var/log/mail
+      - ./data/maillogs:/var/log/mail # logs
       - ./config:/tmp/docker-mailserver
       - /etc/localtime:/etc/localtime:ro
       - /etc/letsencrypt:/etc/letsencrypt:ro
@@ -275,8 +275,6 @@ services:
     container_name: open-webui
     ports:
       - "3002:8080"
-    environment:
-      - OPENAI_API_KEY=${OPENAI_API_KEY}  # Use environment variable for API Key
     volumes:
       - open-webui:/app/backend/data
     restart: always

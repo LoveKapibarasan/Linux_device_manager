@@ -20,5 +20,9 @@ sudo apt install sniproxy
 
 # Syntax Check
 sudo sniproxy -c /etc/sniproxy.conf -f
-
 sudo systemctl restart sniproxy
+
+# !! Notes !!
+# Use external DNS server for its own DNS resolution
+
+

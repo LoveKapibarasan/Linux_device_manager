@@ -85,6 +85,14 @@ cat ./docker-data/dms/config/opendkim/keys/example.com/mail.txt
 docker exec mailserver setup email list
 ## DMARC (Domain-based Message Authentication, Reporting and Conformance)
 ### _dmarc.example.com. IN TXT "v=DMARC1; p=quarantine; rua=mailto:dmarc@example.com"
+## DEBUG
+openssl s_client -connect 127.0.0.1:993
+
+
+# Open WebUI
+## General -> Connectors
+### OpenAI: https://api.openai.com/v1
+### Anthropic: Register pipeline Functions(https://github.com/jeremysears/anthropic-manifold-pipeline/blob/main/anthropic_manifold_pipeline.py)
 
 # DEBUG
 sudo apt install traceroute
