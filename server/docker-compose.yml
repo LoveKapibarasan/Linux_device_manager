@@ -285,7 +285,7 @@ services:
     restart: always
 
   tts-azure-web:
-    build: .
+    build: ./tts-azure-web
     ports:
       - "3003:3000"
     environment:
