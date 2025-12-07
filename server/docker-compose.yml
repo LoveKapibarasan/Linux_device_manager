@@ -284,6 +284,13 @@ services:
       - open-webui:/app/backend/data
     restart: always
 
+  tts-azure-web:
+    build: .
+    ports:
+      - "3003:3000"
+    environment:
+      - SPEECH_KEY=${SPEECH_KEY}
+      - SPEECH_REGION=${SPEECH_REGION}
 
 volumes:
   valkey-data2:

@@ -86,13 +86,17 @@ docker exec mailserver setup email list
 ## DMARC (Domain-based Message Authentication, Reporting and Conformance)
 ### _dmarc.example.com. IN TXT "v=DMARC1; p=quarantine; rua=mailto:dmarc@example.com"
 ## DEBUG
-openssl s_client -connect 127.0.0.1:993
-
+openssl s_client -connect ${DOMAIN_OR_IP}:993
+# Port25: https://console.aws.amazon.com/support/contacts?#/rdns-limits
 
 # Open WebUI
 ## General -> Connectors
 ### OpenAI: https://api.openai.com/v1
 ### Anthropic: Register pipeline Functions(https://github.com/jeremysears/anthropic-manifold-pipeline/blob/main/anthropic_manifold_pipeline.py)
+
+
+# TTS
+git clone -o upstream git@github.com:Femoon/tts-azure-web.git
 
 # DEBUG
 sudo apt install traceroute

@@ -41,6 +41,8 @@ Name: _acme-challenge
 Content: xufdhsv
 TTL: xmin
 ```
+# Check
+sudo openssl x509 -in "/etc/letsencrypt/live/${DOMAIN}/fullchain.pem" -noout -text | grep -A1 "Subject Alternative Name"
 
 # Set up automatic renewal(Default 90 days expiry)
 sudo systemctl enable certbot.timer
