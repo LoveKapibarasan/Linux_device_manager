@@ -285,6 +285,7 @@ services:
     restart: always
 
   tts-azure-web:
+    container_name: tts-azure-web
     build: ./tts-azure-web
     ports:
       - "3003:3000"
