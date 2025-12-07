@@ -270,6 +270,18 @@ services:
       - network
     restart: unless-stopped
 
+  open-webui:
+    image: ghcr.io/open-webui/open-webui:main
+    container_name: open-webui
+    ports:
+      - "3002:8080"
+    environment:
+      - OPENAI_API_KEY=${OPENAI_API_KEY}  # Use environment variable for API Key
+    volumes:
+      - open-webui:/app/backend/data
+    restart: always
+
+
 volumes:
   valkey-data2:
   searxng-data:
