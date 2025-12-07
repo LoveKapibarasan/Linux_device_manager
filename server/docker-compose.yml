@@ -238,8 +238,10 @@ services:
     cap_add:
       - NET_ADMIN
     environment:
-      - SSL_TYPE=letsencrypt
-      - TLS_LEVEL=intermediate  # modernの場合は古いクライアントで問題が出る
+      - SSL_TYPE=manual  # ← letsencrypt から manual に変更
+      - SSL_CERT_PATH=/etc/letsencrypt/live/lovekapibarasan.org/fullchain.pem
+      - SSL_KEY_PATH=/etc/letsencrypt/live/lovekapibarasan.org/privkey.pem
+      - TLS_LEVEL=intermediate
     restart: always
     stop_grace_period: 1m
     healthcheck:
