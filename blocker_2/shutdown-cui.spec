@@ -5,7 +5,7 @@ a = Analysis(
     ['shutdown-cui.py'],
     pathex=[],
     binaries=[],
-    datas=[('config.json', '.')],
+    datas=[],
     hiddenimports=[],
     hookspath=[],
     hooksconfig={},

@@ -120,18 +120,24 @@ services:
     #   - net.ipv4.conf.all.src_valid_mark=1
     restart: unless-stopped
     network_mode: host
-   # https://dev.to/teetoflame/setting-up-a-gitlab-server-community-edition-and-a-gitlab-runner-using-docker-compose-ob6
+
+  # https://dev.to/teetoflame/setting-up-a-gitlab-server-community-edition-and-a-gitlab-runner-using-docker-compose-ob6
   gitlab-server:
         image: 'gitlab/gitlab-ce:latest'
         container_name: gitlab-server
-        hostname: 'gitlab.example.com'
+        hostname: 'gitlab.lovekapibarasan.org'
         environment:
           GITLAB_OMNIBUS_CONFIG: |
-            external_url 'http://localhost:8088'  # Put the IP of your server
+            external_url 'https://gitlab.lovekapibarasan.org'  # Put the IP of your server
+            gitlab_rails['gitlab_shell_host'] = 'gitlab.lovekapibarasan.org'
+            gitlab_rails['gitlab_shell_ssh_port'] = 2224
+            nginx['listen_port'] = 80
+            nginx['listen_https'] = false  #  コンテナ内では HTTPS 不要
+            gitlab_rails['trusted_proxies'] = ['nginx']  #  Nginx を信頼
             gitlab_rails['initial_root_password'] =  "$GITLAB_PASSWORD"  # Set your initial root password here
-        # ports:
-        #  - '8088:8088'  # Expose GitLab on port 8088
-        network_mode: host
+        ports:
+          - '8088:80'  # Expose GitLab on port 8088
+          - '2224:22' # Do not use ssh on 22 in host. sudo ss -tlnp | grep sshd
         volumes:
           - ./config:/etc/gitlab  # Persist GitLab configuration
           - ./logs:/var/log/gitlab  # Persist GitLab logs
@@ -164,52 +170,37 @@ services:
   db:
     image: mariadb:latest
     container_name: db
-    network_mode: host
+    ports:
+      - "3306:3306"
     volumes:
       - db_data:/var/lib/mysql
+      - ./init-db.sql:/docker-entrypoint-initdb.d/init-db.sql:ro
     restart: always
-    command: --port=3306
     environment:
-      DB_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
-      WORDPRESS_DB_PASSWORD: ${WORDPRESS_DB_PASSWORD}
+      MARIADB_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}  # MYSQL_ → MARIADB_
       ROUNDCUBE_DB_PASSWORD: ${ROUNDCUBE_DB_PASSWORD}
-    entrypoint: >
-      bash -c '
-      cat > /docker-entrypoint-initdb.d/init-db.sh <<EOF
-      #!/bin/bash
-      set -e
-      mysql -uroot -p"$$MYSQL_ROOT_PASSWORD" <<EOSQL
-          CREATE DATABASE IF NOT EXISTS roundcube;
-          CREATE USER IF NOT EXISTS "roundcube"@"%" IDENTIFIED BY "${ROUNDCUBE_DB_PASSWORD}";
-          GRANT ALL PRIVILEGES ON roundcube.* TO "roundcube"@"%";
-    
-          CREATE DATABASE IF NOT EXISTS wordpress;
-          CREATE USER IF NOT EXISTS "wordpress"@"%" IDENTIFIED BY "${WORDPRESS_DB_PASSWORD}";
-          GRANT ALL PRIVILEGES ON wordpress.* TO "wordpress"@"%";
-    
-          FLUSH PRIVILEGES;
-      EOSQL
-      EOF
-      chmod +x /docker-entrypoint-initdb.d/init-db.sh &&
-      exec docker-entrypoint.sh mariadbd --port=3306
-      '
+      WORDPRESS_DB_PASSWORD: ${WORDPRESS_DB_PASSWORD}
+    networks:
+      - network
 
   wordpress:
+      container_name: wordpress
       depends_on:
         - db
       image: wordpress:latest
-      # ports:
-      #  - "8080:80"
-      network_mode: host
+      ports:
+       - "8090:80"
       restart: always
       environment:
-        WORDPRESS_DB_HOST: 127.0.0.1:3306
+        WORDPRESS_DB_HOST: db:3306
         WORDPRESS_DB_USER: wordpress
         WORDPRESS_DB_PASSWORD: ${WORDPRESS_DB_PASSWORD}
         WORDPRESS_DB_NAME: wordpress
       volumes:
         - wordpress_data:/var/www/html
-        - ./ports.conf:/etc/apache2/ports.conf:ro
+        #- ./ports.conf:/etc/apache2/ports.conf:ro
+      networks:
+        - network
 
 # https://github.com/dockur/samba/blob/master/compose.yml
   samba:
@@ -231,63 +222,91 @@ services:
     restart: always
 
 # https://blog.estampie.work/archives/3343
+# https://docker-mailserver.github.io/docker-mailserver/latest/usage/
   mailserver:
     image: docker.io/mailserver/docker-mailserver:latest
     container_name: mailserver
-    hostname: mail.example.com
-    # ports:
-    #  - "25:25"     # SMTP
-    #  - "143:143"   # IMAP
-    #  - "587:587"   # SMTP submission
-    #  - "993:993"   # IMAPS
+    env_file: mailserver.env
+    hostname: mail.lovekapibarasan.org  # FQDNに変更
+    ports:
+      - "25:25"      # SMTP
+      - "143:143"    # IMAP
+      - "587:587"    # Submission
+      - "465:465"    # SMTPS
+      - "993:993"    # IMAPS
     volumes:
-      - ./data/maildata:/var/mail
+      - ./data/maildata:/var/mail # mail data
       - ./data/mailstate:/var/mail-state
-      - ./data/maillogs:/var/log/mail
+      - ./data/maillogs:/var/log/mail # logs
       - ./config:/tmp/docker-mailserver
       - /etc/localtime:/etc/localtime:ro
-    network_mode: host
+      - /etc/letsencrypt:/etc/letsencrypt:ro
     cap_add:
       - NET_ADMIN
-    restart: unless-stopped
+    environment:
+      - SSL_TYPE=manual  # ← letsencrypt から manual に変更
+      - SSL_CERT_PATH=/etc/letsencrypt/live/lovekapibarasan.org/fullchain.pem
+      - SSL_KEY_PATH=/etc/letsencrypt/live/lovekapibarasan.org/privkey.pem
+      - TLS_LEVEL=intermediate
+    restart: always
     stop_grace_period: 1m
     healthcheck:
       test: "ss --listening --ipv4 --tcp | grep --silent ':smtp' || exit 1"
       timeout: 3s
       retries: 5
+    networks:
+      - network
 
   # Webメールクライアント (Roundcube)
   roundcube:
     image: roundcube/roundcubemail:latest
     container_name: roundcube
-    # ports:
-    #  - "8080:80"
+    ports:
+      - "8085:80"
     environment:
-      ROUNDCUBEMAIL_DB_TYPE: mysql # MariaDB is originated from mysql
-      ROUNDCUBEMAIL_DB_HOST: 127.0.0.1:3306
+      ROUNDCUBEMAIL_DB_TYPE: mysql # MariaDB is originated from mySQL
+      ROUNDCUBEMAIL_DB_HOST: db
       ROUNDCUBEMAIL_DB_USER: roundcube
       ROUNDCUBEMAIL_DB_PASSWORD: ${ROUNDCUBE_DB_PASSWORD}
       ROUNDCUBEMAIL_DB_NAME: roundcube
-      ROUNDCUBEMAIL_DEFAULT_HOST: ssl://lovekapibarasan.org # mail.domain.com
-      ROUNDCUBEMAIL_SMTP_SERVER: ssl://lovekapibarasan.org
-    volumes:
-      - roundcube_data:/var/www/html
+      ROUNDCUBEMAIL_DEFAULT_HOST: ssl://mail.lovekapibarasan.org
+      ROUNDCUBEMAIL_DEFAULT_PORT: 993
+      ROUNDCUBEMAIL_SMTP_SERVER: tls://mail.lovekapibarasan.org
+      ROUNDCUBEMAIL_SMTP_PORT: 587
+      APACHE_SERVER_NAME: mail.lovekapibarasan.org
     depends_on:
       - mailserver
       - db
+    networks:
+      - network
     restart: unless-stopped
-    network_mode: host
-    command: >
-      bash -c "
-      sed -i 's/Listen 80/Listen 8085/g' /etc/apache2/ports.conf &&
-      sed -i 's/:80/:8085/g' /etc/apache2/sites-available/000-default.conf &&
-      apache2-foreground
-      "
 
+  open-webui:
+    image: ghcr.io/open-webui/open-webui:main
+    container_name: open-webui
+    ports:
+      - "3002:8080"
+    volumes:
+      - open-webui:/app/backend/data
+    restart: always
+
+  tts-azure-web:
+    container_name: tts-azure-web
+    build: ./tts-azure-web
+    ports:
+      - "3003:3000"
+    environment:
+      - SPEECH_KEY=${SPEECH_KEY}
+      - SPEECH_REGION=${SPEECH_REGION}
+      - DEMO_MODE=false
 
 volumes:
-  roundcube_data:  # Define the volume here
   valkey-data2:
   searxng-data:
   db_data:
   wordpress_data:
+  open-webui:
+
+networks:
+  network:
+    driver: bridge

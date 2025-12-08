@@ -3,14 +3,21 @@ import os
 import re
 import json
 from datetime import datetime
+import time
 import shlex # a Python standard library module for safely splitting and quoting command-line strings.
 import platform
 import getpass
+import sys
 from typing import TypedDict
 from datetime import date, datetime
 
-SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+def get_base_dir():
+    if getattr(sys, 'frozen', False):
+        return os.path.dirname(os.path.dirname(sys.executable))
+    else:
+        return os.path.dirname(os.path.abspath(__file__))
 
+SCRIPT_DIR = get_base_dir()
 USAGE_FILE = os.path.join(SCRIPT_DIR, "usage_file.json")
 
 LOG_FILE = os.path.join(os.path.expanduser("~"), "notify.log")
@@ -31,11 +38,7 @@ def notify(content):
         print(f"Failed to write log: {e}")
 
 def shutdown_all():
-    if not is_ntp_synced():
-        return
-
     os_name = platform.system()
-
     try:
         if "Windows" in os_name:
             subprocess.run(["shutdown", "/s", "/t", "0"], check=True)
@@ -46,15 +49,9 @@ def shutdown_all():
     except Exception as e:
         notify(f"Failed shutdown_all: {e}")
 
-import subprocess
-import platform
 
 def suspend_all():
-    if not is_ntp_synced():
-        return
-
     os_name = platform.system()
-
     try:
         if "Windows" in os_name:
             # 現在のセッションを取得
@@ -82,9 +79,6 @@ def suspend_all():
 
     except Exception as e:
         notify(f"Suspend failed: {e}")
-
-
-           
 
 def cancel_shutdown():
     try:
@@ -144,10 +138,35 @@ def is_ntp_synced() -> bool:
     try:
         os_name = platform.system()
         if "Windows" in os_name:
-            result = subprocess.run(
-                        ["w32tm", "/query", "/status"],
-                        capture_output=True, text=True, check=True
+            try:
+                # Check service status
+                status_result = subprocess.run(
+                    ["sc", "query", "w32time"],
+                    capture_output=True, text=True, check=False
+                )
+
+                # If service is not running, start it
+                if "Stratum" not in status_result.stdout:
+                    notify("Windows Time service is not running. Starting it...")
+                    subprocess.run(
+                        ["powershell", "-Command", "Start-Service w32time"],
+                        check=False
                     )
+                    time.sleep(3)  # Give it time to start
+
+                    # Force a resync after starting
+                    subprocess.run(["w32tm", "/resync", "/force"], check=False)
+                    time.sleep(2)
+
+            except Exception as e:
+                notify(f"Error starting w32time service: {e}")
+                return False
+
+            # Now query the status
+            result = subprocess.run(
+                ["w32tm", "/query", "/status"],
+                capture_output=True, text=True, check=False  # Use check=False
+            )
             out = result.stdout
             for line in out.splitlines():
                 if "Stratum" in line:
@@ -156,9 +175,11 @@ def is_ntp_synced() -> bool:
                         value_str = line.split(":")[1].strip().split()[0]  # remove :0(unspecified)
                         value = int(value_str)
                         notify(f"Info: value = {value}")
-                        if value == 0:
-                            subprocess.run(["w32tm", "/resync"], check=False)
-                        return 0 < value < 16
+                        if value <= 0 or value >= 16:
+                            subprocess.run(["w32tm", "/resync", "/force"], check=False)
+                            return False
+                        else:
+                            return 0 < value < 16
                     except Exception as e:
                         notify(f"Unknown error happened at is_ntp_synced(): {e}")
                         return False

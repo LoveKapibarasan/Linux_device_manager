@@ -22,5 +22,12 @@ ip a
 # IP Routes
 sudo ip route show
 
+# Ubuntu
+## NAT setting
+## DNS server
+
+# Android
+## Always on VPN && Do not block non-DNS connection && DNS server
+
 # Change DNS
 resolvectl dns wg0 8.8.8.8 1.1.1.1

@@ -2,26 +2,19 @@ import time
 import json
 import subprocess
 import os
-import sys
 from datetime import datetime
 from datetime import time as dtime
-from utils import notify, shutdown_all, suspend_all,  protect_usage_file, read_usage_file, update_usage_file, is_ntp_synced
+from utils import notify, shutdown_all, suspend_all,  protect_usage_file, read_usage_file, update_usage_file, is_ntp_synced, get_base_dir
 
 # === Time Unit Constants ===
 UNIT = 60
 
-
 def load_config(path="config.json"):
-    if getattr(sys, 'frozen', False):
-        # PyInstaller で一つの exe にまとめた場合
-         base_dir = sys._MEIPASS
-    else:
-        base_dir = os.path.dirname(os.path.abspath(__file__))
+    base_dir = get_base_dir()
     full_path = os.path.join(base_dir, path)
     notify(f"Config file is read from {full_path}")
     with open(full_path, "r", encoding="utf-8") as f:
         config = json.load(f)
-
     # "HH:MM" → datetime.time
     for key in ["weekday", "weekend"]:
         for tkey in ["BLOCK_START", "BLOCK_END"]:
@@ -29,13 +22,13 @@ def load_config(path="config.json"):
             config[key][tkey] = dtime(hh, mm)
     return config
 
-
-
 class UsageManager:
     def __init__(self):
+        # Order
+        self.is_ntp_synced_cache = False
+        self.is_notify_remaining_time_cache = False
         self.config = load_config()
         self.profile = self._load_profile()
-        
         protect_usage_file(self._get_now().date())
 
     def _load(self):
@@ -55,9 +48,12 @@ class UsageManager:
             return 0
     
     def _get_now(self) -> datetime:
+        if self.is_ntp_synced_cache:
+            return datetime.now()
         # Busy wait until NTP is synced
         while True:
             if is_ntp_synced():
+                self.is_ntp_synced_cache = True
                 return datetime.now()
             notify("Waiting NTP..")
             time.sleep(60)
@@ -143,8 +139,11 @@ def start_loop():
                     return
             
             if usage.is_notified():
-                usage.notify_remaining_time()
-            
+                if not usage.is_notify_remaining_time_cache:
+                    usage.notify_remaining_time()
+                    usage.is_notify_remaining_time_cache = True
+            else:
+                usage.is_notify_remaining_time_cache = False
             usage.add_minutes()
 
         except Exception as e:
