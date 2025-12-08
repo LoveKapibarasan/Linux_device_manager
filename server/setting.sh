@@ -77,3 +77,12 @@ sudo vim /etc/resolv.conf
 
 # After
 docker restart pihole
+
+
+# Samba
+## Windows
+### Map Network Drive
+### Drive Letter: Z
+### Folder :\\SAMBA_server_IP\Data
+## Ubuntu(Natrius)
+### Ctrl + L -> smb://SAMBA_server_IP/Data

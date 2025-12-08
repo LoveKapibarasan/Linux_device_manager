@@ -21,3 +21,6 @@ curl ifconfig.me
 ip a
 # IP Routes
 sudo ip route show
+
+# Change DNS
+resolvectl dns wg0 8.8.8.8 1.1.1.1
