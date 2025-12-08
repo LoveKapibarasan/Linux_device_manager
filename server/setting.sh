@@ -30,7 +30,7 @@ sudo ss -tlnp | grep -E ':(22|2222)'
 
 ssh-keygen -t ed25519 -C "xxx@yyy"
 ssh-copy-id -p 2222 -i ~/.ssh/server.pub user@$server_ip
-sudo nano /etc/ssh/sshd_config
+sudo vim /etc/ssh/sshd_config
 # PermitRootLogin no
 # PasswordAuthentication no
 # PubkeyAuthentication yes
@@ -50,6 +50,14 @@ sudo mv "$HOME/Linux_device_manager/white_list_3/db/gravity_current.db" "$HOME/L
 ### Stop systemd-resolved
 sudo systemctl stop systemd-resolved
 sudo systemctl mask systemd-resolved
+### Normal
+### sshd checks port → connect
+
+### Socket Activation：
+### systemd checks port → Run sshd
+sudo systemctl cat ssh.socket
+sudo vim /lib/systemd/system/ssh.socket
+sudo vim /etc/systemd/system/ssh.socket.d/listen.conf
 
 # Vaultwarden
 ## account -> security -> 2FA

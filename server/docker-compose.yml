@@ -120,17 +120,24 @@ services:
     #   - net.ipv4.conf.all.src_valid_mark=1
     restart: unless-stopped
     network_mode: host
-   # https://dev.to/teetoflame/setting-up-a-gitlab-server-community-edition-and-a-gitlab-runner-using-docker-compose-ob6
+
+  # https://dev.to/teetoflame/setting-up-a-gitlab-server-community-edition-and-a-gitlab-runner-using-docker-compose-ob6
   gitlab-server:
         image: 'gitlab/gitlab-ce:latest'
         container_name: gitlab-server
         hostname: 'gitlab.lovekapibarasan.org'
         environment:
           GITLAB_OMNIBUS_CONFIG: |
-            external_url 'http://gitlab.lovekapibarasan.org'  # Put the IP of your server
+            external_url 'https://gitlab.lovekapibarasan.org'  # Put the IP of your server
+            gitlab_rails['gitlab_shell_host'] = 'gitlab.lovekapibarasan.org'
+            gitlab_rails['gitlab_shell_ssh_port'] = 22
+            nginx['listen_port'] = 80
+            nginx['listen_https'] = false  #  コンテナ内では HTTPS 不要
+            gitlab_rails['trusted_proxies'] = ['nginx']  #  Nginx を信頼
             gitlab_rails['initial_root_password'] =  "$GITLAB_PASSWORD"  # Set your initial root password here
         ports:
-          - '8088:8088'  # Expose GitLab on port 8088
+          - '8088:80'  # Expose GitLab on port 8088
+          - '22:22' # Do not use ssh on 22 in host. sudo ss -tlnp | grep sshd
         volumes:
           - ./config:/etc/gitlab  # Persist GitLab configuration
           - ./logs:/var/log/gitlab  # Persist GitLab logs
