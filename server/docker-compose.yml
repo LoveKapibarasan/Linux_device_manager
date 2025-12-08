@@ -124,14 +124,13 @@ services:
   gitlab-server:
         image: 'gitlab/gitlab-ce:latest'
         container_name: gitlab-server
-        hostname: 'gitlab.example.com'
+        hostname: 'gitlab.lovekapibarasan.org'
         environment:
           GITLAB_OMNIBUS_CONFIG: |
-            external_url 'http://localhost:8088'  # Put the IP of your server
+            external_url 'http://gitlab.lovekapibarasan:8088'  # Put the IP of your server
             gitlab_rails['initial_root_password'] =  "$GITLAB_PASSWORD"  # Set your initial root password here
-        # ports:
-        #  - '8088:8088'  # Expose GitLab on port 8088
-        network_mode: host
+        ports:
+          - '8088:8088'  # Expose GitLab on port 8088
         volumes:
           - ./config:/etc/gitlab  # Persist GitLab configuration
           - ./logs:/var/log/gitlab  # Persist GitLab logs
