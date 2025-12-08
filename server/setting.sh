@@ -97,7 +97,9 @@ openssl s_client -connect ${DOMAIN_OR_IP}:993
 
 # TTS
 git clone -o upstream git@github.com:Femoon/tts-azure-web.git
-
+## .env.local
+## "dev": "next dev -p 3003"
+## westeurope
 
 # DEBUG
 sudo apt install traceroute
