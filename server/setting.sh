@@ -109,6 +109,11 @@ git clone -o upstream git@github.com:Femoon/tts-azure-web.git
 ## "dev": "next dev -p 3003"
 ## westeurope
 
+
+# GitLab
+## Settings → Repository → Mirroring repositories
+### Add ssh:// and enter private key
+
 # DEBUG
 sudo apt install traceroute
 traceroute docker.io

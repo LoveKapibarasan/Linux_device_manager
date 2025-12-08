@@ -26,3 +26,7 @@ sudo systemctl restart sniproxy
 # Use external DNS server for its own DNS resolution
 
 
+# Gitlab
+iptables -t nat -A PREROUTING -p tcp --dport 2224 -j DNAT --to-destination 10.10.0.2:2224
+iptables -A FORWARD -p tcp -d 10.10.0.2 --dport 2224 -j ACCEPT
+
