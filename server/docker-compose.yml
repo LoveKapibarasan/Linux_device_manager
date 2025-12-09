@@ -315,6 +315,8 @@ services:
       MYSQL_PASSWORD: nextcloud
     depends_on:
       - db
+    networks:
+      - network
 
 volumes:
   valkey-data2:
