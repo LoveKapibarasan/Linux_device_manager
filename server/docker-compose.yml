@@ -322,6 +322,7 @@ volumes:
   db_data:
   wordpress_data:
   open-webui:
+  nextcloud_data:
 
 networks:
   network:
