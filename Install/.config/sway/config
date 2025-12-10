@@ -17,8 +17,9 @@ output * scale 1
 ### Input configuration
 input * {
 	xkb_layout de
+    # xkb_model "apple" 
+    # xkb_options "altwin:swap_alt_win"
     }
-
 
 ## Key bindings
 

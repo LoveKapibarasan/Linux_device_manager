@@ -54,7 +54,7 @@ fi
 sudo pacman -Rns nano vim
 
 # Basic Packages
-sudo pacman -S base-devel wget btop usbutils\
+sudo pacman -S base-devel wget btop usbutils udisks2\
     fcitx5 fcitx5-configtool fcitx5-mozc fcitx5-gtk fcitx5-qt \
     noto-fonts noto-fonts-cjk noto-fonts-emoji \
     git openssh git-lfs vi less git-filter-repo github-cli \
