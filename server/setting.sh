@@ -111,7 +111,8 @@ git clone -o upstream git@github.com:Femoon/tts-azure-web.git
 
 
 # GitLab
-## Settings → Repository → Mirroring repositories
+## Gitlab: Settings → Repository → Mirroring repositories
+## Github: Setting -> Deploy keys
 ### Add ssh:// and enter private key
 
 # DEBUG

@@ -167,6 +167,7 @@ services:
     #  - 80:80
 
   # 共通DB
+  # Memo: MySQL commands are replaced with mariadb commands.
   db:
     image: mariadb:latest
     container_name: db
@@ -214,12 +215,23 @@ services:
       RW: true      # Optional, default true
       UID: 1000    # Optional, default 1000
       GID: 1000    # Optional, default 1000
-    # ports:
-    #  - 445:445
-    network_mode: host
+    ports:
+      - 445:445
     volumes:
       - ./samba:/storage
     restart: always
+
+  jellyfin:
+    image: jellyfin/jellyfin:latest
+    container_name: jellyfin
+    user: 1000:1000
+    ports:
+      - 8096:8096
+    volumes:
+      - ./config:/config
+      - ./cache:/cache
+      - ./media:/media:ro  # Media file location
+    restart: unless-stopped
 
 # https://blog.estampie.work/archives/3343
 # https://docker-mailserver.github.io/docker-mailserver/latest/usage/
@@ -300,12 +312,33 @@ services:
       - SPEECH_REGION=${SPEECH_REGION}
       - DEMO_MODE=false
 
+  nextcloud:
+    image: nextcloud:latest
+    container_name: nextcloud
+    restart: always
+    ports:
+      - "8089:80"
+    volumes:
+      - nextcloud_data:/var/www/html
+    environment:
+      MYSQL_HOST: db
+      MYSQL_DATABASE: nextcloud
+      MYSQL_USER: nextcloud
+      MYSQL_PASSWORD: $NEXTCLOUD_DB_PASSWORD
+      NEXTCLOUD_ADMIN_USER: $NEXTCLOUD_ADMIN_USER
+      NEXTCLOUD_ADMIN_PASSWORD: $NEXTCLOUD_ADMIN_PASSWORD
+    depends_on:
+      - db
+    networks:
+      - network
+
 volumes:
   valkey-data2:
   searxng-data:
   db_data:
   wordpress_data:
   open-webui:
+  nextcloud_data:
 
 networks:
   network:
