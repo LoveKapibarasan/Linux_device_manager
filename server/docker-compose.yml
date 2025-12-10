@@ -167,6 +167,7 @@ services:
     #  - 80:80
 
   # 共通DB
+  # Memo: MySQL commands are replaced with mariadb commands.
   db:
     image: mariadb:latest
     container_name: db
@@ -220,6 +221,18 @@ services:
     volumes:
       - ./samba:/storage
     restart: always
+
+  jellyfin:
+    image: jellyfin/jellyfin:latest
+    container_name: jellyfin
+    user: 1000:1000
+    ports:
+      - 8096:8096
+    volumes:
+      - ./config:/config
+      - ./cache:/cache
+      - ./media:/media:ro  # Media file location
+    restart: unless-stopped
 
 # https://blog.estampie.work/archives/3343
 # https://docker-mailserver.github.io/docker-mailserver/latest/usage/
