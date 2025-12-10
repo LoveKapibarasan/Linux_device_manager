@@ -12,6 +12,8 @@ read -p "Enter new username:" username
 useradd -m -G wheel $username
 passwd $username
 
+systemctl enable systemd-resolved && systemctl restart systemd-resolved
+
 pacman -Syyu
 
 # 3. Install
@@ -19,6 +21,7 @@ pacman -Syyu
 pacman -S sudo --noconfirm
 
 sed -i 's/^# \(%wheel ALL=(ALL:ALL) ALL\)$/\1/' /etc/sudoers
+# sudo visudo
 sudo visudo -c 
 su - $username
 

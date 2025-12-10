@@ -30,6 +30,9 @@ station $DEVICE connect $SSID
 exit
 EOF
 fi
+
+lspci | grep -i network
+
 # 3. partition
 
 lsblk

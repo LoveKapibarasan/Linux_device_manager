@@ -68,4 +68,12 @@ cd scrcpy
 # Syncthing
 sudo apt install syncthing -y
 syncthing &
-# Access localhost:8384 and copy and paste the device ID from other devices
+## Access localhost:8384 and copy and paste the device ID from other devices
+
+# Quatro
+wget https://quarto.org/download/latest/quarto-linux-amd64.deb
+sudo dpkg -i quarto-linux-amd64.deb
+R
+install.packages("knitr")
+install.packages("rmarkdown")
+q()
