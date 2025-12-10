@@ -1,7 +1,7 @@
 #!/bin/bash
 # Basic Packages
 sudo pacman -S pipewire pipewire-alsa pipewire-pulse  \
-    alsamixer --noconfirm # sof-firmware
+    alsa-utils --noconfirm # sof-firmware
 
 # multilib が無効の場合のみ有効化
 if grep -q "^#\[multilib\]" /etc/pacman.conf; then
