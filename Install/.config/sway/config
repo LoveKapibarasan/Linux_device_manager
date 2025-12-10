@@ -6,7 +6,7 @@ include /etc/sway/config-vars.d/*
 
 ###  exec
 exec --no-startup-id fcitx5 -d
-exec rofi -show drun
+exec waybar
 
 
 
