@@ -288,7 +288,7 @@ services:
       ROUNDCUBEMAIL_SMTP_AUTH_TYPE: LOGIN
       ROUNDCUBEMAIL_SMTP_STARTTLS: true
     depends_on:
-      - mailserver
+      # - mailserver
       - db
     networks:
       - network
