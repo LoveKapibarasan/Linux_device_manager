@@ -14,7 +14,7 @@ sudo touch /etc/hosts
 cat > /etc/hosts <<EOF
 127.0.0.1   localhost
 ::1         localhost
-127.0.1.1   ${hostname}.localdomain ${HOSTNAME}
+127.0.1.1   ${hostname}.localdomain ${hostname}
 EOF
 
 # Locale
@@ -61,6 +61,8 @@ elif is_command pacman;then
         sudo localectl set-keymap "$KEYMAP"
         sudo localectl status
 fi
+# Mac: localectl set-x11-keymap us macintosh
+## Debug: sudo evtest
 
 # Residence = Wohnsitz
 

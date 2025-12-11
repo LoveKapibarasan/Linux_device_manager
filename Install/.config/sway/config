@@ -6,6 +6,7 @@ include /etc/sway/config-vars.d/*
 
 ###  exec
 exec --no-startup-id fcitx5 -d
+exec waybar
 
 
 
@@ -17,8 +18,9 @@ output * scale 1
 ### Input configuration
 input * {
 	xkb_layout de
+    # xkb_model  "macintosh" 
+    # xkb_options "altwin:swap_alt_win"
     }
-
 
 ## Key bindings
 
@@ -67,8 +69,17 @@ input * {
 
 ### Status Bar:
 
+### Apps
+#### Launcher（rofi）
+bindsym $mod+d exec "rofi -show drun"
+
+#### File Manager（pcmanfm）
+bindsym $mod+e exec pcmanfm
+
+
 ### Custom Settings
 default_border none
+
 
 
 

@@ -1,7 +1,7 @@
 #!/bin/bash
 # Basic Packages
 sudo pacman -S pipewire pipewire-alsa pipewire-pulse  \
-    alsamixer --noconfirm # sof-firmware
+    alsa-utils --noconfirm # sof-firmware
 
 # multilib が無効の場合のみ有効化
 if grep -q "^#\[multilib\]" /etc/pacman.conf; then
@@ -54,24 +54,24 @@ fi
 sudo pacman -Rns nano vim
 
 # Basic Packages
-sudo pacman -S base-devel gvim wget btop usbutils\
+sudo pacman -S base-devel wget btop usbutils udisks2\
     fcitx5 fcitx5-configtool fcitx5-mozc fcitx5-gtk fcitx5-qt \
     noto-fonts noto-fonts-cjk noto-fonts-emoji \
     git openssh git-lfs vi less git-filter-repo github-cli \
-    hyprland alacritty wl-clipboard xdg-desktop-portal-hyprland xdg-desktop-portal    xdg-desktop-portal-wlr xwayland \ 
+    hyprland alacritty wl-clipboard xdg-desktop-portal-hyprland xdg-desktop-portal xdg-desktop-portal-wlr xwayland \ 
     grim wtype \ 
     pcmanfm waybar rofi dunst zsh \
     python python-pip python-setuptools python-wheel python-docs\
     nodejs npm nvm \
     docker docker-compose \
-    neovim --no-confirm
+    neovim qutebrowser --noconfirm
     # apparmor
+    # sway gvim
 
 sudo systemctl enable --now docker
 sudo systemctl enable --now apparmor
 systemctl --user enable ssh-agent.service
-systemctl --user start ssh-agent.servic:wq
-e
+systemctl --user start ssh-agent.servic
 
 ## Electron
 sudo pacman -S atk at-spi2-core at-spi2-atk gtk3 nss alsa-lib libdrm libgbm libxkbcommon libcups \
@@ -94,7 +94,8 @@ cd $(get_user_home)
 git clone https://aur.archlinux.org/yay.git
 cd yay
 makepkg -si
-yay -S nkf  --noconfirm
+yay -S nkf --noconfirm
+# yay -S b43-firmware # broadcom
 
 # Pihole
 yay -S pi-hole-core pi-hole-ftl pi-hole-web --noconfirm
