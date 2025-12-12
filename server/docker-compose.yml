@@ -281,12 +281,11 @@ services:
       ROUNDCUBEMAIL_DB_USER: roundcube
       ROUNDCUBEMAIL_DB_PASSWORD: ${ROUNDCUBE_DB_PASSWORD}
       ROUNDCUBEMAIL_DB_NAME: roundcube
-      ROUNDCUBEMAIL_SMTP_SERVER: email-smtp.eu-central-1.amazonaws.com
+      ROUNDCUBEMAIL_DEFAULT_HOST: ssl://mail.lovekapibarasan.org
+      ROUNDCUBEMAIL_DEFAULT_PORT: 993
+      ROUNDCUBEMAIL_SMTP_SERVER: tls://mail.lovekapibarasan.org
       ROUNDCUBEMAIL_SMTP_PORT: 587
-      ROUNDCUBEMAIL_SMTP_USER: $SES_USERNAME
-      ROUNDCUBEMAIL_SMTP_PASS: $SES_PASSWORD
-      ROUNDCUBEMAIL_SMTP_AUTH_TYPE: LOGIN
-      ROUNDCUBEMAIL_SMTP_STARTTLS: true
+      APACHE_SERVER_NAME: mail.lovekapibarasan.org
     depends_on:
       # - mailserver
       - db
