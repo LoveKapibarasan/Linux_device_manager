@@ -288,7 +288,7 @@ services:
       - network
     restart: unless-stopped
     volumes:
-      - ./roundcube/config/config.inc.php:/config/config.inc.php
+      - ./roundcube/config/config.inc.php:/var/roundcube/config/config.inc.php
 
 
   open-webui:
