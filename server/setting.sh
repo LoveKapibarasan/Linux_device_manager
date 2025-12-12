@@ -114,6 +114,17 @@ git clone -o upstream git@github.com:Femoon/tts-azure-web.git
 ## Gitlab: Settings → Repository → Mirroring repositories
 ## Github: Setting -> Deploy keys
 ### Add ssh:// and enter private key
+### Permission Error:
+docker exec -it gitlab-server bash
+chmod 600 /etc/gitlab/ssh_host_*
+chmod 700 /etc/gitlab
+exit
+#### Regenerate GitLab keys
+docker exec -it gitlab-server gitlab-ctl reconfigure
+docker exec -it gitlab-server gitlab-ctl restart sshd
+
+
+
 
 # DEBUG
 sudo apt install traceroute
