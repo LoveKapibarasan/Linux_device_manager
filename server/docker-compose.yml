@@ -288,8 +288,7 @@ services:
       - network
     restart: unless-stopped
     volumes:
-      - ./roundcube/config/config.inc.php:/var/roundcube/config/config.inc.php
-
+      - ./roundcube/config:/var/roundcube/config
 
   open-webui:
     image: ghcr.io/open-webui/open-webui:main
