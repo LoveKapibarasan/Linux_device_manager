@@ -1,14 +1,14 @@
 <?php
 
 $config['default_host'] = array(
-    'workmail' => 'ssl://imap.mail.us-west-2.awsapps.com',
+    'workmail' => 'ssl://imap.mail.us-west-1.awsapps.com',
     'gmail'    => 'ssl://imap.gmail.com',
 );
 
 $config['default_port'] = 993;
 
 $config['smtp_server'] = array(
-    'workmail' => 'ssl://smtp.mail.us-west-2.awsapps.com',
+    'workmail' => 'ssl://smtp.mail.us-west-1.awsapps.com',
     'gmail'    => 'ssl://smtp.gmail.com',
 );
 
@@ -21,6 +21,6 @@ $config['smtp_pass'] = '%p';
 
 $config['login_autocomplete'] = 2;
 $config['default_host'] = array(
-    'Amazon WorkMail' => 'ssl://imap.mail.us-west-2.awsapps.com',
+    'Amazon WorkMail' => 'ssl://imap.mail.us-west-1.awsapps.com',
     'Gmail'           => 'ssl://imap.gmail.com',
 );
