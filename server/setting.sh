@@ -141,3 +141,7 @@ docker restart pihole
 ### Folder :\\SAMBA_server_IP\Data
 ## Ubuntu(Natrius)
 ### Ctrl + L -> smb://SAMBA_server_IP/Data
+
+# Jellyfin
+## Permission Error
+chmod -R 777 ./config ./cache
