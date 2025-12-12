@@ -29,7 +29,10 @@ sudo systemctl restart sniproxy
 # Gitlab
 iptables -t nat -A PREROUTING -p tcp --dport 2224 -j DNAT --to-destination 10.10.0.2:2224
 iptables -A FORWARD -p tcp -d 10.10.0.2 --dport 2224 -j ACCEPT
-iptables -t nat -A PREROUTING -p tcp --dport 25 -j DNAT --to-destination 10.10.0.2:2224
+iptables -t nat -A PREROUTING -p tcp --dport 25 -j DNAT --to-destination 10.10.0.2:25
 iptables -A FORWARD -p tcp -d 10.10.0.2 --dport 25 -j ACCEPT
-iptables -t nat -A PREROUTING -p tcp --dport 993 -j DNAT --to-destination 10.10.0.2:2224
+iptables -t nat -A PREROUTING -p tcp --dport 993 -j DNAT --to-destination 10.10.0.2:993
 iptables -A FORWARD -p tcp -d 10.10.0.2 --dport 993 -j ACCEPT
+
+iptables -t nat -L PREROUTING -n --line-numbers
+iptables -t nat -D PREROUTING $line_number
