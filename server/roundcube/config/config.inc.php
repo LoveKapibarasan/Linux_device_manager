@@ -20,3 +20,14 @@ $config['zipdownload_selection'] = true;
 $config['des_key'] = 'oqiFXlygYIzxciu3oAd0oQ6y';
 $config['enable_spellcheck'] = true;
 $config['spellcheck_engine'] = 'pspell';
+
+
+// 削除は即EXPUNGEしない
+$config['flag_for_deletion'] = true;
+
+// Trash を使う
+$config['trash_mbox'] = 'Trash';
+
+// 削除後に expunge しない
+$config['skip_deleted'] = false;
+$config['imap_expunge_on_logout'] = false;
