@@ -290,8 +290,8 @@ services:
     networks:
       - network
     restart: unless-stopped
-    # volumes:
-    #   - ./roundcube/config/config:/var/www/html/config
+    volumes:
+       - ./roundcube/config:/var/www/html/config
     # config/config.docker.inc.php
 
 
