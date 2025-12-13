@@ -152,3 +152,5 @@ chmod -R 777 ./config ./cache
 docker exec -it roundcube sed -i "s|^\$config\['default_host'\].*|\$config['default_host'] = 'ssl://imap.%s';|" /var/www/html/config/config.docker.inc.php
 #  echo "\$config['default_host'] = 'ssl://imap.%s';" >>  /var/www/html/config/config.inc.php
 docker restart roundcube
+### Note: Some region does not have mail server
+### nc -vz imap.mail.us-east-1.awsapps.com 993
