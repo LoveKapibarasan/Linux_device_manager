@@ -282,6 +282,7 @@ services:
       ROUNDCUBEMAIL_DB_PASSWORD: ${ROUNDCUBE_DB_PASSWORD}
       ROUNDCUBEMAIL_DB_NAME: roundcube
       ROUNDCUBEMAIL_DEFAULT_HOST: ssl://imap.%s
+      ROUNDCUBEMAIL_DEFAULT_PORT: 993
     depends_on:
       # - mailserver
       - db
