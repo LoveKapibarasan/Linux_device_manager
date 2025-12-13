@@ -1,4 +1,7 @@
 <?php
+
+// 0. Plugin
+$config['plugins'] = [];
 // 1. Load the base Docker configuration
 include(__DIR__ . '/config.docker.inc.php');
 
