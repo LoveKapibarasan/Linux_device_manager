@@ -281,12 +281,16 @@ services:
       ROUNDCUBEMAIL_DB_USER: roundcube
       ROUNDCUBEMAIL_DB_PASSWORD: ${ROUNDCUBE_DB_PASSWORD}
       ROUNDCUBEMAIL_DB_NAME: roundcube
+      ROUNDCUBEMAIL_DEFAULT_HOST: ssl://imap.%s
     depends_on:
       # - mailserver
       - db
     networks:
       - network
     restart: unless-stopped
+    # volumes:
+    #   - ./roundcube/config/config:/var/www/html/config
+
 
   open-webui:
     image: ghcr.io/open-webui/open-webui:main

@@ -147,3 +147,8 @@ docker restart pihole
 # Jellyfin
 ## Permission Error
 chmod -R 777 ./config ./cache
+
+# Roundcube
+docker exec -it roundcube sed -i "s|^\$config\['default_host'\].*|\$config['default_host'] = 'ssl://imap.%s';|" /var/www/html/config/config.docker.inc.php
+#  echo "\$config['default_host'] = 'ssl://imap.%s';" >>  /var/www/html/config/config.inc.php
+docker restart roundcube
