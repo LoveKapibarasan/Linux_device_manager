@@ -50,11 +50,13 @@ sudo mv "$HOME/Linux_device_manager/white_list_3/db/gravity_current.db" "$HOME/L
 ### Stop systemd-resolved
 sudo systemctl stop systemd-resolved
 sudo systemctl mask systemd-resolved
+sudo vim /etc/resolv.conf # 1.1.1.1
 ### Normal
 ### sshd checks port → connect
 
 ### Socket Activation：
 ### systemd checks port → Run sshd
+# sudo systemctl mask ssh.socket
 sudo systemctl cat ssh.socket
 sudo vim /lib/systemd/system/ssh.socket
 sudo vim /etc/systemd/system/ssh.socket.d/listen.conf

@@ -287,9 +287,6 @@ services:
     networks:
       - network
     restart: unless-stopped
-    volumes:
-      - ./roundcube/config:/var/www/html/config
-
 
   open-webui:
     image: ghcr.io/open-webui/open-webui:main
