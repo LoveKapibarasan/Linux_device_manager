@@ -123,6 +123,18 @@ exit
 docker exec -it gitlab-server gitlab-ctl reconfigure
 docker exec -it gitlab-server gitlab-ctl restart sshd
 
+# Nextcloud
+docker exec -it nextcloud bash
+vi /var/www/html/config/config.php
+# trusted_domains' => 
+# array (
+#  0 => 'localhost',
+#  1 => '127.0.0.1',
+# or
+docker exec -u www-data nextcloud php occ config:system:set trusted_domains 0 --value=localhost
+docker exec -u www-data nextcloud php occ config:system:set trusted_domains 1 --value=127.0.0.1
+
+docker exec -u www-data nextcloud php occ app:install calendar
 
 
 
