@@ -179,3 +179,4 @@ workgroup
 # AWS
 .*amazonaws\.com$
 .*aws\.amazon\.com$
+.*awsapps\.com$

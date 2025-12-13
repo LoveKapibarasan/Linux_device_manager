@@ -50,11 +50,13 @@ sudo mv "$HOME/Linux_device_manager/white_list_3/db/gravity_current.db" "$HOME/L
 ### Stop systemd-resolved
 sudo systemctl stop systemd-resolved
 sudo systemctl mask systemd-resolved
+sudo vim /etc/resolv.conf # 1.1.1.1
 ### Normal
 ### sshd checks port → connect
 
 ### Socket Activation：
 ### systemd checks port → Run sshd
+# sudo systemctl mask ssh.socket
 sudo systemctl cat ssh.socket
 sudo vim /lib/systemd/system/ssh.socket
 sudo vim /etc/systemd/system/ssh.socket.d/listen.conf
@@ -157,3 +159,10 @@ docker restart pihole
 # Jellyfin
 ## Permission Error
 chmod -R 777 ./config ./cache
+
+# Roundcube
+docker exec -it roundcube sed -i "s|^\$config\['default_host'\].*|\$config['default_host'] = 'ssl://imap.%s';|" /var/www/html/config/config.docker.inc.php
+#  echo "\$config['default_host'] = 'ssl://imap.%s';" >>  /var/www/html/config/config.inc.php
+docker restart roundcube
+### Note: Some region does not have mail server
+### nc -vz imap.mail.us-east-1.awsapps.com 993

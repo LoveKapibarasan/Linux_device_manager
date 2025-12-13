@@ -76,8 +76,6 @@ services:
         # Set the appropriate timezone for your location from
         # https://en.wikipedia.org/wiki/List_of_tz_database_time_zones, e.g:
         TZ: 'Europe/Berlin'
-        # Set a password to access the web interface. Not setting one will result in a random password being assigned
-        FTLCONF_webserver_api_password: 'correct horse battery staple'
         # If using Docker's default `bridge` network setting the dns listening mode should be set to 'ALL'
         FTLCONF_dns_listeningMode: 'ALL'
         # https://docs.pi-hole.net/docker/configuration/
@@ -281,14 +279,20 @@ services:
       ROUNDCUBEMAIL_DB_USER: roundcube
       ROUNDCUBEMAIL_DB_PASSWORD: ${ROUNDCUBE_DB_PASSWORD}
       ROUNDCUBEMAIL_DB_NAME: roundcube
+      ROUNDCUBEMAIL_DEFAULT_HOST: |
+        ssl://imap.mail.us-east-1.awsapps.com
+        ssl://imap.gmail.com
+        ssl://outlook.office365.com
+      ROUNDCUBEMAIL_DEFAULT_PORT: 993
     depends_on:
       # - mailserver
       - db
     networks:
       - network
     restart: unless-stopped
-    volumes:
-      - ./roundcube/config:/var/www/html/config
+    # volumes:
+    #   - ./roundcube/config/config:/var/www/html/config
+    # config/config.docker.inc.php
 
 
   open-webui:
