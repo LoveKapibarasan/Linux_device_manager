@@ -1,10 +1,15 @@
 <?php
 // ★ 必須
 $config['plugins'] = [];
+
+// ★ これが無いとドロップダウンが出ない
+$config['username_domain'] = '';
+
 $config['default_host'] = array(
     'workmail' => 'ssl://imap.mail.us-west-1.awsapps.com',
     'gmail'    => 'ssl://imap.gmail.com',
 );
+
 
 $config['default_port'] = 993;
 
