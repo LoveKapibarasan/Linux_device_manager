@@ -1,5 +1,6 @@
 <?php
-
+// ★ 必須
+$config['plugins'] = [];
 $config['default_host'] = array(
     'workmail' => 'ssl://imap.mail.us-west-1.awsapps.com',
     'gmail'    => 'ssl://imap.gmail.com',
