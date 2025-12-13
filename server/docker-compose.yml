@@ -291,6 +291,7 @@ services:
     restart: unless-stopped
     # volumes:
     #   - ./roundcube/config/config:/var/www/html/config
+    # config/config.docker.inc.php
 
 
   open-webui:
