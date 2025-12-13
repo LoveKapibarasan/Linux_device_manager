@@ -325,6 +325,7 @@ services:
       MYSQL_PASSWORD: $NEXTCLOUD_DB_PASSWORD
       NEXTCLOUD_ADMIN_USER: $NEXTCLOUD_ADMIN_USER
       NEXTCLOUD_ADMIN_PASSWORD: $NEXTCLOUD_ADMIN_PASSWORD
+      NEXTCLOUD_TRUSTED_DOMAINS: localhost 127.0.0.1 nextcloud.lovekapibarasan.org
     depends_on:
       - db
     networks:
