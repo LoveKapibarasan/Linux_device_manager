@@ -154,3 +154,4 @@ docker exec -it roundcube sed -i "s|^\$config\['default_host'\].*|\$config['defa
 docker restart roundcube
 ### Note: Some region does not have mail server
 ### nc -vz imap.mail.us-east-1.awsapps.com 993
+### Access control rules -> Use these protocols -> IMAP
