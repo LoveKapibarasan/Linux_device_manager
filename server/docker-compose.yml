@@ -333,19 +333,20 @@ services:
       - network
 
 # https://hub.docker.com/r/jeankhawand/anki-sync-server
-  anki_sync_server:
-    image: jeankhawand/anki-sync-server:25.07
-    container_name: anki_sync_server
-    restart: unless-stopped
+
+  portainer:
+    image: portainer/portainer-ce:latest
+    container_name: portainer
+    restart: always
+
     ports:
-      - "8097:8080"
-    environment:
-      SYNC_USER1: "admin:${ANKI_PASSWORD}"
+      - "9000:9000"     # Web UI（HTTP）
+      - "8000:8000"     # Edge Agent
+
     volumes:
-      # for distroless tags /root/.syncserver
-      # - anki_data:/root
-      # for simple tags 25.02.6+ before it used to be /home/anki
-      - anki_data:/anki_data
+      - /var/run/docker.sock:/var/run/docker.sock
+      - portainer_data:/data
+
 
 volumes:
   valkey-data2:
@@ -355,6 +356,7 @@ volumes:
   open-webui:
   nextcloud_data:
   anki_data:
+  portainer_data:
 
 networks:
   network:
