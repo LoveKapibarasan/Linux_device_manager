@@ -155,6 +155,8 @@ docker restart pihole
 ### Folder :\\SAMBA_server_IP\Data
 ## Ubuntu(Natrius)
 ### Ctrl + L -> smb://SAMBA_server_IP/Data
+### cmd /c cmdkey /add:10.10.0.1 /user:samba /pass:password
+### cmdkey /list
 
 # Jellyfin
 ## Permission Error

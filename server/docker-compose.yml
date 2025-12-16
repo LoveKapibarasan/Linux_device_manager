@@ -228,7 +228,7 @@ services:
     volumes:
       - ./config:/config
       - ./cache:/cache
-      - ./media:/media:ro  # Media file location
+      - ./samba/media:/media:ro  # Media file location
     restart: unless-stopped
 
 # https://blog.estampie.work/archives/3343
@@ -347,6 +347,15 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
       - portainer_data:/data
 
+# Obsidian + MkDocs + Samba
+  mkdocs:
+    image: squidfunk/mkdocs-material
+    container_name: mkdocs
+    volumes:
+      - ./samba/my_website:/docs
+    ports:
+      - "8000:8000"
+    command: serve -a 0.0.0.0:8000
 
 volumes:
   valkey-data2:
