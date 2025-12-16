@@ -332,6 +332,20 @@ services:
     networks:
       - network
 
+# https://hub.docker.com/r/jeankhawand/anki-sync-server
+  anki_sync_server:
+    image: jeankhawand/anki-sync-server:25.07
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    environment:
+      SYNC_USER1: "admin:${ANKI_PASSWORD}"
+    volumes:
+      # for distroless tags /root/.syncserver
+      # - anki_data:/root
+      # for simple tags 25.02.6+ before it used to be /home/anki
+      - anki_data:/anki_data
+
 volumes:
   valkey-data2:
   searxng-data:
@@ -339,6 +353,7 @@ volumes:
   wordpress_data:
   open-webui:
   nextcloud_data:
+  anki_data:
 
 networks:
   network:
