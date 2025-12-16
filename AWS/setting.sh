@@ -37,3 +37,6 @@ iptables -t nat -A PREROUTING -p tcp --dport 993 -j DNAT --to-destination 10.10.
 iptables -A FORWARD -p tcp -d 10.10.0.2 --dport 993 -j ACCEPT
 
 
+# sudo: unable to resolve host ip-xxx-xxx-xxx-xxx 
+hostname
+sudo vim /etc/hosts # Add line: 127.0.1.1   ip-xxx-xxx-xxx-xxx
