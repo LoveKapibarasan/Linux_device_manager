@@ -17,10 +17,8 @@ init-db.sql
 tts-azure-web/
 
 server/shogihome
-server/etc-pihole/
 server/data/
 server/logs/
-server/runner/
 server/config/
 server/cache/
 server/media/
