@@ -212,8 +212,8 @@ services:
     ports:
       - 8096:8096
     volumes:
-      - ./config:/config
-      - ./cache:/cache
+      - jellyfin-config:/config
+      - jellyfin-cache:/cache
       - ./samba/media:/media:ro  # Media file location
     restart: unless-stopped
 
@@ -454,6 +454,8 @@ volumes:
   mail-state:
   mail-logs:
   mail-config:
+  jellyfin-config:
+  jellyfin-cache:
 
 networks:
   network:
