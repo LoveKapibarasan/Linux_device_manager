@@ -134,9 +134,9 @@ services:
       - '8088:80'  # Expose GitLab on port 8088
       - '2224:22' # Do not use ssh on 22 in host. sudo ss -tlnp | grep sshd
     volumes:
-      - ./config:/etc/gitlab  # Persist GitLab configuration
-      - ./logs:/var/log/gitlab  # Persist GitLab logs
-      - ./data:/var/opt/gitlab  # Persist GitLab data
+      - gitlab-config:/etc/gitlab  # Persist GitLab configuration
+      - gitlab-logs:/var/log/gitlab  # Persist GitLab logs
+      - gitlab-data:/var/opt/gitlab  # Persist GitLab data
     restart: always
 
   vaultwarden:
@@ -445,6 +445,11 @@ volumes:
   loki-data:
   pihole:
   vw-data:
+    external: true
+    name: server_vw-data
+  gitlab-config:
+  gitlab-data:
+  gitlab-logs:
 
 networks:
   network:
