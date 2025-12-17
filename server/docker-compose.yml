@@ -83,7 +83,7 @@ services:
       # https://gist.github.com/kaczmar2/027fd6f64f4e4e7ebbb0c75cb3409787
       volumes:
         # For persisting Pi-hole's databases and common configuration file
-        - './etc-pihole:/etc/pihole'
+        - pihole:/etc/pihole
         # Uncomment the below if you have custom dnsmasq config files that you want to persist. Not needed for most starting fresh with Pi-hole v6. If you're upgrading from v5 you and have used this directory before, you should keep it enabled for the first v6 container start to allow for a complete migration. It can be removed afterwards. Needs environment variable FTLCONF_misc_etc_dnsmasq_d: 'true'
         #- './etc-dnsmasq.d:/etc/dnsmasq.d'
       cap_add:
@@ -443,6 +443,7 @@ volumes:
   prometheus_data:
   grafana-storage: {}
   loki-data:
+  pihole:
 
 networks:
   network:
