@@ -319,6 +319,7 @@ services:
 
 # https://hub.docker.com/r/jeankhawand/anki-sync-server
 
+
   portainer:
     image: portainer/portainer-ce:latest
     container_name: portainer
@@ -353,6 +354,8 @@ services:
     ports:
       - "9090:9090"
     restart: always
+    networks:
+      - network
 
   node_exporter:
     image: prom/node-exporter:latest
@@ -360,6 +363,8 @@ services:
     ports:
       - "9100:9100"
     restart: always
+    networks:
+      - network
 
 # Visualize
   grafana:
@@ -378,6 +383,8 @@ services:
       - loki  
     volumes:
       - grafana-storage:/var/lib/grafana
+    networks:
+      - network
 
 # log management
   loki:
@@ -390,6 +397,8 @@ services:
       - loki-data:/loki
       - ./loki/local-config.yaml:/etc/loki/local-config.yaml:ro
     restart: always
+    networks:
+      - network
 
 # log collector
   promtail:
@@ -403,6 +412,8 @@ services:
     depends_on:
       - loki
     restart: always
+    networks:
+      - network
 
 volumes:
   valkey-data2:
