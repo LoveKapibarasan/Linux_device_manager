@@ -7,14 +7,14 @@ sudo do-release-upgrade -d
 sudo apt install git curl btop wireguard -y
 
 sudo apt install python3 python3-pip python3-venv \ 
-npm \ 
-libfuse2 lld build-essential 7zip \
-docker.io docker-compose -y
+        npm \ 
+        libfuse2t64 lld build-essential 7zip \
+        docker.io docker-compose -y
 sudo systemctl enable --now docker
 sudo usermod -aG docker $USER
 
 sudo snap install obsidian --classic
-
+# or download appimage
 
 # Change keyboard input
 # Settings → Region & Language → Input Sources

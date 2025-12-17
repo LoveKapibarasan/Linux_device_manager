@@ -347,7 +347,7 @@ services:
     container_name: prometheus
     volumes:
       - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
-      - prometheus:/prometheus
+      - prometheus_data:/prometheus
     command:
       - "--config.file=/etc/prometheus/prometheus.yml"
     ports:
@@ -375,7 +375,10 @@ services:
     restart: always
     depends_on:
       - prometheus
-      - loki
+      - loki  
+    volumes:
+      - grafana-storage:/var/lib/grafana
+
 # log management
   loki:
     image: grafana/loki:2.9.2
@@ -383,6 +386,9 @@ services:
     command: -config.file=/etc/loki/local-config.yaml
     ports:
       - "3100:3100"
+    volumes:
+      - loki-data:/loki
+      - ./loki/local-config.yaml:/etc/loki/local-config.yaml:ro
     restart: always
 
 # log collector
@@ -390,7 +396,8 @@ services:
     image: grafana/promtail:2.9.2
     container_name: promtail
     volumes:
-      - /var/log:/var/log
+      - /var/lib/docker/containers:/var/lib/docker/containers:ro
+      - /var/log:/var/log:ro
       - ./promtail/promtail.yml:/etc/promtail/promtail.yml
     command: -config.file=/etc/promtail/promtail.yml
     depends_on:
@@ -406,7 +413,9 @@ volumes:
   nextcloud_data:
   anki_data:
   portainer_data:
-  prometheus:
+  prometheus_data:
+  grafana-storage: {}
+  loki-data:
 
 networks:
   network:
