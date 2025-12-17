@@ -13,6 +13,9 @@ docker.io docker-compose -y
 sudo systemctl enable --now docker
 sudo usermod -aG docker $USER
 
+sudo snap install obsidian --classic
+
+
 # Change keyboard input
 # Settings → Region & Language → Input Sources
 gsettings set org.gnome.desktop.input-sources sources "[('xkb', 'us'), ('xkb', 'de')]"
