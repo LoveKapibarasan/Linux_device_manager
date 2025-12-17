@@ -148,7 +148,7 @@ services:
         - DOMAIN=https://password.lovekapibarasan.org
        # - ROCKET_PORT=8083
     volumes:
-      - ./vw-data/:/data/
+      - vw-data/:/data/
     ports:
       - '8083:80'
 
@@ -444,6 +444,7 @@ volumes:
   grafana-storage: {}
   loki-data:
   pihole:
+  vw-data:
 
 networks:
   network:
