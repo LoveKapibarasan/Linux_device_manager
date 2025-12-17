@@ -13,7 +13,4 @@ server:
 valkey:
   url: redis://redis:6379/0
 
-redis:
-  url: redis://redis:6379/0
-
 # Memo: settins.yml(Plural)
