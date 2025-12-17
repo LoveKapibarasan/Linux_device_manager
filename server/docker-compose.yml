@@ -254,7 +254,6 @@ services:
     networks:
       - network
 
-  # Webメールクライアント (Roundcube)
   roundcube:
     image: roundcube/roundcubemail:latest
     container_name: roundcube
