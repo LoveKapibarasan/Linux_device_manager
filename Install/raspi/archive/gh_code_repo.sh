@@ -1,6 +1,6 @@
 #!/bin/bash
 
-sudo apt install wget gpg apt-transport-https -y
+sudo apt install wget gpg apt-transport-https curl -y
 
 ## 1. code 公開鍵を取得
 wget -qO- https://packages.microsoft.com/keys/microsoft.asc \

@@ -31,19 +31,6 @@ git config --global pull.rebase false
 git config --global core.autocrlf input
 git config --list
 
-
-git clone git@github.com:LoveKapibarasan/Linux_device_manager.git
-git clone git@github.com:LoveKapibarasan/utils_python.git
-git clone git@github.com:LoveKapibarasan/kifs.git
-git clone git@github.com:LoveKapibarasan/my_website.git
-git clone git@github.com:LoveKapibarasan/enc-private.git
-
-git clone git@github.com:LoveKapibarasan/shogihome.git
-cd "${HOME}/shogihome"
-git remote add upstream git@github.com:sunfish-shogi/shogihome.git
-cd
-
-
 # Repository List
 USER_HOME=$(get_user_home)
 

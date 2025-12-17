@@ -150,8 +150,6 @@ services:
         - ROCKET_PORT=8083
     volumes:
       - ./vw-data/:/data/
-    ports:
-      - 80:80
 
   db:
     image: mariadb:latest
