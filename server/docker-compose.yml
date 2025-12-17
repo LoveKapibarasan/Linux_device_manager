@@ -15,8 +15,6 @@ services:
       # Mount Let's Encrypt certificates
       - /etc/letsencrypt:/etc/letsencrypt:ro
       - ./shogihome/docs/webapp:/usr/share/nginx/html/shogihome:ro
-    depends_on:
-      - searxng
     restart: unless-stopped
 
   redis:
@@ -32,6 +30,7 @@ services:
       options:
         max-size: "1m"
         max-file: "1"
+
 # https://github.com/searxng/searxng-docker/blob/master/
   searxng:
     container_name: searxng
@@ -51,6 +50,8 @@ services:
       - BIND_ADDRESS=0.0.0.0:8081
       - GRANIAN_HOST=0.0.0.0
       - GRANIAN_PORT=8081
+    depends_on:
+      - redis
     logging:
       driver: "json-file"
       options:
@@ -99,6 +100,7 @@ services:
         # Optional, if Pi-hole should get some more processing time
         - SYS_NICE
       restart: unless-stopped
+
   wireguard:
     image: linuxserver/wireguard:latest
     container_name: wireguard
@@ -121,10 +123,10 @@ services:
 
   # https://dev.to/teetoflame/setting-up-a-gitlab-server-community-edition-and-a-gitlab-runner-using-docker-compose-ob6
   gitlab-server:
-        image: 'gitlab/gitlab-ce:latest'
-        container_name: gitlab-server
-        hostname: 'gitlab.lovekapibarasan.org'
-        environment:
+    image: 'gitlab/gitlab-ce:latest'
+    container_name: gitlab-server
+    hostname: 'gitlab.lovekapibarasan.org'
+    environment:
           GITLAB_OMNIBUS_CONFIG: |
             external_url 'https://gitlab.lovekapibarasan.org'  # Put the IP of your server
             gitlab_rails['gitlab_shell_host'] = 'gitlab.lovekapibarasan.org'
@@ -133,22 +135,14 @@ services:
             nginx['listen_https'] = false  #  コンテナ内では HTTPS 不要
             gitlab_rails['trusted_proxies'] = ['nginx']  #  Nginx を信頼
             gitlab_rails['initial_root_password'] =  "$GITLAB_PASSWORD"  # Set your initial root password here
-        ports:
-          - '8088:80'  # Expose GitLab on port 8088
-          - '2224:22' # Do not use ssh on 22 in host. sudo ss -tlnp | grep sshd
-        volumes:
-          - ./config:/etc/gitlab  # Persist GitLab configuration
-          - ./logs:/var/log/gitlab  # Persist GitLab logs
-          - ./data:/var/opt/gitlab  # Persist GitLab data
-        restart: always
-
-  gitlab-runner:
-      image: 'gitlab/gitlab-runner:latest'
-      container_name: gitlab-runner
-      volumes:
-          - /var/run/docker.sock:/var/run/docker.sock
-          - ./runner/config:/etc/gitlab-runner
-      restart: always
+    ports:
+      - '8088:80'  # Expose GitLab on port 8088
+      - '2224:22' # Do not use ssh on 22 in host. sudo ss -tlnp | grep sshd
+    volumes:
+      - ./config:/etc/gitlab  # Persist GitLab configuration
+      - ./logs:/var/log/gitlab  # Persist GitLab logs
+      - ./data:/var/opt/gitlab  # Persist GitLab data
+    restart: always
 
   vaultwarden:
     image: vaultwarden/server:latest
@@ -161,8 +155,8 @@ services:
         - ROCKET_PORT=8083
     volumes:
       - ./vw-data/:/data/
-    # ports:
-    #  - 80:80
+    ports:
+      - 80:80
 
   # 共通DB
   # Memo: MySQL commands are replaced with mariadb commands.
@@ -183,23 +177,23 @@ services:
       - network
 
   wordpress:
-      container_name: wordpress
-      depends_on:
-        - db
-      image: wordpress:latest
-      ports:
-       - "8090:80"
-      restart: always
-      environment:
-        WORDPRESS_DB_HOST: db:3306
-        WORDPRESS_DB_USER: wordpress
-        WORDPRESS_DB_PASSWORD: ${WORDPRESS_DB_PASSWORD}
-        WORDPRESS_DB_NAME: wordpress
-      volumes:
-        - wordpress_data:/var/www/html
-        #- ./ports.conf:/etc/apache2/ports.conf:ro
-      networks:
-        - network
+    container_name: wordpress
+    depends_on:
+      - db
+    image: wordpress:latest
+    ports:
+      - "8090:80"
+    restart: always
+    environment:
+      WORDPRESS_DB_HOST: db:3306
+      WORDPRESS_DB_USER: wordpress
+      WORDPRESS_DB_PASSWORD: ${WORDPRESS_DB_PASSWORD}
+      WORDPRESS_DB_NAME: wordpress
+    volumes:
+      - wordpress_data:/var/www/html
+      #- ./ports.conf:/etc/apache2/ports.conf:ro
+    networks:
+      - network
 
 # https://github.com/dockur/samba/blob/master/compose.yml
   samba:
@@ -237,7 +231,7 @@ services:
     image: docker.io/mailserver/docker-mailserver:latest
     container_name: mailserver
     env_file: mailserver.env
-    hostname: mail.lovekapibarasan.org  # FQDNに変更
+    hostname: mail.lovekapibarasan.org
     ports:
       - "25:25"      # SMTP
       - "143:143"    # IMAP
@@ -254,7 +248,7 @@ services:
     cap_add:
       - NET_ADMIN
     environment:
-      - SSL_TYPE=manual  # ← letsencrypt から manual に変更
+      - SSL_TYPE=manual  # ← letsencrypt
       - SSL_CERT_PATH=/etc/letsencrypt/live/lovekapibarasan.org/fullchain.pem
       - SSL_KEY_PATH=/etc/letsencrypt/live/lovekapibarasan.org/privkey.pem
       - TLS_LEVEL=intermediate
@@ -342,7 +336,6 @@ services:
     ports:
       - "9000:9000"     # Web UI（HTTP）
       - "8000:8000"     # Edge Agent
-
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - portainer_data:/data
@@ -356,6 +349,52 @@ services:
     ports:
       - "8000:8000"
     command: serve -a 0.0.0.0:8000
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: prometheus
+    volumes:
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+    command:
+      - "--config.file=/etc/prometheus/prometheus.yml"
+    ports:
+      - "9090:9090"
+    restart: always
+
+  node_exporter:
+    image: prom/node-exporter:latest
+    container_name: node_exporter
+    ports:
+      - "9100:9100"
+    restart: always
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana
+    ports:
+      - "3000:3000"
+    restart: always
+    depends_on:
+      - prometheus
+      - loki
+
+  loki:
+    image: grafana/loki:2.9.2
+    container_name: loki
+    command: -config.file=/etc/loki/local-config.yaml
+    ports:
+      - "3100:3100"
+    restart: always
+
+  promtail:
+    image: grafana/promtail:2.9.2
+    container_name: promtail
+    volumes:
+      - /var/log:/var/log
+      - ./promtail/promtail.yml:/etc/promtail/promtail.yml
+    command: -config.file=/etc/promtail/promtail.yml
+    depends_on:
+      - loki
+    restart: always
 
 volumes:
   valkey-data2:

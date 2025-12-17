@@ -136,6 +136,7 @@ vi /var/www/html/config/config.php
 docker exec -u www-data nextcloud php occ config:system:set trusted_domains 0 --value=localhost
 docker exec -u www-data nextcloud php occ config:system:set trusted_domains 1 --value=127.0.0.1
 
+docker exec -u www-data nextcloud php occ app:install tasks
 docker exec -u www-data nextcloud php occ app:install calendar
 
 
