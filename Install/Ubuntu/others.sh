@@ -48,10 +48,6 @@ sudo apt install dbus-x11 -y
 # Oath
 sudo apt-get install oathtool -y
 
-# Wireguard
-sudo apt install wireguard -y
-
-
 # Scrcpy https://github.com/Genymobile/scrcpy/blob/master/doc/linux.md
 # for Debian/Ubuntu
 sudo apt install ffmpeg libsdl2-2.0-0 adb wget \

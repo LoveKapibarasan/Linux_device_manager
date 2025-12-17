@@ -57,14 +57,14 @@ services:
   pihole:
       container_name: pihole
       image: pihole/pihole:latest
-      #ports:
+      ports:
         # DNS Ports
-      #  - "53:53/tcp"
-      #  - "53:53/udp"
+        - "53:53/tcp"
+        - "53:53/udp"
         # Default HTTP Port
-      #  - "80:80/tcp"
+        - "8082:80/tcp"
         # Default HTTPs Port. FTL will generate a self-signed certificate
-      #  - "443:443/tcp"
+        #- "443:443/tcp"
         # Uncomment the below if using Pi-hole as your DHCP Server
         #- "67:67/udp"
         # Uncomment the line below if you are using Pi-hole as your NTP server
@@ -77,14 +77,13 @@ services:
         FTLCONF_dns_listeningMode: 'ALL'
         # https://docs.pi-hole.net/docker/configuration/
         FTLCONF_dns_upstreams: '8.8.8.8;1.1.1.1'
-        FTLCONF_webserver_port: '8082,8443s'
+        #FTLCONF_webserver_port: '8082,8443s'
         FTLCONF_debug_api: 'true'
-      network_mode: host
       # Volumes store your data between container upgrades
       # https://gist.github.com/kaczmar2/027fd6f64f4e4e7ebbb0c75cb3409787
       volumes:
         # For persisting Pi-hole's databases and common configuration file
-        - './etc-pihole:/etc/pihole'
+        - pihole:/etc/pihole
         # Uncomment the below if you have custom dnsmasq config files that you want to persist. Not needed for most starting fresh with Pi-hole v6. If you're upgrading from v5 you and have used this directory before, you should keep it enabled for the first v6 container start to allow for a complete migration. It can be removed afterwards. Needs environment variable FTLCONF_misc_etc_dnsmasq_d: 'true'
         #- './etc-dnsmasq.d:/etc/dnsmasq.d'
       cap_add:
@@ -147,11 +146,11 @@ services:
     environment:
       # https://github.com/dani-garcia/vaultwarden/discussions/4497
         - DOMAIN=https://password.lovekapibarasan.org
-        - ROCKET_PORT=8083
+       # - ROCKET_PORT=8083
     volumes:
-      - ./vw-data/:/data/
+      - vw-data/:/data/
     ports:
-      - 80:80
+      - '8083:80'
 
   db:
     image: mariadb:latest
@@ -320,6 +319,7 @@ services:
 
 # https://hub.docker.com/r/jeankhawand/anki-sync-server
 
+
   portainer:
     image: portainer/portainer-ce:latest
     container_name: portainer
@@ -348,12 +348,14 @@ services:
     container_name: prometheus
     volumes:
       - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
-      - prometheus:/prometheus
+      - prometheus_data:/prometheus
     command:
       - "--config.file=/etc/prometheus/prometheus.yml"
     ports:
       - "9090:9090"
     restart: always
+    networks:
+      - network
 
   node_exporter:
     image: prom/node-exporter:latest
@@ -361,6 +363,24 @@ services:
     ports:
       - "9100:9100"
     restart: always
+    networks:
+      - network
+
+  cadvisor:
+    image: gcr.io/cadvisor/cadvisor:v0.49.1
+    container_name: cadvisor
+    privileged: true
+    ports:
+      - "8080:8080"
+    volumes:
+      - /:/rootfs:ro
+      - /var/run:/var/run:ro
+      - /sys:/sys:ro
+      - /var/lib/docker/:/var/lib/docker:ro
+    networks:
+      - network
+    restart: always
+
 
 # Visualize
   grafana:
@@ -376,7 +396,12 @@ services:
     restart: always
     depends_on:
       - prometheus
-      - loki
+      - loki  
+    volumes:
+      - grafana-storage:/var/lib/grafana
+    networks:
+      - network
+
 # log management
   loki:
     image: grafana/loki:2.9.2
@@ -384,19 +409,27 @@ services:
     command: -config.file=/etc/loki/local-config.yaml
     ports:
       - "3100:3100"
+    volumes:
+      - loki-data:/loki
+      - ./loki/local-config.yaml:/etc/loki/local-config.yaml:ro
     restart: always
+    networks:
+      - network
 
 # log collector
   promtail:
     image: grafana/promtail:2.9.2
     container_name: promtail
     volumes:
-      - /var/log:/var/log
+      - /var/lib/docker/containers:/var/lib/docker/containers:ro
+      - /var/log:/var/log:ro
       - ./promtail/promtail.yml:/etc/promtail/promtail.yml
     command: -config.file=/etc/promtail/promtail.yml
     depends_on:
       - loki
     restart: always
+    networks:
+      - network
 
 volumes:
   valkey-data2:
@@ -407,7 +440,11 @@ volumes:
   nextcloud_data:
   anki_data:
   portainer_data:
-  prometheus:
+  prometheus_data:
+  grafana-storage: {}
+  loki-data:
+  pihole:
+  vw-data:
 
 networks:
   network:

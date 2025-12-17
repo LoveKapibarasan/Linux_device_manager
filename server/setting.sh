@@ -71,8 +71,8 @@ docker compose logs searxng | grep "Listening"
 ### secret_key: "$(openssl rand -hex 32)"  # change this!!!
 
 # 1. Firefox:
-## https://domain/search?q=%s
-## https://domain/autocomplete?q=%s
+## https://search.lovekapibarasan.org/search?q=%s
+## https://search.lovekapibarasan.org/autocomplete?q=%s
 # 2. Edge
 ## edge://settings/searchEngines -> Make as default
 
@@ -154,10 +154,12 @@ docker restart pihole
 ### Map Network Drive
 ### Drive Letter: Z
 ### Folder :\\SAMBA_server_IP\Data
-## Ubuntu(Natrius)
-### Ctrl + L -> smb://SAMBA_server_IP/Data
 ### cmd /c cmdkey /add:10.10.0.1 /user:samba /pass:password
 ### cmdkey /list
+## Ubuntu(Natrius)
+### Ctrl + L -> smb://SAMBA_server_IP/Data
+### Right Click -> Add to bookmarks
+
 
 # Jellyfin
 ## Permission Error

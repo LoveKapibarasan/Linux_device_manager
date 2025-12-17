@@ -19,7 +19,6 @@ tts-azure-web/
 server/shogihome
 server/data/
 server/logs/
-server/runner/
 server/config/
 server/cache/
 server/media/
