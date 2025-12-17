@@ -147,14 +147,12 @@ services:
     environment:
       # https://github.com/dani-garcia/vaultwarden/discussions/4497
         - DOMAIN=https://password.lovekapibarasan.org
-        - ROCKET_PORT=8083
+       # - ROCKET_PORT=8083
     volumes:
       - ./vw-data/:/data/
     ports:
-      - 80:80
+      - '8083:80'
 
-  # 共通DB
-  # Memo: MySQL commands are replaced with mariadb commands.
   db:
     image: mariadb:latest
     container_name: db
