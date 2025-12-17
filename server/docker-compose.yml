@@ -148,7 +148,6 @@ services:
     image: vaultwarden/server:latest
     container_name: vaultwarden
     restart: unless-stopped
-    network_mode: host
     environment:
       # https://github.com/dani-garcia/vaultwarden/discussions/4497
         - DOMAIN=https://password.lovekapibarasan.org
@@ -345,10 +344,12 @@ services:
     image: squidfunk/mkdocs-material
     container_name: mkdocs
     volumes:
-      - ./samba/my_website:/docs
+      - ./samba/memo:/docs
     ports:
-      - "8000:8000"
+      - "8020:8000"
     command: serve -a 0.0.0.0:8000
+
+# Watch and collect metrics data
   prometheus:
     image: prom/prometheus:latest
     container_name: prometheus
@@ -366,17 +367,22 @@ services:
     ports:
       - "9100:9100"
     restart: always
-
+# Visualize
   grafana:
     image: grafana/grafana:latest
     container_name: grafana
     ports:
       - "3000:3000"
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=$GRAFANA_PASSWORD
+      - GF_USERS_ALLOW_SIGN_UP=false
+      - GF_SERVER_ROOT_URL=http://grafana.lovekapibarasan.org
     restart: always
     depends_on:
       - prometheus
       - loki
-
+# log management
   loki:
     image: grafana/loki:2.9.2
     container_name: loki
@@ -384,7 +390,7 @@ services:
     ports:
       - "3100:3100"
     restart: always
-
+# log collector
   promtail:
     image: grafana/promtail:2.9.2
     container_name: promtail
