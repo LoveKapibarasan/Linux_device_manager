@@ -231,10 +231,10 @@ services:
       - "465:465"    # SMTPS
       - "993:993"    # IMAPS
     volumes:
-      - ./data/maildata:/var/mail # mail data
-      - ./data/mailstate:/var/mail-state
-      - ./data/maillogs:/var/log/mail # logs
-      - ./config:/tmp/docker-mailserver
+      - mail-data/maildata:/var/mail # mail data
+      - mail-state:/var/mail-state
+      - mail-logs:/var/log/mail # logs
+      - mail-config:/tmp/docker-mailserver
       - /etc/localtime:/etc/localtime:ro
       - /etc/letsencrypt:/etc/letsencrypt:ro
     cap_add:
@@ -450,6 +450,10 @@ volumes:
   gitlab-config:
   gitlab-data:
   gitlab-logs:
+  mail-data:
+  mail-state:
+  mail-logs:
+  mail-config:
 
 networks:
   network:

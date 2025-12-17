@@ -17,9 +17,7 @@ init-db.sql
 tts-azure-web/
 
 server/shogihome
-server/data/
-server/logs/
-server/config/
 server/cache/
+server/config/
 server/media/
 server/samba/
