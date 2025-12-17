@@ -231,7 +231,7 @@ services:
       - "465:465"    # SMTPS
       - "993:993"    # IMAPS
     volumes:
-      - mail-data/maildata:/var/mail # mail data
+      - mail-data:/var/mail # mail data
       - mail-state:/var/mail-state
       - mail-logs:/var/log/mail # logs
       - mail-config:/tmp/docker-mailserver
