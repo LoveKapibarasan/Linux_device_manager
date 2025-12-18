@@ -10,6 +10,13 @@ sudo apt install python3 python3-pip python3-venv \
         npm \ 
         libfuse2t64 lld build-essential 7zip \
         docker.io docker-compose -y
+
+# https://www.digitalocean.com/community/tutorials/how-to-install-and-use-docker-on-ubuntu-20-04
+sudo apt install apt-transport-https ca-certificates curl software-properties-common
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu focal stable"
+apt-cache policy docker-ce
+sudo apt install docker-ce
 sudo systemctl enable --now docker
 sudo usermod -aG docker $USER
 

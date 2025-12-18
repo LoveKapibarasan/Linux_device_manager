@@ -143,11 +143,8 @@ docker exec -u www-data nextcloud php occ app:install calendar
 
 # DEBUG
 sudo apt install traceroute
-traceroute docker.io
-## Use outer DNS server temporally
+## Use outer DNS server
 sudo vim /etc/resolv.conf
-## After
-docker restart pihole
 
 # Samba
 ## Windows
@@ -174,15 +171,9 @@ docker restart roundcube
 ### nc -vz imap.mail.us-east-1.awsapps.com 993
 ### Access control rules -> Use these protocols -> IMAP
 
-# Anki
-curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
-sudo apt install -y protobuf-compiler
-rustup toolchain remove 1.81.0
-rustup install 1.82.0
-rustup override set 1.82.0
-cargo install --locked \
-  --git https://github.com/ankitects/anki.git \
-  --tag 25.02.5 \
-  anki-sync-server
+# MKDocs
+# 0 */2 * * * /usr/bin/docker restart mkdocs
 
-"SYNC_USER1=user:${ANKI_PASS}" anki-sync-server
+
+# Portainer.io
+## Environments -> Add environment -> Docker Standalone -> Agent

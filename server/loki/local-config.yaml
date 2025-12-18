@@ -1,8 +1,11 @@
 auth_enabled: false
 
+# https://grafana.com/docs/loki/latest/configure/
+# A. Server
 server:
   http_listen_port: 3100
 
+# B. 
 common:
   path_prefix: /loki
   storage:
@@ -10,25 +13,32 @@ common:
       chunks_directory: /loki/chunks
       rules_directory: /loki/rules
   replication_factor: 1
+  # Assign Loki Node
   ring:
+    # Where to store the ring info(Key-Value Store)
     kvstore:
-      store: inmemory
+      store: memberlist
 
+# C. schema_config
+# Log Index, Version
 schema_config:
   configs:
-    - from: 2020-10-24
-      store: boltdb-shipper
+    - from: 2025-01-01
+      store: tsdb
       object_store: filesystem
-      schema: v11
+      schema: v13
       index:
         prefix: index_
         period: 24h
 
+# D. storage_config
 storage_config:
-  boltdb_shipper:
-    active_index_directory: /loki/index
-    cache_location: /loki/cache
-    shared_store: filesystem
+  filesystem:
+    directory: /loki/chunks
 
+
+# E. limits_config
 limits_config:
   retention_period: 168h 
+
+# F. auth_enabled
