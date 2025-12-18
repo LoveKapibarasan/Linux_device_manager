@@ -174,6 +174,5 @@ docker restart roundcube
 # MKDocs
 # 0 */2 * * * /usr/bin/docker restart mkdocs
 
-
 # Portainer.io
 ## Environments -> Add environment -> Docker Standalone -> Agent
