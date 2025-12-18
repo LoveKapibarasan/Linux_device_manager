@@ -95,6 +95,21 @@ services:
         # Optional, if Pi-hole should get some more processing time
         - SYS_NICE
       restart: unless-stopped
+      networks:
+        - network
+
+  unbound:
+    image: mvance/unbound:latest
+    container_name: unbound
+    hostname: unbound
+    ports:
+      - "853:853/tcp"
+    volumes:
+      - ./unbound/unbound.conf:/opt/unbound/etc/unbound/unbound.conf:ro
+      - /etc/letsencrypt:/etc/letsencrypt:ro
+    restart: unless-stopped
+    networks:
+      - network
 
   wireguard:
     image: linuxserver/wireguard:latest

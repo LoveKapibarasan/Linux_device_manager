@@ -173,3 +173,16 @@ docker restart roundcube
 ### Note: Some region does not have mail server
 ### nc -vz imap.mail.us-east-1.awsapps.com 993
 ### Access control rules -> Use these protocols -> IMAP
+
+# Anki
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+sudo apt install -y protobuf-compiler
+rustup toolchain remove 1.81.0
+rustup install 1.82.0
+rustup override set 1.82.0
+cargo install --locked \
+  --git https://github.com/ankitects/anki.git \
+  --tag 25.02.5 \
+  anki-sync-server
+
+"SYNC_USER1=user:${ANKI_PASS}" anki-sync-server
