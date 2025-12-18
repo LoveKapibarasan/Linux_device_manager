@@ -176,6 +176,7 @@ docker restart roundcube
 ## Environments -> Add environment -> Docker Standalone -> Agent
 
 # Anki
+# https://docs.ankiweb.net/sync-server.html
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 sudo apt install -y protobuf-compiler
 rustup install 1.82.0
@@ -183,4 +184,10 @@ rustup override set 1.82.0
 cargo install --locked \
   --git https://github.com/ankitects/anki.git \
   --tag 25.02.5 \
-  anki-sync-server
+SYNC_USER1=user:pass SYNC_PORT=9003 anki-sync-server
+which anki-sync-server
+# Default Path
+ls -a ~/.syncserver/user/
+
+sudo systemctl daemon-reload
+sudo systemctl enable --now anki-sync-server
