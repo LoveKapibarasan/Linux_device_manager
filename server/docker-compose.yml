@@ -134,9 +134,9 @@ services:
       - '8088:80'  # Expose GitLab on port 8088
       - '2224:22' # Do not use ssh on 22 in host. sudo ss -tlnp | grep sshd
     volumes:
-      - ./config:/etc/gitlab  # Persist GitLab configuration
-      - ./logs:/var/log/gitlab  # Persist GitLab logs
-      - ./data:/var/opt/gitlab  # Persist GitLab data
+      - gitlab-config:/etc/gitlab  # Persist GitLab configuration
+      - gitlab-logs:/var/log/gitlab  # Persist GitLab logs
+      - gitlab-data:/var/opt/gitlab  # Persist GitLab data
     restart: always
 
   vaultwarden:
@@ -212,8 +212,8 @@ services:
     ports:
       - 8096:8096
     volumes:
-      - ./config:/config
-      - ./cache:/cache
+      - jellyfin-config:/config
+      - jellyfin-cache:/cache
       - ./samba/media:/media:ro  # Media file location
     restart: unless-stopped
 
@@ -231,10 +231,10 @@ services:
       - "465:465"    # SMTPS
       - "993:993"    # IMAPS
     volumes:
-      - ./data/maildata:/var/mail # mail data
-      - ./data/mailstate:/var/mail-state
-      - ./data/maillogs:/var/log/mail # logs
-      - ./config:/tmp/docker-mailserver
+      - mail-data:/var/mail # mail data
+      - mail-state:/var/mail-state
+      - mail-logs:/var/log/mail # logs
+      - mail-config:/tmp/docker-mailserver
       - /etc/localtime:/etc/localtime:ro
       - /etc/letsencrypt:/etc/letsencrypt:ro
     cap_add:
@@ -445,6 +445,17 @@ volumes:
   loki-data:
   pihole:
   vw-data:
+    external: true
+    name: server_vw-data
+  gitlab-config:
+  gitlab-data:
+  gitlab-logs:
+  mail-data:
+  mail-state:
+  mail-logs:
+  mail-config:
+  jellyfin-config:
+  jellyfin-cache:
 
 networks:
   network:
