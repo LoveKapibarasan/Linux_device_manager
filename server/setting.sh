@@ -139,8 +139,6 @@ docker exec -u www-data nextcloud php occ config:system:set trusted_domains 1 --
 docker exec -u www-data nextcloud php occ app:install tasks
 docker exec -u www-data nextcloud php occ app:install calendar
 
-
-
 # DEBUG
 sudo apt install traceroute
 ## Use outer DNS server
@@ -176,3 +174,13 @@ docker restart roundcube
 
 # Portainer.io
 ## Environments -> Add environment -> Docker Standalone -> Agent
+
+# Anki
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+sudo apt install -y protobuf-compiler
+rustup install 1.82.0
+rustup override set 1.82.0
+cargo install --locked \
+  --git https://github.com/ankitects/anki.git \
+  --tag 25.02.5 \
+  anki-sync-server
