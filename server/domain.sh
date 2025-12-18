@@ -32,15 +32,12 @@ sudo certbot certonly --standalone -d $DOMAIN
 # sudo certbot certonly --standalone --http-01-address 10.10.0.2 -d $DOMAIN
 ## Nginx
 # sudo certbot certonly --webroot -w /var/www/html -d lovekapibarasan.org
-# ワイルドカード証明書を取得
+
+# Wildcard certification
 sudo certbot certonly --manual --preferred-challenges dns -d lovekapibarasan.org -d *.lovekapibarasan.org
-# Add this entry
-```
-Type: TXT
-Name: _acme-challenge
-Content: xufdhsv
-TTL: xmin
-```
+### Add _acme-challenge(TXT) entry
+
+
 # Check
 sudo openssl x509 -in "/etc/letsencrypt/live/${DOMAIN}/fullchain.pem" -noout -text | grep -A1 "Subject Alternative Name"
 

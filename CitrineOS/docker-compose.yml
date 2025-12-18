@@ -1,0 +1,17 @@
+services:
+  nginx:
+    image: nginx:latest
+    container_name: nginx
+    ports:
+      - "8080:80"
+      - "80:80"
+      - "443:443"
+    network_mode: host
+    volumes:
+      # custom domain config
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro
+      # - ./nginx.conf:/etc/nginx/sites-available/xxx:ro is for service version??
+      # Mount Let's Encrypt certificates
+      - /etc/letsencrypt:/etc/letsencrypt:ro
+      - ./shogihome/docs/webapp:/usr/share/nginx/html/shogihome:ro
+    restart: unless-stopped
