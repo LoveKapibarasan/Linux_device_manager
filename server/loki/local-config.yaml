@@ -13,9 +13,11 @@ common:
       chunks_directory: /loki/chunks
       rules_directory: /loki/rules
   replication_factor: 1
+  # Assign Loki Node
   ring:
+    # Where to store the ring info(Key-Value Store)
     kvstore:
-      store: inmemory
+      store: memberlist
 
 # C. schema_config
 # Log Index, Version
