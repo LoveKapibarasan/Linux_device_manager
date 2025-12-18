@@ -316,9 +316,6 @@ services:
     networks:
       - network
 
-# https://hub.docker.com/r/jeankhawand/anki-sync-server
-
-
   portainer:
     image: portainer/portainer-ce:latest
     container_name: portainer
@@ -350,6 +347,7 @@ services:
       - prometheus_data:/prometheus
     command:
       - "--config.file=/etc/prometheus/prometheus.yml"
+      # Receieves log from internet
       - "--web.enable-remote-write-receiver"
     ports:
       - "9090:9090"

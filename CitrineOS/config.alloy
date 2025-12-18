@@ -10,18 +10,21 @@ loki.source.docker "all" {
   targets = discovery.docker.all.targets
 
   labels = {
-    environment = "production"
-    host        = constants.hostname
+    environment = "production",
+    host        = constants.hostname,
   }
 
   forward_to = [loki.write.default.receiver]
 }
 
-prometheus.scrape "node" {
+
+// instance = constants.hostname is identifier
+prometheus.scrape "node_exporter" {
   targets = [{
-    __address__ = "localhost:9100"
-    job = "node"
-    environment = "production"
+    __address__ = "localhost:9100",
+    job = "node",
+    instance = constants.hostname,
+    environment = "production",
   }]
 
   forward_to = [prometheus.remote_write.main.receiver]
