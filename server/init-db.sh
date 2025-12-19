@@ -3,6 +3,8 @@
 source .env
 
 cd ~/Linux_device_manager/server
+
+# mariadb -u root -p
 cat > init-db.sql << EOF
 CREATE DATABASE IF NOT EXISTS roundcube;
 CREATE USER IF NOT EXISTS 'roundcube'@'%' IDENTIFIED BY '${ROUNDCUBE_DB_PASSWORD}';
