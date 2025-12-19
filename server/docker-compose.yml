@@ -482,7 +482,8 @@ services:
       POSTGRES_USER: n8n
       POSTGRES_PASSWORD: ${N8N_DB_PASSWORD}
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+    # Version 18
+      - postgres_data:/var/lib/postgresql
 
 volumes:
   valkey-data2:
