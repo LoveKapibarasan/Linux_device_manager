@@ -41,30 +41,26 @@ sudo tee /etc/wireguard/"$wg_server_interface".conf <<EOF
 # server virtual interface address
 Address = ${WG_Server}/24
 ListenPort = 51820
-SaveConfig = true
+SaveConfig = false
 PrivateKey = $(cat server_private.key)
 
 # Enable IP packet transfer
 PostUp = sysctl -w net.ipv4.ip_forward=1
-
-# DNAT (22, 80, 8080, 443, 51820), (53, 2222, 3389, 993)
+# DNAT
 PostUp = iptables -t nat -A PREROUTING -i ${wg_server_interface} -p tcp --dport 53 -j DNAT --to-destination ${HOME_PC}:53
 PostUp = iptables -t nat -A PREROUTING -i ${wg_server_interface} -p udp --dport 53 -j DNAT --to-destination ${HOME_PC}:53
-
-# SNAT
 PostUp = iptables -t nat -A POSTROUTING -j MASQUERADE
+PostUp = iptables -A FORWARD -i server -j ACCEPT
+PostUp = iptables -A FORWARD -o server -j ACCEPT
+
 
 PostDown = sysctl -w net.ipv4.ip_forward=0
-
 PostDown = iptables -t nat -D PREROUTING -i ${wg_server_interface} -p udp --dport 53 -j DNAT --to-destination ${HOME_PC}:53
 PostDown = iptables -t nat -D PREROUTING -i ${wg_server_interface} -p tcp --dport 53 -j DNAT --to-destination ${HOME_PC}:53
-PostDown = iptables -t nat -D PREROUTING -d ${IP} -p tcp --dport 80 -j DNAT --to-destination ${HOME_PC}:80
-PostDown = iptables -t nat -D PREROUTING -d ${IP} -p tcp --dport 8080 -j DNAT --to-destination ${HOME_PC}:8080
-PostDown = iptables -t nat -D PREROUTING -d ${IP} -p tcp --dport 53 -j DNAT --to-destination ${HOME_PC}:53
-PostDown = iptables -t nat -D PREROUTING -d ${IP} -p udp --dport 53 -j DNAT --to-destination ${HOME_PC}:53
-
 
 PostDown = iptables -t nat -D POSTROUTING -j MASQUERADE
+PostDown = iptables -D FORWARD -i server -j ACCEPT
+PostDown = iptables -D FORWARD -o server -j ACCEPT
 
 ${PEER_CONFIG}
 EOF

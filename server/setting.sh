@@ -191,3 +191,5 @@ ls -a ~/.syncserver/user/
 
 sudo systemctl daemon-reload
 sudo systemctl enable --now anki-sync-server
+# Tools -> Preferences -> Sync
+# Do not forget tail /

@@ -24,19 +24,8 @@ sudo systemctl restart sniproxy
 
 # !! Notes !!
 # Use external DNS server for its own DNS resolution
+sudo vim /etc/resolv.conf
 
-
-# Gitlab
-# Exclude itself
-sudo iptables -t nat -I PREROUTING 1 -s 10.10.0.2 -p tcp --dport 993 -j RETURN
-iptables -t nat -A PREROUTING -p tcp --dport 2224 -j DNAT --to-destination 10.10.0.2:2224
-iptables -A FORWARD -p tcp -d 10.10.0.2 --dport 2224 -j ACCEPT
-iptables -t nat -A PREROUTING -p tcp --dport 25 -j DNAT --to-destination 10.10.0.2:25
-iptables -A FORWARD -p tcp -d 10.10.0.2 --dport 25 -j ACCEPT
-iptables -t nat -A PREROUTING -p tcp --dport 993 -j DNAT --to-destination 10.10.0.2:993
-iptables -A FORWARD -p tcp -d 10.10.0.2 --dport 993 -j ACCEPT
-
-
-# sudo: unable to resolve host ip-xxx-xxx-xxx-xxx 
+# sudo: unable to resolve host ip-xxx-xxx-xxx-xxx
 hostname
 sudo vim /etc/hosts # Add line: 127.0.1.1   ip-xxx-xxx-xxx-xxx
