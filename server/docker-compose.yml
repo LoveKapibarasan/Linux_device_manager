@@ -471,7 +471,18 @@ services:
     volumes:
       - n8n_data:/home/node/.n8n
     depends_on:
-      - db
+      - postgres
+
+  postgres:
+    image: postgres:latest
+    container_name: postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: n8n
+      POSTGRES_USER: n8n
+      POSTGRES_PASSWORD: ${N8N_DB_PASSWORD}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
 
 volumes:
   valkey-data2:
