@@ -139,8 +139,6 @@ docker exec -u www-data nextcloud php occ config:system:set trusted_domains 1 --
 docker exec -u www-data nextcloud php occ app:install tasks
 docker exec -u www-data nextcloud php occ app:install calendar
 
-
-
 # DEBUG
 sudo apt install traceroute
 ## Use outer DNS server
@@ -174,7 +172,6 @@ docker restart roundcube
 # MKDocs
 # 0 */2 * * * /usr/bin/docker restart mkdocs
 
-
 # Portainer.io
 ## Environments -> Add environment -> Docker Standalone -> Agent
 
@@ -184,3 +181,20 @@ docker restart roundcube
 sudo iptables -t nat -A PREROUTING -p tcp --dport 853 -j DNAT --to-destination 10.10.0.2:853
 sudo iptables -A FORWARD -p tcp -d 10.10.0.2 --dport 853 -m conntrack --ctstate NEW,ESTABLISHED,RELATED -j ACCEPT
 sudo iptables -A FORWARD -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT
+
+# Anki
+# https://docs.ankiweb.net/sync-server.html
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+sudo apt install -y protobuf-compiler
+rustup install 1.82.0
+rustup override set 1.82.0
+cargo install --locked \
+  --git https://github.com/ankitects/anki.git \
+  --tag 25.02.5 \
+SYNC_USER1=user:pass SYNC_PORT=9003 anki-sync-server
+which anki-sync-server
+# Default Path
+ls -a ~/.syncserver/user/
+
+sudo systemctl daemon-reload
+sudo systemctl enable --now anki-sync-server

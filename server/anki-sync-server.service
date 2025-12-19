@@ -1,0 +1,16 @@
+[Unit]
+Description=Anki Sync Server
+After=network.target
+
+[Service]
+Type=simple
+User=user
+Environment=SYNC_USER1=user:$change_me
+Environment=SYNC_PORT=9003
+Environment=SYNC_HOST=0.0.0.0
+ExecStart=/home/user/.cargo/bin/anki-sync-server
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
