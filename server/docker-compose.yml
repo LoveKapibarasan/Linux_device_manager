@@ -95,7 +95,8 @@ services:
         - SYS_NICE
       restart: unless-stopped
       networks:
-        - network
+        dns-network:
+          ipv4_address: 172.20.0.10
 
   unbound:
     image: mvance/unbound:latest
@@ -108,7 +109,8 @@ services:
       - /etc/letsencrypt:/etc/letsencrypt:ro
     restart: unless-stopped
     networks:
-      - network
+      dns-network: 
+          ipv4_address: 172.20.0.11
 
   wireguard:
     image: linuxserver/wireguard:latest
@@ -500,3 +502,7 @@ volumes:
 networks:
   network:
     driver: bridge
+  dns-network:  
+    ipam:
+      config:
+        - subnet: 172.20.0.0/24

@@ -36,7 +36,8 @@ xdg-desktop-portal xdg-desktop-portal-gnome xdg-desktop-portal-gtk -y --no-insta
 sudo apt install shotcut ffmpeg -y
 
 # Adb
-sudo apt install android-tools-adb android-tools-fastboot -y
+sudo apt install android-tools-adb android-tools-fastboot android-sdk-platform-tools-common -y
+sudo usermod -aG plugdev $USER
 
 # Ubuntu-Desktop
 sudo apt install ubuntu-desktop -y

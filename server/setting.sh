@@ -175,6 +175,13 @@ docker restart roundcube
 # Portainer.io
 ## Environments -> Add environment -> Docker Standalone -> Agent
 
+# Unbound
+### In AWS 
+### DNAT
+sudo iptables -t nat -A PREROUTING -p tcp --dport 853 -j DNAT --to-destination 10.10.0.2:853
+sudo iptables -A FORWARD -p tcp -d 10.10.0.2 --dport 853 -m conntrack --ctstate NEW,ESTABLISHED,RELATED -j ACCEPT
+sudo iptables -A FORWARD -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT
+
 # Anki
 # https://docs.ankiweb.net/sync-server.html
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh

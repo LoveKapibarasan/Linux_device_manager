@@ -55,4 +55,12 @@ X-GNOME-Autostart-Notify=false
 X-KDE-autostart-after=panel
 EOF
 
+
+# SSH
+sudo apt install openssh-server
+sudo systemctl enable --now ssh
+
+
 sudo passwd root
+
+
