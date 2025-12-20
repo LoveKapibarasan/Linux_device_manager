@@ -486,7 +486,7 @@ services:
       - postgres_data:/var/lib/postgresql
 
 #  head /dev/urandom | LC_ALL=C tr -dc 'A-Za-z0-9' | head -c 32 && echo
-  fireflyiii:
+  firefly_iii:
       image: fireflyiii/core:latest
       hostname: app
       container_name: firefly_iii
