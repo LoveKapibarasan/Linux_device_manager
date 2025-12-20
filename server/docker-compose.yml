@@ -77,6 +77,7 @@ services:
         # https://docs.pi-hole.net/docker/configuration/
         FTLCONF_dns_upstreams: '8.8.8.8;1.1.1.1'
         #FTLCONF_webserver_port: '8082,8443s'
+        FTLCONF_webserver_api_password: ${PIHOLE_PASSWORD}
         FTLCONF_debug_api: 'true'
       # Volumes store your data between container upgrades
       # https://gist.github.com/kaczmar2/027fd6f64f4e4e7ebbb0c75cb3409787
