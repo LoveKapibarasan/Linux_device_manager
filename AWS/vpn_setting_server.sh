@@ -5,7 +5,7 @@ sudo apt update -y
 sudo apt install wireguard git -y
 
 # Define OS list
-OS_LIST="vm ubuntu ubuntu win android"
+OS_LIST="vm ubuntu ubuntu win android arch"
 
 
 wg genkey | tee server_private.key | wg pubkey > server_public.key
