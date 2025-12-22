@@ -74,3 +74,12 @@ git clone git@github.com:ollama/ollama.git "${USER_HOME}/ollama"
 # Mail Server
 git clone -o upstream git@github.com:mail-in-a-box/mailinabox.git "${USER_HOME}/mailinabox"
 
+# Shogi-Extend
+## Under src/ 
+git clone -o upstream git@github.com:akicho8/shogi-extend.git "${USER_HOME}/src/shogi-extend"
+## ImageMagick is reuired
+sudo apt install -y \
+  imagemagick \
+  libmagickwand-dev
+rm config/credentials.yml.enc config/master.key
+EDITOR=vim bin/rails credentials:edit

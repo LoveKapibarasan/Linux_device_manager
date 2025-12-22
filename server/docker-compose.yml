@@ -445,6 +445,8 @@ services:
     restart: always
     networks:
       - network
+    
+    
 
 volumes:
   valkey-data2:

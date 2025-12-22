@@ -74,3 +74,48 @@ R
 install.packages("knitr")
 install.packages("rmarkdown")
 q()
+
+
+# Ruby
+sudo apt install ruby-full -y
+## Rbenv
+# https://github.com/rbenv/rbenv
+## Ruby Build
+# https://github.com/rbenv/ruby-build
+mkdir -p ~/.rbenv/plugins
+git clone -o upstream https://github.com/rbenv/ruby-build.git ~/.rbenv/plugins/ruby-build
+sudo apt install -y \
+  libyaml-dev \
+  libssl-dev \
+  libreadline-dev \
+  zlib1g-dev \
+  libffi-dev \
+  libgdbm-dev \
+  build-essential
+
+rbenv install x.y.z
+rbenv global x.y.z
+
+## Bundler
+gem install bundler --user-install
+## Check version
+echo 'export PATH="$HOME/.local/share/gem/ruby/3.2.0/bin:$PATH"' >> ~/.bashrc
+
+
+
+# Nodenv
+# https://github.com/nodenv/nodenv
+## node-build Plugin
+git clone https://github.com/nodenv/node-build.git ~/.nodenv/plugins/node-build
+
+
+
+# Yarn
+curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
+echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list
+
+
+# Nodejs NPM
+sudo apt remove nodejs npm
+## Use NVM
+
