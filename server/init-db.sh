@@ -2,7 +2,7 @@
 
 source .env
 
-cd ~/Linux_device_manager/server
+# mariadb -u root -p
 cat > init-db.sql << EOF
 CREATE DATABASE IF NOT EXISTS roundcube;
 CREATE USER IF NOT EXISTS 'roundcube'@'%' IDENTIFIED BY '${ROUNDCUBE_DB_PASSWORD}';
@@ -15,6 +15,14 @@ GRANT ALL PRIVILEGES ON wordpress.* TO 'wordpress'@'%';
 CREATE DATABASE IF NOT EXISTS nextcloud;
 CREATE USER IF NOT EXISTS 'nextcloud'@'%' IDENTIFIED BY '${NEXTCLOUD_DB_PASSWORD}';
 GRANT ALL PRIVILEGES ON nextcloud.* TO 'nextcloud'@'%';
+
+CREATE DATABASE IF NOT EXISTS n8n;
+CREATE USER IF NOT EXISTS 'n8n'@'%' IDENTIFIED BY '${N8N_DB_PASSWORD}';
+GRANT ALL PRIVILEGES ON n8n.* TO 'n8n'@'%';
+
+CREATE DATABASE IF NOT EXISTS firefly;
+CREATE USER IF NOT EXISTS 'firefly'@'%' IDENTIFIED BY '${DB_PASSWORD}';
+GRANT ALL PRIVILEGES ON firefly.* TO 'firefly'@'%';
 
 FLUSH PRIVILEGES;
 EOF

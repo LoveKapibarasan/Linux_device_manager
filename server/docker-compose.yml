@@ -77,6 +77,7 @@ services:
         # https://docs.pi-hole.net/docker/configuration/
         FTLCONF_dns_upstreams: '8.8.8.8;1.1.1.1'
         #FTLCONF_webserver_port: '8082,8443s'
+        FTLCONF_webserver_api_password: ${PIHOLE_PASSWORD}
         FTLCONF_debug_api: 'true'
       # Volumes store your data between container upgrades
       # https://gist.github.com/kaczmar2/027fd6f64f4e4e7ebbb0c75cb3409787
@@ -448,6 +449,81 @@ services:
     
     
 
+  n8n:
+    image: n8nio/n8n:latest
+    container_name: "n8n"
+    restart: unless-stopped
+    ports:
+      - "5678:5678"
+    environment:
+      - DB_TYPE=postgresdb
+      - DB_POSTGRESDB_HOST=postgres
+      - DB_POSTGRESDB_PORT=5432
+      - DB_POSTGRESDB_DATABASE=n8n
+      - DB_POSTGRESDB_USER=n8n
+      - DB_POSTGRESDB_PASSWORD=${N8N_DB_PASSWORD}
+
+      - N8N_BASIC_AUTH_ACTIVE=true
+      - N8N_BASIC_AUTH_USER=admin
+      - N8N_BASIC_AUTH_PASSWORD=${N8N_PASSWORD}
+
+      - N8N_HOST=n8n.lovekapibarasan.org
+      - N8N_PROTOCOL=http
+      - WEBHOOK_URL=https://n8n.lovekapibarasan.org/
+      - GENERIC_TIMEZONE=Europe/Berlin
+    volumes:
+      - n8n_data:/home/node/.n8n
+    depends_on:
+      - postgres
+
+  postgres:
+    image: postgres:latest
+    container_name: postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: n8n
+      POSTGRES_USER: n8n
+      POSTGRES_PASSWORD: ${N8N_DB_PASSWORD}
+    volumes:
+    # Version 18
+      - postgres_data:/var/lib/postgresql
+
+#  head /dev/urandom | LC_ALL=C tr -dc 'A-Za-z0-9' | head -c 32 && echo
+  firefly_iii:
+      image: fireflyiii/core:latest
+      hostname: app
+      container_name: firefly_iii
+      restart: always
+      volumes:
+        - firefly_iii_upload:/var/www/html/storage/upload
+      env_file: .env
+      networks:
+        - network
+      ports:
+        - 83:8080
+      depends_on:
+          - db
+
+  cron:
+      #
+      # To make this work, set STATIC_CRON_TOKEN in your .env file or as an environment variable
+      # The STATIC_CRON_TOKEN must be *exactly* 32 characters long
+      #
+      image: alpine
+      restart: always
+      container_name: firefly_iii_cron
+      env_file: .env
+      command: sh -c "
+        apk add tzdata && \
+        (ln -s /usr/share/zoneinfo/$$TZ /etc/localtime || true) && \
+        echo \"0 3 * * * wget -qO- http://app:8080/api/v1/cron/$$STATIC_CRON_TOKEN;echo\"
+        | crontab - && \
+        crond -f -L /dev/stdout"
+      networks:
+        - network
+      depends_on:
+        - firefly_iii
+
 volumes:
   valkey-data2:
   searxng-data:
@@ -473,6 +549,9 @@ volumes:
   mail-config:
   jellyfin-config:
   jellyfin-cache:
+  n8n_data:
+  postgres_data:
+  firefly_iii_upload:
 
 networks:
   network:
