@@ -9,13 +9,11 @@ discovery.docker "all" {
 // no forward_to component
 discovery.relabel "docker_labels" {
   targets = discovery.docker.all.targets
-
   rule {
     action        = "replace"
     source_labels = ["__meta_docker_container_name"]
     target_label  = "container_name"
   }
-
   rule {
     action        = "replace"
     source_labels = ["__meta_docker_container_label_app"]
@@ -29,7 +27,8 @@ discovery.relabel "docker_labels" {
 // https://grafana.com/docs/alloy/latest/reference/components/loki/loki.source.docker/
 loki.source.docker "src" {
   host    = "unix:///var/run/docker.sock"
-  targets = discovery.relabel.docker_labels.targets
+  // Receives output
+  targets = discovery.relabel.docker_labels.output
   labels = {
   // constants.hostname = hostname from OS
     "host" = constants.hostname,
