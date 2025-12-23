@@ -12,26 +12,35 @@ loki.source.docker "src" {
   labels = {
   // constants.hostname = hostname from OS
     "host" = constants.hostname,
+    "app" = "docker",
   }
   forward_to = [loki.relabel.labels.receiver]
 }
 
 // relabel
-// https://grafana.com/docs/alloy/latest/reference/components/loki/loki.relabel/
 // If no labels remain after the relabeling rules are applied, then the log entries are dropped.
-loki.relabel "labels" {
+// Relabel at discovery.relabels
+
+discovery.relabel "docker_labels" {
+  targets = discovery.docker.all.targets
+
+  rule {
+    action        = "replace"
+    source_labels = ["__meta_docker_container_name"]
+    target_label  = "container_name"
+  }
+
   rule {
     action        = "replace"
     source_labels = ["__meta_docker_container_label_app"]
-    target_label  = "container_label"
+    target_label  = "app"
   }
-  rule {
-      action        = "replace"
-      source_labels = ["__meta_docker_container_name"]
-      target_label  = "container_name"
-  }
+
   forward_to = [loki.process.logs.receiver]
 }
+
+// https://grafana.com/docs/alloy/latest/reference/components/loki/loki.relabel/
+
 
 // process
 // https://grafana.com/docs/alloy/latest/reference/components/loki/loki.process/
