@@ -392,8 +392,10 @@ services:
       - "traefik.http.routers.tts.entrypoints=websecure"
       - "traefik.http.routers.tts.tls.certresolver=le"
       - "traefik.http.services.tts.loadbalancer.server.port=3000"
-      - "traefik.http.middlewares.tts-auth.basicauth.users=${BASIC_AUTH}"
-      - "traefik.http.routers.tts-auth.middlewares=auth"
+      # middleware 定義
+      - "traefik.http.middlewares.auth.basicauth.users=${TTS_BASIC_AUTH}"
+      # router に middleware を適用
+      - "traefik.http.routers.tts.middlewares=auth"
     networks:
       - network
 
