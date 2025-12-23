@@ -72,7 +72,7 @@ services:
       - "traefik.http.routers.traefik.tls.certresolver=le"
       # Service は internal api
       - "traefik.http.routers.traefik.service=api@internal"
-      - "traefik.http.middlewares.dashboard-auth.basicauth.users=${TTS_BASIC_AUTH}"
+      - "traefik.http.middlewares.dashboard-auth.basicauth.users=${BASIC_AUTH}"
       - "traefik.http.routers.traefik.middlewares=dashboard-auth"
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
