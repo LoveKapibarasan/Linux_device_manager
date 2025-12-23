@@ -41,9 +41,6 @@ sudo sed -i 's/^PasswordAuthentication yes/PasswordAuthentication no/' /etc/ssh/
 sudo sshd -T | grep pubkeyauth
 sudo sshd -T | grep passwordauthentication
 
-# Shogihome
-git clone -o upstream git@github.com:sunfish-shogi/shogihome.git
-
 # Pihole
 mkdir -p "$HOME/Linux_device_manager/server/etc-pihole"
 sudo mv "$HOME/Linux_device_manager/white_list_3/db/gravity_current.db" "$HOME/Linux_device_manager/server/etc-pihole/gravity.db"
