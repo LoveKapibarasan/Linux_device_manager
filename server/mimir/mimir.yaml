@@ -3,9 +3,6 @@ multitenancy_enabled: false
 server:
   http_listen_port: 9009
 
-common:
-  path_prefix: /data
-
 blocks_storage:
   backend: s3
   s3:
