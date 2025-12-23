@@ -11,6 +11,8 @@ services:
       options:
         max-size: "1m"
         max-file: "1"
+    labels:
+      app: 'redis'
     networks:
       - network
 
@@ -36,13 +38,14 @@ services:
         max-size: "1m"
         max-file: "1"
     labels:
-      - "traefik.enable=true"
-      # Router（入口）
-      - "traefik.http.routers.app.rule=Host(`search.lovekapibarasan.org`)"
-      - "traefik.http.routers.app.entrypoints=websecure"
-      - "traefik.http.routers.app.tls.certresolver=le"
-      # Service（転送先）
-      - "traefik.http.services.app.loadbalancer.server.port=8081"
+      app: searxng
+      traefik.enable: "true"
+      # Router
+      traefik.http.routers.app.rule: Host(`search.lovekapibarasan.org`)
+      traefik.http.routers.app.entrypoints: websecure
+      traefik.http.routers.app.tls.certresolver: le
+      # Service
+      traefik.http.services.app.loadbalancer.server.port: "8081"
     networks:
       - network
 
@@ -64,15 +67,17 @@ services:
       - "443:443"
       - "8082:8080"
     labels:
-      - "traefik.enable=true"
+      app: traefik
+      traefik.enable: true
       # Dashboard Router
-      - "traefik.http.routers.traefik.rule=Host(`traefik.lovekapibarasan.org`)"
-      - "traefik.http.routers.traefik.entrypoints=websecure"
-      - "traefik.http.routers.traefik.tls.certresolver=le"
+      traefik.http.routers.traefik.rule: Host(`traefik.lovekapibarasan.org`)
+      traefik.http.routers.traefik.entrypoints: websecure
+      traefik.http.routers.traefik.tls.certresolver: le
       # Service は internal api
-      - "traefik.http.routers.traefik.service=api@internal"
-      - "traefik.http.middlewares.dashboard-auth.basicauth.users=${BASIC_AUTH}"
-      - "traefik.http.routers.traefik.middlewares=dashboard-auth"
+      traefik.http.routers.traefik.service: api@internal
+      # Basic Auth
+      traefik.http.middlewares.dashboard-auth.basicauth.users: ${BASIC_AUTH}
+      traefik.http.routers.traefik.middlewares: dashboard-auth
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
       - /etc/letsencrypt:/letsencrypt
@@ -122,11 +127,12 @@ services:
         - SYS_NICE
       restart: unless-stopped
       labels:
-        - "traefik.enable=true"
-        - "traefik.http.routers.pihole.rule=Host(`pihole.lovekapibarasan.org`)"
-        - "traefik.http.routers.pihole.entrypoints=websecure"
-        - "traefik.http.routers.pihole.tls.certresolver=le"
-        - "traefik.http.services.pihole.loadbalancer.server.port=80"
+        app: pihole
+        traefik.enable: "true"
+        traefik.http.routers.pihole.rule: Host(`pihole.lovekapibarasan.org`)
+        traefik.http.routers.pihole.entrypoints: websecure
+        traefik.http.routers.pihole.tls.certresolver: le
+        traefik.http.services.pihole.loadbalancer.server.port: "80"
       networks:
         network:
           ipv4_address: 172.20.0.10
@@ -141,6 +147,8 @@ services:
       - ./unbound/unbound.conf:/opt/unbound/etc/unbound/unbound.conf:ro
       - /etc/letsencrypt:/etc/letsencrypt:ro
     restart: unless-stopped
+    labels:
+      app: unbound
     networks:
       network:
           ipv4_address: 172.20.0.11
@@ -163,6 +171,8 @@ services:
     #sysctls:
     #   - net.ipv4.conf.all.src_valid_mark=1
     restart: unless-stopped
+    labels:
+      app: wireguard
     network_mode: host
 
   # https://dev.to/teetoflame/setting-up-a-gitlab-server-community-edition-and-a-gitlab-runner-using-docker-compose-ob6
@@ -186,11 +196,12 @@ services:
       - gitlab-data:/var/opt/gitlab  # Persist GitLab data
     restart: always
     labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.gitlab.rule=Host(`gitlab.lovekapibarasan.org`)"
-      - "traefik.http.routers.gitlab.entrypoints=websecure"
-      - "traefik.http.routers.gitlab.tls.certresolver=le"
-      - "traefik.http.services.gitlab.loadbalancer.server.port=80"
+      app: gitlab-server
+      traefik.enable: "true"
+      traefik.http.routers.gitlab.rule: Host(`gitlab.lovekapibarasan.org`)
+      traefik.http.routers.gitlab.entrypoints: websecure
+      traefik.http.routers.gitlab.tls.certresolver: le
+      traefik.http.services.gitlab.loadbalancer.server.port: "80"
     networks:
       - network
 
@@ -207,11 +218,12 @@ services:
     ports:
       - '8085:8085'
     labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.password.rule=Host(`password.lovekapibarasan.org`)"
-      - "traefik.http.routers.password.entrypoints=websecure"
-      - "traefik.http.routers.password.tls.certresolver=le"
-      - "traefik.http.services.password.loadbalancer.server.port=8085"
+      app: vaultwarden
+      traefik.enable: "true"
+      traefik.http.routers.password.rule: Host(`password.lovekapibarasan.org`)
+      traefik.http.routers.password.entrypoints: websecure
+      traefik.http.routers.password.tls.certresolver: le
+      traefik.http.services.password.loadbalancer.server.port: "8085"
     networks:
       - network
 
@@ -228,6 +240,8 @@ services:
       MARIADB_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}  # MYSQL_ → MARIADB_
       ROUNDCUBE_DB_PASSWORD: ${ROUNDCUBE_DB_PASSWORD}
       WORDPRESS_DB_PASSWORD: ${WORDPRESS_DB_PASSWORD}
+    labels:
+      app: mariadb
     networks:
       - network
 
@@ -248,11 +262,13 @@ services:
       - wordpress_data:/var/www/html
       #- ./ports.conf:/etc/apache2/ports.conf:ro
     labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.root.rule=Host(`lovekapibarasan.org`)"
-      - "traefik.http.routers.root.entrypoints=websecure"
-      - "traefik.http.routers.root.tls.certresolver=le"
-      - "traefik.http.services.root.loadbalancer.server.port=80"
+      app: wordpress
+      traefik.enable: "true"
+      traefik.http.routers.root.rule: Host(`lovekapibarasan.org`)
+      traefik.http.routers.root.entrypoints: websecure
+      traefik.http.routers.root.tls.certresolver: le
+      traefik.http.services.root.loadbalancer.server.port: "80"
+
     networks:
       - network
 
@@ -273,6 +289,8 @@ services:
     volumes:
       - ./samba:/storage
     restart: always
+    labels:
+      app: samba
     networks:
       - network
 
@@ -288,11 +306,13 @@ services:
       - ./samba/media:/media:ro  # Media file location
     restart: unless-stopped
     labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.media.rule=Host(`media.lovekapibarasan.org`)"
-      - "traefik.http.routers.media.entrypoints=websecure"
-      - "traefik.http.routers.media.tls.certresolver=le"
-      - "traefik.http.services.media.loadbalancer.server.port=8096"
+      app: jellyfin
+      traefik.enable: "true"
+      traefik.http.routers.media.rule: Host(`media.lovekapibarasan.org`)
+      traefik.http.routers.media.entrypoints: websecure
+      traefik.http.routers.media.tls.certresolver: le
+      traefik.http.services.media.loadbalancer.server.port: "8096"
+
     networks:
       - network
 
@@ -329,6 +349,8 @@ services:
       test: "ss --listening --ipv4 --tcp | grep --silent ':smtp' || exit 1"
       timeout: 3s
       retries: 5
+    labels:
+      app: mainserver
     networks:
       - network
 
@@ -353,11 +375,13 @@ services:
        - ./roundcube/config:/var/www/html/config
     # config/config.docker.inc.php
     labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.roundcube.rule=Host(`roundcube.lovekapibarasan.org`)"
-      - "traefik.http.routers.roundcube.entrypoints=websecure"
-      - "traefik.http.routers.roundcube.tls.certresolver=le"
-      - "traefik.http.services.roundcube.loadbalancer.server.port=80"
+      app: roundcube
+      traefik.enable: "true"
+      traefik.http.routers.roundcube.rule: Host(`roundcube.lovekapibarasan.org`)
+      traefik.http.routers.roundcube.entrypoints: websecure
+      traefik.http.routers.roundcube.tls.certresolver: le
+      traefik.http.services.roundcube.loadbalancer.server.port: "80"
+
     networks:
       - network
 
@@ -370,11 +394,12 @@ services:
       - open-webui:/app/backend/data
     restart: always
     labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.ai.rule=Host(`ai.lovekapibarasan.org`)"
-      - "traefik.http.routers.ai.entrypoints=websecure"
-      - "traefik.http.routers.ai.tls.certresolver=le"
-      - "traefik.http.services.ai.loadbalancer.server.port=8080"
+      app: open-webui
+      traefik.enable: "true"
+      traefik.http.routers.ai.rule: Host(`ai.lovekapibarasan.org`)
+      traefik.http.routers.ai.entrypoints: websecure
+      traefik.http.routers.ai.tls.certresolver: le
+      traefik.http.services.ai.loadbalancer.server.port: "8080"
     networks:
       - network
 
@@ -388,15 +413,14 @@ services:
       - SPEECH_REGION=${SPEECH_REGION}
       - DEMO_MODE=false
     labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.tts.rule=Host(`tts.lovekapibarasan.org`)"
-      - "traefik.http.routers.tts.entrypoints=websecure"
-      - "traefik.http.routers.tts.tls.certresolver=le"
-      - "traefik.http.services.tts.loadbalancer.server.port=3000"
-      # middleware 定義
-      - "traefik.http.middlewares.auth.basicauth.users=${TTS_BASIC_AUTH}"
-      # router に middleware を適用
-      - "traefik.http.routers.tts.middlewares=auth"
+      app: tts-azure-web
+      traefik.enable: "true"
+      traefik.http.routers.tts.rule: Host(`tts.lovekapibarasan.org`)
+      traefik.http.routers.tts.entrypoints: websecure
+      traefik.http.routers.tts.tls.certresolver: le
+      traefik.http.services.tts.loadbalancer.server.port: "3000"
+      traefik.http.middlewares.auth.basicauth.users: ${TTS_BASIC_AUTH}
+      traefik.http.routers.tts.middlewares: auth
     networks:
       - network
 
@@ -419,11 +443,12 @@ services:
     depends_on:
       - db
     labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.nextcloud.rule=Host(`nextcloud.lovekapibarasan.org`)"
-      - "traefik.http.routers.nextcloud.entrypoints=websecure"
-      - "traefik.http.routers.nextcloud.tls.certresolver=le"
-      - "traefik.http.services.nextcloud.loadbalancer.server.port=80"
+      app: nextcloud
+      traefik.enable: "true"
+      traefik.http.routers.nextcloud.rule: Host(`nextcloud.lovekapibarasan.org`)
+      traefik.http.routers.nextcloud.entrypoints: websecure
+      traefik.http.routers.nextcloud.tls.certresolver: le
+      traefik.http.services.nextcloud.loadbalancer.server.port: "80"
     networks:
       - network
 
@@ -438,11 +463,12 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
       - portainer_data:/data
     labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.docker.rule=Host(`docker.lovekapibarasan.org`)"
-      - "traefik.http.routers.docker.entrypoints=websecure"
-      - "traefik.http.routers.docker.tls.certresolver=le"
-      - "traefik.http.services.docker.loadbalancer.server.port=9000"
+      app: portainer
+      traefik.enable: "true"
+      traefik.http.routers.docker.rule: Host(`docker.lovekapibarasan.org`)
+      traefik.http.routers.docker.entrypoints: websecure
+      traefik.http.routers.docker.tls.certresolver: le
+      traefik.http.services.docker.loadbalancer.server.port: "9000"
     networks:
       - network
 
@@ -454,13 +480,14 @@ services:
       - ./samba/memo:/docs
     ports:
       - "8093:8000"
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.memo.rule=Host(`memo.lovekapibarasan.org`)"
-      - "traefik.http.routers.memo.entrypoints=websecure"
-      - "traefik.http.routers.memo.tls.certresolver=le"
-      - "traefik.http.services.memo.loadbalancer.server.port=8000"
     command: serve -a 0.0.0.0:8000
+    labels:
+      app: mkdocs
+      traefik.enable: "true"
+      traefik.http.routers.memo.rule: "Host(`memo.lovekapibarasan.org`)"
+      traefik.http.routers.memo.entrypoints: websecure
+      traefik.http.routers.memo.tls.certresolver: le
+      traefik.http.services.memo.loadbalancer.server.port: "8000"
     networks:
       - network
 
@@ -478,6 +505,8 @@ services:
     ports:
       - "9090:9090"
     restart: always
+    labels:
+      app: prometheus
     networks:
       - network
 
@@ -487,6 +516,8 @@ services:
     ports:
       - "9100:9100"
     restart: always
+    labels:
+      app: node_exporter
     networks:
       - network
 
@@ -502,6 +533,8 @@ services:
       - /sys:/sys:ro
       - /var/lib/docker/:/var/lib/docker:ro
     restart: always
+    labels:
+      app: cadvisor
     networks:
       - network
 
@@ -524,6 +557,8 @@ services:
       # https://community.grafana.com/t/am-i-missing-something-running-all-pieces-in-docker-compose/147152
       - /var/run/docker.sock:/var/run/docker.sock
       - ./alloy/config.alloy:/etc/alloy/config.alloy:ro
+    labels:
+      app: alloy
     networks:
       - network
 
@@ -545,11 +580,12 @@ services:
     volumes:
       - grafana-storage:/var/lib/grafana
     labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.log.rule=Host(`log.lovekapibarasan.org`)"
-      - "traefik.http.routers.log.entrypoints=websecure"
-      - "traefik.http.routers.log.tls.certresolver=le"
-      - "traefik.http.services.log.loadbalancer.server.port=3000"
+      app: grafana
+      traefik.enable: "true"
+      traefik.http.routers.minio.rule: "Host(`minio.lovekapibarasan.org`)"
+      traefik.http.routers.minio.entrypoints: websecure
+      traefik.http.routers.minio.tls.certresolver: le
+      traefik.http.services.minio.loadbalancer.server.port: "9001"
     networks:
       - network
 
@@ -564,6 +600,8 @@ services:
       - loki-data:/loki
       - ./loki/local-config.yaml:/etc/loki/local-config.yaml:ro
     restart: always
+    labels:
+      app: loki
     networks:
       - network
 
@@ -579,26 +617,30 @@ services:
     depends_on:
       - loki
     restart: always
+    labels:
+      app: promtail
     networks:
       - network
 
   mimir:
-      image: grafana/mimir:latest
-      container_name: mimir
-      command:
-        - "-config.file=/etc/mimir/mimir.yaml"
-      volumes:
-        - ./mimir/mimir.yaml:/etc/mimir/mimir.yaml
-        - mimir-data:/data
-      ports:
-        - "9009:9009"
-      depends_on:
-        - minio
-      environment:
-        MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD}
+    image: grafana/mimir:latest
+    container_name: mimir
+    command:
+      - "-config.file=/etc/mimir/mimir.yaml"
+    volumes:
+      - ./mimir/mimir.yaml:/etc/mimir/mimir.yaml
+      - mimir-data:/data
+    ports:
+      - "9009:9009"
+    depends_on:
+      - minio
+    environment:
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD}
       restart: unless-stopped
-      networks:
-        - network
+    labels:
+      app: mimir
+    networks:
+      - network
 
   minio:
     image: minio/minio:latest
@@ -614,11 +656,12 @@ services:
       - "9001:9001" # Console
     restart: unless-stopped
     labels:
-        - "traefik.enable=true"
-        - "traefik.http.routers.minio.rule=Host(`minio.lovekapibarasan.org`)"
-        - "traefik.http.routers.minio.entrypoints=websecure"
-        - "traefik.http.routers.minio.tls.certresolver=le"
-        - "traefik.http.services.minio.loadbalancer.server.port=9001"
+      app: minio
+      traefik.enable: "true"
+      traefik.http.routers.minio.rule: Host(`minio.lovekapibarasan.org`)
+      traefik.http.routers.minio.entrypoints: websecure
+      traefik.http.routers.minio.tls.certresolver: le
+      traefik.http.services.minio.loadbalancer.server.port: "9001"
     networks:
       - network
 
@@ -647,11 +690,12 @@ services:
     depends_on:
       - postgres
     labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.n8n.rule=Host(`n8n.lovekapibarasan.org`)"
-      - "traefik.http.routers.n8n.entrypoints=websecure"
-      - "traefik.http.routers.n8n.tls.certresolver=le"
-      - "traefik.http.services.n8n.loadbalancer.server.port=5678"
+      app: n8n
+      traefik.enable: "true"
+      traefik.http.routers.n8n.rule: Host(`n8n.lovekapibarasan.org`)
+      traefik.http.routers.n8n.entrypoints: websecure
+      traefik.http.routers.n8n.tls.certresolver: le
+      traefik.http.services.n8n.loadbalancer.server.port: "5678"
     networks:
       - network
 
@@ -666,6 +710,8 @@ services:
     volumes:
     # Version 18
       - postgres_data:/var/lib/postgresql
+    labels:
+      app: postgres
     networks:
       - network
 
@@ -683,11 +729,12 @@ services:
     depends_on:
       - db
     labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.expense.rule=Host(`expense.lovekapibarasan.org`)"
-      - "traefik.http.routers.expense.entrypoints=websecure"
-      - "traefik.http.routers.expense.tls.certresolver=le"
-      - "traefik.http.services.expense.loadbalancer.server.port=8080"
+      app: firefly_iii
+      traefik.enable: "true"
+      traefik.http.routers.expense.rule: Host(`expense.lovekapibarasan.org`)
+      traefik.http.routers.expense.entrypoints: websecure
+      traefik.http.routers.expense.tls.certresolver: le
+      traefik.http.services.expense.loadbalancer.server.port: "8080"
     networks:
       - network
 
@@ -708,6 +755,8 @@ services:
         crond -f -L /dev/stdout"
     depends_on:
       - firefly_iii
+    labels:
+      app: cron
     networks:
       - network
 
