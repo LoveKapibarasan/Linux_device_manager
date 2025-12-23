@@ -1,5 +1,5 @@
 // Detect Docker Containers
-// no -
+// no - and care the , in labels
 discovery.docker "all" {
   host = "unix:///var/run/docker.sock"
 }
@@ -14,7 +14,7 @@ loki.source.docker "src" {
     "host" = constants.hostname,
     "app" = "docker",
   }
-  forward_to = [loki.relabel.labels.receiver]
+  forward_to = [discovery.relabel.docker_labels.receiver]
 }
 
 // relabel
