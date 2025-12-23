@@ -505,6 +505,26 @@ services:
     networks:
       - network
 
+  alloy:
+    image: 'grafana/alloy:v1.11.3'
+    container_name: "alloy"
+    # http://localhost:12345
+    command:
+      [
+        'run',
+        '--server.http.listen-addr',
+        '0.0.0.0:12345',
+        '--storage.path',
+        '/var/lib/alloy/data',
+        '--stability.level',
+        'public-preview',
+        '/etc/alloy/config.alloy',
+      ]
+    volumes:
+      # https://community.grafana.com/t/am-i-missing-something-running-all-pieces-in-docker-compose/147152
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./alloy/config.alloy:/etc/alloy/config.alloy:ro
+    network_mode: host
 
 # Visualize
   grafana:
