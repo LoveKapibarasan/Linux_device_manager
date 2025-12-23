@@ -524,7 +524,8 @@ services:
       # https://community.grafana.com/t/am-i-missing-something-running-all-pieces-in-docker-compose/147152
       - /var/run/docker.sock:/var/run/docker.sock
       - ./alloy/config.alloy:/etc/alloy/config.alloy:ro
-    network_mode: host
+    networks:
+      - network
 
 # Visualize
   grafana:
