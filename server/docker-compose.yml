@@ -674,7 +674,6 @@ services:
       - firefly_iii
     networks:
       - network
-      -
 
 volumes:
   valkey-data2:
@@ -714,6 +713,3 @@ networks:
       config:
         - subnet: 172.20.0.0/24
           gateway: 172.20.0.1
-          aux_addresses:
-            reserved_app_10: 172.20.0.10
-            reserved_app_11: 172.20.0.11
