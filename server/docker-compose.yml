@@ -574,6 +574,8 @@ services:
       depends_on:
         - minio
       restart: unless-stopped
+      networks:
+        - network
 
   minio:
     image: minio/minio:latest
@@ -581,13 +583,21 @@ services:
     command: server /data --console-address ":9001"
     environment:
       MINIO_ROOT_USER: minioadmin
-      MINIO_ROOT_PASSWORD: minioadmin
+      MINIO_ROOT_PASSWORD: $MINIO_ROOT_PASSWORD
     volumes:
       - minio-data:/data
     ports:
       - "9000:9000" # S3 API
       - "9001:9001" # Console
     restart: unless-stopped
+    labels:
+        - "traefik.enable=true"
+        - "traefik.http.routers.minio.rule=Host(`minio.lovekapibarasan.org`)"
+        - "traefik.http.routers.minio.entrypoints=websecure"
+        - "traefik.http.routers.minio.tls.certresolver=le"
+        - "traefik.http.services.minio.loadbalancer.server.port=9001"
+    networks:
+      - network
 
   n8n:
     image: n8nio/n8n:latest
