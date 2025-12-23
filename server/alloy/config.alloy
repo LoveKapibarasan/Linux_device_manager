@@ -12,7 +12,6 @@ loki.source.docker "src" {
   labels = {
   // constants.hostname = hostname from OS
     "host" = constants.hostname,
-    "app" = "docker",
   }
   forward_to = [loki.relabel.labels.receiver]
 }
