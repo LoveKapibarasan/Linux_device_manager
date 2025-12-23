@@ -557,8 +557,34 @@ services:
     restart: always
     networks:
       - network
-    
-    
+
+  mimir:
+      image: grafana/mimir:latest
+      container_name: mimir
+      command:
+        - "-config.file=/etc/mimir/mimir.yaml"
+      volumes:
+        - ./mimir/mimir.yaml:/etc/mimir/mimir.yaml
+        - mimir-data:/data
+      ports:
+        - "9009:9009"
+      depends_on:
+        - minio
+      restart: unless-stopped
+
+  minio:
+    image: minio/minio:latest
+    container_name: minio
+    command: server /data --console-address ":9001"
+    environment:
+      MINIO_ROOT_USER: minioadmin
+      MINIO_ROOT_PASSWORD: minioadmin
+    volumes:
+      - minio-data:/data
+    ports:
+      - "9000:9000" # S3 API
+      - "9001:9001" # Console
+    restart: unless-stopped
 
   n8n:
     image: n8nio/n8n:latest
@@ -648,6 +674,7 @@ services:
       - firefly_iii
     networks:
       - network
+      -
 
 volumes:
   valkey-data2:
@@ -677,6 +704,8 @@ volumes:
   n8n_data:
   postgres_data:
   firefly_iii_upload:
+  minio-data:
+  mimir-data:
 
 networks:
   network:
@@ -685,3 +714,7 @@ networks:
       config:
         - subnet: 172.20.0.0/24
           gateway: 172.20.0.1
+          aux_addresses:
+            reserved_app_10: 172.20.0.10
+            reserved_app_11: 172.20.0.11
+
