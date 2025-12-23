@@ -58,4 +58,20 @@ loki.write "default" {
     url = "http://loki:3100/loki/api/v1/push"
   }
 }
+// DEBUG
 
+loki.relabel "debug_labels" {
+  rule {
+    action = "labelmap"
+    regex  = "__meta_docker_(.*)"
+  }
+
+  forward_to = [loki.write.default.receiver]
+}
+
+loki.source.docker "src" {
+  host    = "unix:///var/run/docker.sock"
+  targets = discovery.docker.all.targets
+
+  forward_to = [loki.relabel.debug_labels.receiver]
+}
