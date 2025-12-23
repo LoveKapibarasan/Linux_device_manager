@@ -12,7 +12,7 @@ loki.source.docker "src" {
   targets = discovery.docker.all.targets
 
   labels = {
-    host = constants.hostname
+    host = constants.hostname,
   }
 
   forward_to = [loki.relabel.labels.receiver]
@@ -38,15 +38,15 @@ loki.process "logs" {
 // get JSON key and convert into loki label
   stage.json {
     expressions = {
-      level = "level"
-      msg   = "message"
+      level = "level",
+      msg   = "message",
     }
   }
 
   stage.labels {
   // "": use extracted value
     values = {
-      level = ""
+      level = "",
     }
   }
 
