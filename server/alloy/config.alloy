@@ -34,7 +34,7 @@ loki.source.docker "src" {
     "host" = constants.hostname,
     "app" = "docker",
   }
-  forward_to = [discovery.process.logs.receiver]
+  forward_to = [loki.process.logs.receiver]
 }
 
 // https://grafana.com/docs/alloy/latest/reference/components/loki/loki.relabel/
