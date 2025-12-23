@@ -1,0 +1,15 @@
+devise_and_slack:
+  development:
+    google:
+      key: your_google_key
+      secret: your_google_secret
+    twitter:
+      key: your_twitter_key
+      secret: your_twitter_secret
+    github:
+      key: your_github_client_id
+      secret: your_github_client_secret
+    aws:
+      access_key_id: YOUR_AWS_ACCESS_KEY_ID
+      secret_key: YOUR_AWS_SECRET_KEY
+      region: ap-northeast-1

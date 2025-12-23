@@ -4,10 +4,9 @@ sudo apt update -y && sudo apt upgrade -y
 
 sudo do-release-upgrade -d
 
-sudo apt install git curl btop wireguard -y
+sudo apt install git curl btop wireguard vim -y
 
 sudo apt install python3 python3-pip python3-venv \ 
-        npm \ 
         libfuse2t64 lld build-essential 7zip \
         docker.io docker-compose -y
 
