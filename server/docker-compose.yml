@@ -540,6 +540,7 @@ services:
     networks:
       - network
 
+
   alloy:
     image: 'grafana/alloy:v1.11.3'
     container_name: "alloy"
@@ -559,6 +560,8 @@ services:
       # https://community.grafana.com/t/am-i-missing-something-running-all-pieces-in-docker-compose/147152
       - /var/run/docker.sock:/var/run/docker.sock
       - ./alloy/config.alloy:/etc/alloy/config.alloy:ro
+    ports:
+      - "12345:12345"
     labels:
       app: alloy
       traefik.enable: "true"
@@ -570,7 +573,6 @@ services:
       traefik.http.routers.alloy.middlewares: auth
     networks:
       - network
-
 # Visualize
   grafana:
     image: grafana/grafana:latest
