@@ -113,14 +113,8 @@ git clone -o upstream git@github.com:Femoon/tts-azure-web.git
 ## Gitlab: Settings → Repository → Mirroring repositories
 ## Github: Setting -> Deploy keys
 ### Add ssh:// and enter private key
-### Permission Error:
-docker exec -it gitlab-server bash
-chmod 600 /etc/gitlab/ssh_host_*
-chmod 700 /etc/gitlab
-exit
-#### Regenerate GitLab keys
-docker exec -it gitlab-server gitlab-ctl reconfigure
-docker exec -it gitlab-server gitlab-ctl restart sshd
+### Github host key: https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/githubs-ssh-key-fingerprints
+### Add 127.0.0.1 gitlab.lovekapibarasan.org at /etc/hosts
 
 # Nextcloud
 docker exec -it nextcloud bash
