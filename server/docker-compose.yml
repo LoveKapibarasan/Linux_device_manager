@@ -187,6 +187,8 @@ services:
             gitlab_rails['gitlab_shell_ssh_port'] = 2224
             gitlab_rails['trusted_proxies'] = ['172.20.0.0/24']
             gitlab_rails['initial_root_password'] =  "$GITLAB_PASSWORD"  # Set your initial root password here
+            nginx['listen_port'] = 80
+            nginx['listen_https'] = false
     ports:
       - '8084:80'  # Expose GitLab on port 8088
       - '2224:22' # Do not use ssh on 22 in host. sudo ss -tlnp | grep sshd
