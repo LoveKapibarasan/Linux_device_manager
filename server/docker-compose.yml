@@ -562,15 +562,6 @@ services:
       - ./alloy/config.alloy:/etc/alloy/config.alloy:ro
     ports:
       - "12345:12345"
-    labels:
-      app: alloy
-      traefik.enable: "true"
-      traefik.http.routers.alloy.rule: Host(`alloy.lovekapibarasan.org`)
-      traefik.http.routers.alloy.entrypoints: websecure
-      traefik.http.routers.alloy.tls.certresolver: le
-      traefik.http.services.alloy.loadbalancer.server.port: "12345"
-      traefik.http.middlewares.auth.basicauth.users: ${ALLOY_BASIC_AUTH}
-      traefik.http.routers.alloy.middlewares: auth
     networks:
       - network
 # Visualize
