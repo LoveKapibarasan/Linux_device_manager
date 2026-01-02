@@ -82,6 +82,7 @@ workgroup
 
 # Docker
 .*docker\.io$
+.*docker\.com$
 
 # firefox
 .*mozilla\.org$
