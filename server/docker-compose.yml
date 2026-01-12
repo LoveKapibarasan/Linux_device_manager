@@ -774,7 +774,7 @@ services:
     labels:
       app: superproductivity
       traefik.enable: "true"
-      traefik.http.routers.tasks.rule: Host(`tasks.lovekapibarasan.org`)
+      traefik.http.routers.tasks.rule: Host(`tasks.sub.lovekapibarasan.org`)
       traefik.http.routers.tasks.entrypoints: websecure
       traefik.http.routers.tasks.tls.certresolver: le
       traefik.http.services.tasks.loadbalancer.server.port: "8080"
@@ -792,7 +792,7 @@ services:
     labels: 
       app: webdav
       traefik.enable: "true"
-      traefik.http.routers.webdav.rule: Host(`webdav.lovekapibarasan.org`)
+      traefik.http.routers.webdav.rule: Host(`webdav.sub.lovekapibarasan.org`)
       traefik.http.routers.webdav.entrypoints: websecure
       traefik.http.routers.webdav.tls.certresolver: le
       traefik.http.services.webdav.loadbalancer.server.port: "2345"
