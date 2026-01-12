@@ -9,7 +9,8 @@ devise_and_slack:
     github:
       key: your_github_client_id
       secret: your_github_client_secret
-    aws:
-      access_key_id: YOUR_AWS_ACCESS_KEY_ID
-      secret_key: YOUR_AWS_SECRET_KEY
-      region: ap-northeast-1
+
+aws:
+  access_key_id: YOUR_AWS_ACCESS_KEY_ID
+  secret_key: YOUR_AWS_SECRET_KEY
+  region: ap-northeast-1

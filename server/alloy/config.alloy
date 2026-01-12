@@ -1,0 +1,68 @@
+// Detect Docker Containers
+// no - and care the , in labels
+discovery.docker "all" {
+  host = "unix:///var/run/docker.sock"
+}
+// relabel
+// If no labels remain after the relabeling rules are applied, then the log entries are dropped.
+// Relabel at discovery.relabels
+// no forward_to component
+discovery.relabel "docker_labels" {
+  targets = discovery.docker.all.targets
+  rule {
+    action        = "replace"
+    source_labels = ["__meta_docker_container_name"]
+    target_label  = "container_name"
+  }
+  rule {
+    action        = "replace"
+    source_labels = ["__meta_docker_container_label_app"]
+    target_label  = "app"
+  }
+}
+
+
+// Add meta label
+// https://grafana.com/docs/alloy/latest/reference/components/discovery/discovery.docker/
+// https://grafana.com/docs/alloy/latest/reference/components/loki/loki.source.docker/
+loki.source.docker "src" {
+  host    = "unix:///var/run/docker.sock"
+  // Receives output
+  targets = discovery.relabel.docker_labels.output
+  labels = {
+  // constants.hostname = hostname from OS
+    "host" = constants.hostname,
+    "app" = "docker",
+  }
+  forward_to = [loki.process.logs.receiver]
+}
+
+// https://grafana.com/docs/alloy/latest/reference/components/loki/loki.relabel/
+
+// process
+// https://grafana.com/docs/alloy/latest/reference/components/loki/loki.process/
+
+loki.process "logs" {
+// stage.<name> {
+
+// stage.json: Decompose JSON and create extracted map
+  stage.json {
+    expressions = {
+      level = "",
+    }
+  }
+// stage.labels: Extracted Value -> Label
+  stage.labels {
+  // "": use extracted value, extracted map
+    values = {
+      level = "",
+    }
+  }
+  forward_to = [loki.write.default.receiver]
+}
+
+loki.write "default" {
+  endpoint {
+    url = "http://loki:3100/loki/api/v1/push"
+  }
+}

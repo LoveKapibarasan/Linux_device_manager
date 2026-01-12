@@ -41,9 +41,6 @@ sudo sed -i 's/^PasswordAuthentication yes/PasswordAuthentication no/' /etc/ssh/
 sudo sshd -T | grep pubkeyauth
 sudo sshd -T | grep passwordauthentication
 
-# Shogihome
-git clone -o upstream git@github.com:sunfish-shogi/shogihome.git
-
 # Pihole
 mkdir -p "$HOME/Linux_device_manager/server/etc-pihole"
 sudo mv "$HOME/Linux_device_manager/white_list_3/db/gravity_current.db" "$HOME/Linux_device_manager/server/etc-pihole/gravity.db"
@@ -116,14 +113,8 @@ git clone -o upstream git@github.com:Femoon/tts-azure-web.git
 ## Gitlab: Settings → Repository → Mirroring repositories
 ## Github: Setting -> Deploy keys
 ### Add ssh:// and enter private key
-### Permission Error:
-docker exec -it gitlab-server bash
-chmod 600 /etc/gitlab/ssh_host_*
-chmod 700 /etc/gitlab
-exit
-#### Regenerate GitLab keys
-docker exec -it gitlab-server gitlab-ctl reconfigure
-docker exec -it gitlab-server gitlab-ctl restart sshd
+### Github host key: https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/githubs-ssh-key-fingerprints
+### Add 127.0.0.1 gitlab.lovekapibarasan.org at /etc/hosts
 
 # Nextcloud
 docker exec -it nextcloud bash
@@ -145,12 +136,7 @@ sudo apt install traceroute
 sudo vim /etc/resolv.conf
 
 # Samba
-## Windows
-### Map Network Drive
-### Drive Letter: Z
-### Folder :\\SAMBA_server_IP\Data
-### cmd /c cmdkey /add:10.10.0.1 /user:samba /pass:password
-### cmdkey /list
+
 ## Ubuntu(Natrius)
 ### Ctrl + L -> smb://SAMBA_server_IP/Data
 ### Right Click -> Add to bookmarks

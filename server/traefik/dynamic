@@ -1,0 +1,15 @@
+http:
+  routers:
+    local-router:
+      rule: "Host(`anki.lovekapibarasan.org`)"
+      entryPoints:
+        - websecure
+      service: local-service
+      tls:
+        certResolver: le
+
+  services:
+    local-service:
+      loadBalancer:
+        servers:
+          - url: "http://127.0.0.1:9003"
