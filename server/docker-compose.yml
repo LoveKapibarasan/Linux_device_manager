@@ -762,10 +762,6 @@ services:
     networks:
       - network
 
-      networks:
-        - network
-      depends_on:
-        - firefly_iii
   
 #============================================  
   # Super Productivity Application
@@ -775,17 +771,31 @@ services:
     ports:
       - "8080:80"
     restart: always
+    labels:
+      app: superproductivity
+      traefik.enable: "true"
+      traefik.http.routers.tasks.rule: Host(`tasks.lovekapibarasan.org`)
+      traefik.http.routers.tasks.entrypoints: websecure
+      traefik.http.routers.tasks.tls.certresolver: le
+      traefik.http.services.tasks.loadbalancer.server.port: "8080"
 
   # 同期用 WebDAV サーバー (hacdias/webdav を使用)
   webdav:
     image: hacdias/webdav:latest
-    container_name: super-productivity-sync
+    container_name: webdav
     ports:
       - "2345:2345"
     volumes:
       - ./webdav.yaml:/config.yml:ro
       - ./data:/data
     restart: always
+    labels: 
+      app: webdav
+      traefik.enable: "true"
+      traefik.http.routers.webdav.rule: Host(`webdav.lovekapibarasan.org`)
+      traefik.http.routers.webdav.entrypoints: websecure
+      traefik.http.routers.webdav.tls.certresolver: le
+      traefik.http.services.webdav.loadbalancer.server.port: "2345"
 
 volumes:
   valkey-data2:
