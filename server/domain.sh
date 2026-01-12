@@ -23,8 +23,6 @@ sudo python3 -m http.server 80
 
 # Note:  Turn off cloudflare proxy ( visitor → Cloudflare → server )
 
-# Test from router
-curl -v http://$ip/.well-known/acme-challenge/test
 # Logs
 sudo tail -100 /var/log/letsencrypt/letsencrypt.log
 

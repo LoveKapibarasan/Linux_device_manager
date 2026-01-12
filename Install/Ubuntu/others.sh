@@ -9,6 +9,8 @@ sudo apt install remmina remmina-plugin-rdp -y
 
 # Latex
 sudo apt install texlive texlive-full -y
+# https://tug.org/texlive/quickinstall.html
+# use perl ./install-tl to change disk
 # magick
 sudo apt install imagemagick-7.q16  -y
 
@@ -119,3 +121,9 @@ echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/source
 sudo apt remove nodejs npm
 ## Use NVM
 
+# Espanso
+# https://github.com/espanso/espanso
+# https://espanso.org/docs/install/linux/#wayland-compile
+
+# Rust
+curl https://sh.rustup.rs -sSf | sh

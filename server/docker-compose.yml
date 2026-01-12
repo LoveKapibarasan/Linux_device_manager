@@ -523,6 +523,26 @@ services:
         - network
       depends_on:
         - firefly_iii
+  
+#============================================  
+  # Super Productivity Application
+  super-productivity:
+    image: johannesjo/super-productivity:latest
+    container_name: super-productivity-app
+    ports:
+      - "8080:80"
+    restart: always
+
+  # 同期用 WebDAV サーバー (hacdias/webdav を使用)
+  webdav:
+    image: hacdias/webdav:latest
+    container_name: super-productivity-sync
+    ports:
+      - "2345:2345"
+    volumes:
+      - ./webdav.yaml:/config.yml:ro
+      - ./data:/data
+    restart: always
 
 volumes:
   valkey-data2:

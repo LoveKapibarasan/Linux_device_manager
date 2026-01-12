@@ -1,0 +1,9 @@
+address: 0.0.0.0
+port: 2345
+scope: /data
+modify: true
+auth: true
+users:
+  - username: "admin"
+    password: "${WEBDAV_PASSWORD}"
+    scope: /data
