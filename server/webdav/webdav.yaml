@@ -5,5 +5,5 @@ modify: true
 auth: true
 users:
   - username: "admin"
-    password: "${WEBDAV_PASSWORD}"
+    password: WEBDAV_PASSWORD
     scope: /data
