@@ -824,8 +824,6 @@ volumes:
   loki-data:
   pihole:
   vw-data:
-    external: true
-    name: server_vw-data
   gitlab-config:
   gitlab-data:
   gitlab-logs:
