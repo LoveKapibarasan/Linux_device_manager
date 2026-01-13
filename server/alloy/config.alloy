@@ -43,7 +43,7 @@ loki.source.docker "src" {
 // https://grafana.com/docs/alloy/latest/reference/components/loki/loki.process/
 
 loki.process "logs" {
-// stage.<name> {
+// stage.<name> 
 
 // stage.json: Decompose JSON and create extracted map
   stage.json {

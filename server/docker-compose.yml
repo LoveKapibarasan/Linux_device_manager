@@ -796,6 +796,19 @@ services:
       traefik.http.routers.webdav.entrypoints: websecure
       traefik.http.routers.webdav.tls.certresolver: le
       traefik.http.services.webdav.loadbalancer.server.port: "2345"
+  
+  portainer_agent:
+    image: portainer/agent:latest
+    container_name: portainer_agent
+    restart: always
+    ports:
+      - "9002:9002"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /var/lib/docker/volumes:/var/lib/docker/volumes
+      - portainer_agent_data:/data
+    environment:
+      AGENT_CLUSTER_ADDR: tasks.portainer_agent
 
 volumes:
   valkey-data2:
@@ -827,6 +840,7 @@ volumes:
   firefly_iii_upload:
   minio-data:
   mimir-data:
+  portainer_agent_data:
 
 networks:
   network:
