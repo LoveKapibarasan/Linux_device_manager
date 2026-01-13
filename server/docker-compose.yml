@@ -778,6 +778,8 @@ services:
       traefik.http.services.tasks.loadbalancer.server.port: "8080"
     depends_on:
       - "webdav"
+    networks:
+      - network
 
   # 同期用 WebDAV サーバー (hacdias/webdav を使用)
   webdav:
@@ -796,6 +798,8 @@ services:
       traefik.http.routers.webdav.entrypoints: websecure
       traefik.http.routers.webdav.tls.certresolver: le
       traefik.http.services.webdav.loadbalancer.server.port: "2345"
+    networks:
+      - network
 
 #============================================
 
@@ -810,7 +814,9 @@ services:
       - /var/lib/docker/volumes:/var/lib/docker/volumes
       - portainer_agent_data:/data
     environment:
-      AGENT_CLUSTER_ADDR: tasks.portainer_agent
+      AGENT_CLUSTER_ADDR: tasks.portainer_agent    
+    networks:
+      - network
 
 volumes:
   valkey-data2:
