@@ -798,6 +798,14 @@ services:
       traefik.http.routers.webdav.entrypoints: websecure
       traefik.http.routers.webdav.tls.certresolver: le
       traefik.http.services.webdav.loadbalancer.server.port: "2345"
+      # ミドルウェア設定
+      traefik.http.routers.webdav.middlewares: webdav-cors
+      # CORS設定
+      traefik.http.middlewares.webdav-cors.headers.accesscontrolalloworiginlist: "https://tasks.lovekapibarasan.org"
+      traefik.http.middlewares.webdav-cors.headers.accesscontrolallowmethods: "GET,OPTIONS,PUT,DELETE,PROPFIND,PROPPATCH,MKCOL,COPY,MOVE,LOCK,UNLOCK"
+      traefik.http.middlewares.webdav-cors.headers.accesscontrolallowheaders: "*"
+      traefik.http.middlewares.webdav-cors.headers.accesscontrolallowcredentials: "true"
+      traefik.http.middlewares.webdav-cors.headers.accesscontrolmaxage: "100"
     networks:
       - network
 
