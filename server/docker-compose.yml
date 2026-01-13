@@ -767,7 +767,7 @@ services:
     image: johannesjo/super-productivity:latest
     container_name: super-productivity-app
     ports:
-      - "8080:80"
+      - "8097:80"
     restart: always
     labels:
       app: superproductivity
@@ -775,7 +775,7 @@ services:
       traefik.http.routers.tasks.rule: Host(`tasks.lovekapibarasan.org`)
       traefik.http.routers.tasks.entrypoints: websecure
       traefik.http.routers.tasks.tls.certresolver: le
-      traefik.http.services.tasks.loadbalancer.server.port: "8080"
+      traefik.http.services.tasks.loadbalancer.server.port: "80"
     depends_on:
       - "webdav"
     networks:
