@@ -776,6 +776,8 @@ services:
       traefik.http.routers.tasks.entrypoints: websecure
       traefik.http.routers.tasks.tls.certresolver: le
       traefik.http.services.tasks.loadbalancer.server.port: "8080"
+    depends_on:
+      - "webdav"
 
   # 同期用 WebDAV サーバー (hacdias/webdav を使用)
   webdav:
