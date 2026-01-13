@@ -786,9 +786,9 @@ services:
     image: hacdias/webdav:latest
     container_name: webdav
     ports:
-      - "2345:2345"
+      - "6065:6065"
     volumes:
-      - ./webdav.yaml:/config.yml:ro
+      - ./webdav/webdav.yaml:/config.yml:ro
       - ./data:/data
     restart: always
     labels: 
@@ -797,7 +797,7 @@ services:
       traefik.http.routers.webdav.rule: Host(`webdav.lovekapibarasan.org`)
       traefik.http.routers.webdav.entrypoints: websecure
       traefik.http.routers.webdav.tls.certresolver: le
-      traefik.http.services.webdav.loadbalancer.server.port: "2345"
+      traefik.http.services.webdav.loadbalancer.server.port: "6065"
     networks:
       - network
 
