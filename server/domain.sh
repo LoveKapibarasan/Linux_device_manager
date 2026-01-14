@@ -18,7 +18,7 @@ sudo apt install certbot -y
 # https://dash.cloudflare.com/profile/api-tokens
 mkdir -p ~/.secrets
 echo "dns_cloudflare_api_token=${TOKEN}" >> ~/.secrets/cloudflare.ini
-chmod 600 /home/user/.secrets/cloudflare.ini
+chmod 600 ~/.secrets/cloudflare.ini
 
 # Check if 80 port is free
 if sudo lsof -i :80; then
@@ -33,6 +33,7 @@ fi
 sudo tail -100 /var/log/letsencrypt/letsencrypt.log
 
 # Wildcard certification
+# /home/ubuntu/cert/.venv/bin/certbot
 sudo certbot certonly \
   --dns-cloudflare \
   --dns-cloudflare-credentials /home/user/.secrets/cloudflare.ini \
@@ -43,7 +44,7 @@ sudo /home/user/certbot/.venv/bin/certbot renew --dry-run
 sudo pacman -S cronie
 sudo systemctl enable --now cronie
 sudo crontab -e
-# 0 0,12 * * * /home/user/certbot/.venv/bin/certbot renew --quiet
+# 0 0,12 * * * /home/ubuntu/cert/.venv/bin/certbot renew --quiet
 
 # Check
 sudo openssl x509 -in "/etc/letsencrypt/live/${DOMAIN}/fullchain.pem" -noout -text | grep -A1 "Subject Alternative Name"
