@@ -114,15 +114,15 @@ services:
     environment:
       - TRAEFIK_LOG_DASHBOARD_ACCESS_PATH=/logs/access.log
       - TRAEFIK_LOG_DASHBOARD_AUTH_TOKEN=${TRAEFIK_LOG_DASHBOARD_AUTH_TOKEN}
+      # 地図を有効化
+      - TRAEFIK_LOG_DASHBOARD_GEOIP_ENABLED=true
+      # データベースの保存先
+      - TRAEFIK_LOG_DASHBOARD_GEOIP_DB_PATH=/data/GeoLite2-City.mmdb
     labels:
       app: traefik-agent
     volumes:
       - ./traefik-data/logs:/logs:ro # Traefikのログを読み取り専用でマウント
       - ./traefik-data/positions:/data # 読み取り位置を保存（再起動対策）
-      # 地図を有効化
-      - TRAEFIK_LOG_DASHBOARD_GEOIP_ENABLED=true
-      # データベースの保存先
-      - TRAEFIK_LOG_DASHBOARD_GEOIP_DB_PATH=/data/GeoLite2-City.mmdb
     ports:
       - "5000:5000"
     networks:
