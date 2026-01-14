@@ -72,7 +72,7 @@ prometheus.exporter.unix "node_exporter" {
 prometheus.scrape "node_exporter" {
   targets    = prometheus.exporter.unix.node_exporter.targets
   forward_to = [prometheus.remote_write.mimir.receiver]
-  job_name   = "node"
+  job_name   = "node" // https://github.com/rfmoz/grafana-dashboards Use 'node'
 }
 
 // cAdvisorからコンテナのメトリクスを拾う
