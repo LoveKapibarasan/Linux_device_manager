@@ -24,7 +24,7 @@ http:
     anki-router:
       rule: "Host(`anki.lovekapibarasan.org`)"
       entryPoints: ["websecure"]
-      service: local-service
+      service: anki-service
       tls:
         certResolver: le    
 

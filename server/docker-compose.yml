@@ -65,6 +65,9 @@ services:
       - "--accesslog=true"
       - "--accesslog.format=json" # JSON形式を指定
       - "--accesslog.fields.names.ClientAddr=keep" # IPアドレスを保持
+      # Config
+      - "--providers.file.directory=/etc/traefik/dynamic"
+      - "--providers.file.watch=true"
     ports:
       - "80:80"
       - "443:443"
@@ -84,7 +87,7 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
       - /etc/letsencrypt:/letsencrypt
-      - ./traefik/dynamic_conf.yml:/etc/traefik/dynamic
+      - ./traefik/dynamic_conf.yml:/etc/traefik/dynamic/dynamic_conf.yml
     networks:
       - network
 
