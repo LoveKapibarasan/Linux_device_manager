@@ -905,7 +905,7 @@ services:
 
   portainer_agent_1:
     image: portainer/agent:latest
-    container_name: portainer_agent
+    container_name: portainer_agent_1
     restart: always
     ports:
       - "9002:9001"
@@ -920,7 +920,7 @@ services:
   
   portainer_agent_2:
     image: portainer/agent:latest
-    container_name: portainer_agent
+    container_name: portainer_agent_2
     restart: always
     ports:
       - "9003:9001"
