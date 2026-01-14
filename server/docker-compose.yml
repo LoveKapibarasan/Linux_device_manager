@@ -591,7 +591,7 @@ services:
     networks:
       - network
 
-# log management
+# log management, search
   loki:
     image: grafana/loki:latest
     container_name: loki
@@ -808,6 +808,19 @@ services:
       traefik.http.middlewares.webdav-cors.headers.accesscontrolmaxage: "100"
     networks:
       - network
+
+  restic-server:
+      image: restic/rest-server:latest
+      container_name: restic-server
+      restart: always
+      ports:
+        - "8000:8000"
+      volumes:
+        - ./data:/data          # バックアップデータの保存先
+      environment:
+        - OPTIONS=--append-only # 過去のデータを上書き禁止にする（セキュリティ向上）
+      networks:
+        - network
 
 #============================================
 

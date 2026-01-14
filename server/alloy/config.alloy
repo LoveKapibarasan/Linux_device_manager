@@ -65,4 +65,14 @@ loki.write "default" {
   endpoint {
     url = "http://loki:3100/loki/api/v1/push"
   }
+  // 1. Basic Auth
+  basic_auth {
+     username = "admin"
+     password = "BASIC_AUTH_PASSWORD"
+  }
+
+  // 2. Tenant ID (Mimir)
+  headers = {
+     "X-Scope-OrgID" = "ORG_ID",
+  }
 }
