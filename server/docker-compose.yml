@@ -455,11 +455,11 @@ services:
     # config/config.docker.inc.php
     labels:
       app: roundcube
-      traefik.enable: "true"
-      traefik.http.routers.roundcube.rule: Host(`roundcube.lovekapibarasan.org`)
-      traefik.http.routers.roundcube.entrypoints: websecure
-      traefik.http.routers.roundcube.tls.certresolver: le
-      traefik.http.services.roundcube.loadbalancer.server.port: "80"
+      #traefik.enable: "true"
+      #traefik.http.routers.roundcube.rule: Host(`roundcube.lovekapibarasan.org`)
+      #traefik.http.routers.roundcube.entrypoints: websecure
+      #traefik.http.routers.roundcube.tls.certresolver: le
+      #traefik.http.services.roundcube.loadbalancer.server.port: "80"
 
     networks:
       - network
@@ -839,7 +839,6 @@ services:
     networks:
       - network
   
-  # Super Productivity Application
   super-productivity:
     image: johannesjo/super-productivity:latest
     container_name: super-productivity-app
