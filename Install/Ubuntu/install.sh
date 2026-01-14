@@ -55,5 +55,3 @@ sudo systemctl enable --now ssh
 
 
 sudo passwd root
-
-
