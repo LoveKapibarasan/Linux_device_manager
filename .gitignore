@@ -18,4 +18,4 @@ wg0.conf
 init-db.sql
 tts-azure-web/
 samba/
-shogi-extend/
+backup/

@@ -898,16 +898,37 @@ services:
       ports:
         - "8000:8000"
       volumes:
-        - ./data:/data          # バックアップデータの保存先
+        - /mnt/usb_backup:/data  # Backup dir
       labels:
         app: restic
       environment:
         - OPTIONS=--append-only # 過去のデータを上書き禁止にする（セキュリティ向上）
       networks:
         - network
-#============================================        
+
+  backrest:
+    image: garethgeorge/backrest:latest
+    container_name: backrest
+    hostname: backrest
+    volumes:
+      # 1. Backrest Setting
+      - ./config:/config
+      - ./data:/data
+      # 2. Backup data
+      - /mnt/data:/source:ro
+      # 3. バックアップ先
+      - /mnt/usb_backup:/repository
+    environment:
+      - BACKREST_CONFIG=/config/config.json
+      - BACKREST_DATA=/data
+    ports:
+      - "8099:9898"
+    restart: unless-stopped
+
+#============================================
 # Memo: Skip: 8098
 #============================================
+
 
   portainer_agent_1:
     image: portainer/agent:latest

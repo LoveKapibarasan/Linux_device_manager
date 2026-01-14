@@ -18,3 +18,5 @@ datasources:
     type: loki
     access: proxy
     url: http://loki:3100
+
+# Do not forget multi tenant http header
