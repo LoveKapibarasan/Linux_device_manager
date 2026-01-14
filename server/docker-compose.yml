@@ -641,7 +641,7 @@ services:
     ports:
       - "12345:12345"
     depends_on:
-      - node_exporter
+      #- node_exporter
       - cadvisor
     networks:
       - network
