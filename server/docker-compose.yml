@@ -41,11 +41,11 @@ services:
       app: searxng
       #traefik.enable: "true"
       # Router
-      #traefik.http.routers.app.rule: Host(`search.lovekapibarasan.org`)
-      #traefik.http.routers.app.entrypoints: websecure
-      #traefik.http.routers.app.tls.certresolver: le
+      #traefik.http.routers.search.rule: Host(`search.lovekapibarasan.org`)
+      #traefik.http.routers.search.entrypoints: websecure
+      #traefik.http.routers.search.tls.certresolver: le
       # Service
-      #traefik.http.services.app.loadbalancer.server.port: "8081"
+      #traefik.http.services.search.loadbalancer.server.port: "8081"
     networks:
       - network
 
@@ -128,10 +128,10 @@ services:
     labels:
       app: traefik-dashboard
       traefik.enable: "true"
-      traefik.http.routers.app.rule: Host(`dashboard.traefik.lovekapibarasan.org`)
-      traefik.http.routers.app.entrypoints: websecure
-      traefik.http.routers.app.tls.certresolver: le
-      traefik.http.services.app.loadbalancer.server.port: "3000"
+      traefik.http.routers.tdash.rule: Host(`dashboard.traefik.lovekapibarasan.org`)
+      traefik.http.routers.tdash.entrypoints: websecure
+      traefik.http.routers.tdash.tls.certresolver: le
+      traefik.http.services.tdash.loadbalancer.server.port: "3000"
     ports:
       - "8098:3000"
     depends_on:
