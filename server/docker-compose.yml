@@ -926,12 +926,12 @@ services:
     ports:
       - "8101:9898"
     restart: unless-stopped
+    networks:
+      - network
 
 #============================================
 # Memo: Skip: 8098
 #============================================
-
-
   portainer_agent_1:
     image: portainer/agent:latest
     container_name: portainer_agent_1
