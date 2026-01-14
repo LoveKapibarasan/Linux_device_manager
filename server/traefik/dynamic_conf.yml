@@ -1,15 +1,7 @@
 http:
   routers:
-    # 名前をそれぞれバラバラにします
-    anki-router:
-      rule: "Host(`anki.lovekapibarasan.org`)"
-      entryPoints: ["websecure"]
-      service: local-service
-      tls:
-        certResolver: le
-
-    log-router:
-      rule: "Host(`log.lovekapibarasan.org`)"
+    password-router:
+      rule: "Host(`password.lovekapibarasan.org`)"
       entryPoints: ["websecure"]
       service: log-service
       tls:
@@ -21,17 +13,36 @@ http:
       service: expense-service
       tls:
         certResolver: le
+
+    anki-router:
+      rule: "Host(`anki.lovekapibarasan.org`)"
+      entryPoints: ["websecure"]
+      service: local-service
+      tls:
+        certResolver: le    
+
+    log-router:
+      rule: "Host(`log.lovekapibarasan.org`)"
+      entryPoints: ["websecure"]
+      service: log-service
+      tls:
+        certResolver: le
+    
   services:
-    # ここでそれぞれのポートを正しく指定します
+    password-service:
+      loadBalancer:
+        servers:
+          - url: "http://10.10.0.2:8085"
+    
+    expense-service:
+      loadBalancer:
+        servers:
+          - url: "http://10.10.0.2:8096"
+    
     anki-service:
       loadBalancer:
         servers:
           - url: "http://10.10.0.2:9003"
-
-    expense-service:
-      loadBalancer:
-        servers:
-          - url: "http://10.10.0.2:XXXX" # ←ここをExpenseのポート番号に変えてください
 
     log-service:
       loadBalancer:
