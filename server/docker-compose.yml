@@ -68,6 +68,8 @@ services:
       - "--accesslog=true"
       - "--accesslog.format=json" # JSON形式を指定
       - "--accesslog.fields.names.ClientAddr=keep" # IPアドレスを保持
+      # 【重要】書き出し先のパスを明示的に指定
+      - "--accesslog.filepath=/logs/access.log"
       # Config
       - "--providers.file.directory=/etc/traefik/dynamic"
       - "--providers.file.watch=true"
