@@ -76,7 +76,7 @@ services:
       - "443:443"
       - "8082:8080"
     environment:
-      # CloudflareのグローバルAPIキー、または特定の権限を持つトークン
+    # https://medium.com/@svenvanginkel/the-ultimate-guide-to-setting-up-traefik-650bd68ae633
       #- CF_API_EMAIL=${CF_API_EMAIL}
       - CF_DNS_API_TOKEN=${CF_API_KEY}
       #- CF_API_KEY=${CF_API_KEY}
@@ -143,11 +143,11 @@ services:
       restart: unless-stopped
       labels:
         app: pihole
-        traefik.enable: "true"
-        traefik.http.routers.pihole.rule: Host(`pihole.lovekapibarasan.org`)
-        traefik.http.routers.pihole.entrypoints: websecure
-        traefik.http.routers.pihole.tls.certresolver: le
-        traefik.http.services.pihole.loadbalancer.server.port: "80"
+        #traefik.enable: "true"
+        #traefik.http.routers.pihole.rule: Host(`pihole.lovekapibarasan.org`)
+        #traefik.http.routers.pihole.entrypoints: websecure
+        #traefik.http.routers.pihole.tls.certresolver: le
+        #traefik.http.services.pihole.loadbalancer.server.port: "80"
       networks:
         network:
           ipv4_address: 172.20.0.10

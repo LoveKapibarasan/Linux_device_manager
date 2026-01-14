@@ -1,5 +1,19 @@
 http:
   routers:
+    search-router:
+      rule: "Host(`search.lovekapibarasan.org`)"
+      entryPoints: ["websecure"]
+      service: search-service
+      tls:
+        certResolver: le
+
+    pihole-router:
+      rule: "Host(`pihole.lovekapibarasan.org`)"
+      entryPoints: ["websecure"]
+      service: pihole-service
+      tls:
+        certResolver: le    
+
     password-router:
       rule: "Host(`password.lovekapibarasan.org`)"
       entryPoints: ["websecure"]
@@ -36,6 +50,16 @@ http:
         certResolver: le
     
   services:
+    search-service:
+      loadBalancer:
+        servers:
+          - url: "http://10.10.0.2:8081"
+    
+    pihole-service:
+      loadBalancer:
+        servers:
+          - url: "http://10.10.0.2:8083"
+
     password-service:
       loadBalancer:
         servers:
