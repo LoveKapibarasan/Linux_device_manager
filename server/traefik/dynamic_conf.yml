@@ -119,4 +119,4 @@ http:
     minio-service:
       loadBalancer:
         servers:
-          - url: "http://10.10.0.7:9009"
+          - url: "http://10.10.0.7:9001"
