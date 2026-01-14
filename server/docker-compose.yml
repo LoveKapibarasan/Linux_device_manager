@@ -108,7 +108,7 @@ services:
     restart: unless-stopped
     environment:
       - TRAEFIK_LOG_DASHBOARD_ACCESS_PATH=/logs/access.log
-      - TRAEFIK_LOG_DASHBOARD_AUTH_TOKEN= ${TRAEFIK_LOG_DASHBOARD_AUTH_TOKEN}
+      - TRAEFIK_LOG_DASHBOARD_AUTH_TOKEN=${TRAEFIK_LOG_DASHBOARD_AUTH_TOKEN}
     labels:
       app: traefik-agent
     volumes:
