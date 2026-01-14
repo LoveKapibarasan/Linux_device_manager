@@ -896,13 +896,15 @@ services:
       container_name: restic
       restart: always
       ports:
-        - "8000:8000"
+        - "8099:8000"
       volumes:
         - /mnt/usb_backup:/data  # Backup dir
       labels:
         app: restic
       environment:
         - OPTIONS=--append-only # 過去のデータを上書き禁止にする（セキュリティ向上）
+      depends_on:
+        - backrest
       networks:
         - network
 
@@ -921,10 +923,8 @@ services:
     environment:
       - BACKREST_CONFIG=/config/config.json
       - BACKREST_DATA=/data
-    depends_on:
-      - restic
     ports:
-      - "8099:9898"
+      - "8101:9898"
     restart: unless-stopped
 
 #============================================
