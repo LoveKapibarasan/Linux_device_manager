@@ -128,7 +128,7 @@ services:
     labels:
       app: traefik-dashboard
       traefik.enable: "true"
-      traefik.http.routers.tdash.rule: Host(`dashboard.traefik.lovekapibarasan.org`)
+      traefik.http.routers.tdash.rule: Host(`tdash.lovekapibarasan.org`)
       traefik.http.routers.tdash.entrypoints: websecure
       traefik.http.routers.tdash.tls.certresolver: le
       traefik.http.services.tdash.loadbalancer.server.port: "3000"
