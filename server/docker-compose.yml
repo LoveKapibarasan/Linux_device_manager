@@ -104,11 +104,13 @@ services:
   # --- Traefik Log Dashboard Agent (ログを解析) ---
   traefik-agent:
     image: hhftechnology/traefik-log-dashboard-agent:latest
-    container_name: traefik-log-dashboard-agent
+    container_name: traefik-agent
     restart: unless-stopped
     environment:
       - TRAEFIK_LOG_DASHBOARD_ACCESS_PATH=/logs/access.log
       - TRAEFIK_LOG_DASHBOARD_AUTH_TOKEN= ${TRAEFIK_LOG_DASHBOARD_AUTH_TOKEN}
+    labels:
+      app: traefik-agent
     volumes:
       - ./traefik-data/logs:/logs:ro # Traefikのログを読み取り専用でマウント
       - ./traefik-data/positions:/data # 読み取り位置を保存（再起動対策）
@@ -118,11 +120,18 @@ services:
   # --- Traefik Log Dashboard  ---
   traefik-dashboard:
     image: hhftechnology/traefik-log-dashboard:latest
-    container_name: traefik-log-dashboard
+    container_name: traefik-dashboard
     restart: unless-stopped
     environment:
       - AGENT_API_URL=http://traefik-agent:5000
       - AGENT_API_TOKEN=your_secure_token_here # 上記Agentと同じトークン
+    labels:
+      app: traefik-dashboard
+      traefik.enable: "true"
+      traefik.http.routers.app.rule: Host(`dashboard.traefik.lovekapibarasan.org`)
+      traefik.http.routers.app.entrypoints: websecure
+      traefik.http.routers.app.tls.certresolver: le
+      traefik.http.services.app.loadbalancer.server.port: "3000"
     ports:
       - "8098:3000"
     depends_on:
