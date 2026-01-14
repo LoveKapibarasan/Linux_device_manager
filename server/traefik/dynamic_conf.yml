@@ -149,7 +149,7 @@ http:
         servers:
           - url: "http://10.10.0.7:9009"
 
-middlewares:
+  middlewares:
     loki-auth:
       basicAuth:
         # htpasswd
