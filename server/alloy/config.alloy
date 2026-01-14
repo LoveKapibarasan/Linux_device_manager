@@ -1,3 +1,4 @@
+//=============================================
 // Detect Docker Containers
 // no - and care the , in labels
 discovery.docker "all" {
@@ -61,6 +62,21 @@ loki.process "logs" {
   forward_to = [loki.write.default.receiver]
 }
 
+// ====================================
+// Node Exporterからホストのメトリクスを拾う
+prometheus.scrape "node_exporter" {
+  targets = [{"__address__" = "node-exporter:9100"}]
+  forward_to = [prometheus.remote_write.mimir.receiver]
+}
+
+// cAdvisorからコンテナのメトリクスを拾う
+prometheus.scrape "cadvisor" {
+  targets = [{"__address__" = "cadvisor:8080"}]
+  forward_to = [prometheus.remote_write.mimir.receiver]
+}
+
+// ====================================
+
 loki.write "default" {
   endpoint {
     url = "http://loki:3100/loki/api/v1/push"
@@ -68,7 +84,22 @@ loki.write "default" {
   // 1. Basic Auth
   basic_auth {
      username = "admin"
-     password = "BASIC_AUTH_PASSWORD"
+     password = "LOKI_BASIC_AUTH_PASSWORD"
+  }
+
+  // 2. Tenant ID (Mimir)
+  headers = {
+     "X-Scope-OrgID" = "ORG_ID",
+  }
+}
+prometheus.remote_write "mimir" {
+  endpoint {
+    url = "http://mimir:9009/api/v1/push"
+
+  // 1. Basic Auth
+  basic_auth {
+     username = "admin"
+     password = "MIMIR_BASIC_AUTH_PASSWORD"
   }
 
   // 2. Tenant ID (Mimir)

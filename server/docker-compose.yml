@@ -62,6 +62,9 @@ services:
       - "--certificatesresolvers.le.acme.email=tmp@lovekapibarasan.org"
       - "--certificatesresolvers.le.acme.storage=/letsencrypt/acme.json"
       - "--api.dashboard=true"
+      - "--accesslog=true"
+      - "--accesslog.format=json" # JSON形式を指定
+      - "--accesslog.fields.names.ClientAddr=keep" # IPアドレスを保持
     ports:
       - "80:80"
       - "443:443"
@@ -539,6 +542,8 @@ services:
       app: cadvisor
     networks:
       - network
+      -
+
 
 
   alloy:
