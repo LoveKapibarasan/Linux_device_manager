@@ -1,0 +1,29 @@
+http:
+  routers:
+    local-router:
+      rule: "Host(`anki.lovekapibarasan.org`)"
+      entryPoints:
+        - websecure
+      service: local-service
+      tls:
+        certResolver: le
+
+    external-server-router:
+          rule: "Host(`log.lovekapibarasan.org`)"
+          service: external-server-service
+          entryPoints:
+            - websecure
+          tls:
+            certResolver: le
+            # Let's Encrypt
+
+  services:
+    local-service:
+      loadBalancer:
+        servers:
+          - url: "http://127.0.0.1:9003"
+
+    external-server-service:
+      loadBalancer:
+        servers:
+          - url: "http://10.10.0.1:3001"
