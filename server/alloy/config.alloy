@@ -75,13 +75,17 @@ prometheus.scrape "node_exporter" {
   job_name   = "node" // https://github.com/rfmoz/grafana-dashboards Use 'node'
 }
 
-// cAdvisorからコンテナのメトリクスを拾う
+//  cAdvisor
+// https://grafana.com/grafana/dashboards/19792-cadvisor-dashboard/
+prometheus.exporter.cadvisor "docker" {
+  docker_host = "unix:///var/run/docker.sock"
+}
+
 prometheus.scrape "cadvisor" {
-  targets = [{"__address__" = "cadvisor:8080"}]
+  targets    = prometheus.exporter.cadvisor.docker.targets
   forward_to = [prometheus.remote_write.mimir.receiver]
   job_name   = "cadvisor"
 }
-
 // ====================================
 
 loki.write "default" {
