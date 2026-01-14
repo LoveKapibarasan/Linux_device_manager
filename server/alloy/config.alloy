@@ -67,12 +67,15 @@ loki.process "logs" {
 prometheus.scrape "node_exporter" {
   targets = [{"__address__" = "node-exporter:9100"}]
   forward_to = [prometheus.remote_write.mimir.receiver]
+  // Fix the label name
+  job_name   = "node_exporter"
 }
 
 // cAdvisorからコンテナのメトリクスを拾う
 prometheus.scrape "cadvisor" {
   targets = [{"__address__" = "cadvisor:8080"}]
   forward_to = [prometheus.remote_write.mimir.receiver]
+  job_name   = "cadvisor"
 }
 
 // ====================================
