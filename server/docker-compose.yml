@@ -655,8 +655,9 @@ services:
       - GF_SERVER_ROOT_URL=http://grafana.lovekapibarasan.org
     restart: always
     depends_on:
-      - prometheus
+      #- prometheus
       - loki
+      - mimir
     volumes:
       - grafana-storage:/var/lib/grafana
     labels:

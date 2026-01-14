@@ -54,7 +54,16 @@ http:
       entryPoints: ["websecure"]
       service: anki-service
       tls:
-        certResolver: le    
+        certResolver: le   
+
+    loki-router:
+      rule: "Host(`loki.lovekapibarasan.org`)"
+      entryPoints: ["websecure"]
+      service: loki-service
+      middlewares:
+        - "loki-auth"
+      tls:
+        certResolver: le     
 
     log-router:
       rule: "Host(`log.lovekapibarasan.org`)"
@@ -67,6 +76,15 @@ http:
       rule: "Host(`minio.lovekapibarasan.org`)"
       entryPoints: ["websecure"]
       service: minio-service
+      tls:
+        certResolver: le
+    
+    mimir-router:
+      rule: "Host(`mimir.lovekapibarasan.org`)"
+      entryPoints: ["websecure"]
+      service: mimir-service
+      middlewares:
+        - "mimir-auth"
       tls:
         certResolver: le
 
@@ -111,6 +129,11 @@ http:
         servers:
           - url: "http://10.10.0.2:9003"
 
+    loki-service:
+      loadBalancer:
+        servers:
+          - url: "http://10.10.0.7:3100"      
+
     log-service:
       loadBalancer:
         servers:
@@ -120,3 +143,19 @@ http:
       loadBalancer:
         servers:
           - url: "http://10.10.0.7:9001"
+    
+    mimir-service:
+      loadBalancer:
+        servers:
+          - url: "http://10.10.0.7:9009"
+
+middlewares:
+    loki-auth:
+      basicAuth:
+        # htpasswd
+        users:
+          - "LOKI_BASIC_PASSWORD"
+    mimir-auth:
+      basicAuth:
+        users:
+          - "LOKI_BASIC_PASSWORD"
