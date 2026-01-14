@@ -3,7 +3,7 @@ http:
     password-router:
       rule: "Host(`password.lovekapibarasan.org`)"
       entryPoints: ["websecure"]
-      service: log-service
+      service: password-service
       tls:
         certResolver: le
 
@@ -11,6 +11,13 @@ http:
       rule: "Host(`expense.lovekapibarasan.org`)"
       entryPoints: ["websecure"]
       service: expense-service
+      tls:
+        certResolver: le
+    
+    docker-router:
+      rule: "Host(`docker.lovekapibarasan.org`)"
+      entryPoints: ["websecure"]
+      service: docker-service
       tls:
         certResolver: le
 
@@ -34,6 +41,11 @@ http:
         servers:
           - url: "http://10.10.0.2:8085"
     
+    docker-service:
+      loadBalancer:
+        servers:
+          - url: "http://10.10.0.2:8092"
+
     expense-service:
       loadBalancer:
         servers:
