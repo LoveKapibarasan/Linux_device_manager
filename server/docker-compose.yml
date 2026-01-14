@@ -116,6 +116,8 @@ services:
       - ./traefik-data/positions:/data # 読み取り位置を保存（再起動対策）
     ports:
       - "5000:5000"
+    networks:
+      - network
 
   # --- Traefik Log Dashboard  ---
   traefik-dashboard:
@@ -136,6 +138,8 @@ services:
       - "8098:3000"
     depends_on:
       - traefik-agent  
+    networks:
+      - network
 
   pihole:
       container_name: pihole
