@@ -542,9 +542,6 @@ services:
       app: cadvisor
     networks:
       - network
-      -
-
-
 
   alloy:
     image: 'grafana/alloy:v1.11.3'
