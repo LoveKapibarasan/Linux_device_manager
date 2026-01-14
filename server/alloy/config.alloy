@@ -64,12 +64,12 @@ loki.process "logs" {
 
 // ====================================
 // https://grafana.com/docs/alloy/latest/reference/components/prometheus/prometheus.exporter.unix/
-// 1. Alloy内蔵のNode Exporter（unix exporter）を起動
+// Alloy内蔵のNode Exporter（unix exporter）を起動
 prometheus.exporter.unix "node_exporter" {
   // 必要に応じてコレクターの設定が可能（デフォルトで十分です）
 }
 
-// 2. 起動した内蔵エクスポートを自分自身でスクレイプする
+//  起動した内蔵エクスポートを自分自身でスクレイプする
 prometheus.scrape "node_exporter" {
   targets    = prometheus.exporter.unix.node_exporter.targets
   forward_to = [prometheus.remote_write.mimir.receiver]
