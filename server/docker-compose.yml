@@ -77,8 +77,9 @@ services:
       - "8082:8080"
     environment:
       # CloudflareのグローバルAPIキー、または特定の権限を持つトークン
-      - CF_API_EMAIL=${CF_API_EMAIL}
-      - CF_API_KEY=${CF_API_KEY}
+      #- CF_API_EMAIL=${CF_API_EMAIL}
+      - CF_DNS_API_TOKEN=${CF_API_KEY}
+      #- CF_API_KEY=${CF_API_KEY}
     labels:
       app: traefik
       traefik.enable: true
