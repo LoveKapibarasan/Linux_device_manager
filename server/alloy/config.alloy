@@ -79,7 +79,7 @@ prometheus.scrape "cadvisor" {
 
 loki.write "default" {
   endpoint {
-    url = "http://loki.lovekapibarasan.org/loki/api/v1/push"
+    url = "https://loki.lovekapibarasan.org/loki/api/v1/push"
     // 1. Basic Auth
     basic_auth {
       username = "admin"
@@ -94,7 +94,7 @@ loki.write "default" {
 }
 prometheus.remote_write "mimir" {
   endpoint {
-    url = "http://mimir.lovekapibarasan.org/api/v1/push"
+    url = "https://mimir.lovekapibarasan.org/api/v1/push"
     // 1. Basic Auth
     basic_auth {
       username = "admin"
