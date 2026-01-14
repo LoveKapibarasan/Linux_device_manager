@@ -71,15 +71,14 @@ services:
       - "--accesslog.fields.names.ClientAddr=keep" # IPアドレスを保持
       # 【重要】書き出し先のパスを明示的に指定
       - "--accesslog.filepath=/logs/access.log"
-           # Config
+      # Config
       - "--providers.file.directory=/etc/traefik/dynamic"
-      - "--providers.file.watch=true"
-      # Trust the IP address that argued by these companies
-      - "--entrypoints.websecure.forwardedHeaders.trustedIPs=173.245.48.0/20,103.21.244.0/22,103.22.200.0/22,103.31.4.0/22,141.101.64.0/18,108.162.192.0/18,190.93.240.0/20,188.114.96.0/20,197.234.240.0/22,198.41.128.0/17,162.158.0.0/15,104.16.0.0/13,104.24.0.0/14,172.64.0.0/13,131.0.72.0/22"
-      # 2. Docker Gateway IP（172.20.0.1）
-      - "--entrypoints.websecure.forwardedHeaders.insecure=false"
-      # 3. ClientAddr of log X-Forwarded-For（Real IP）を反映させる
-      - "--accesslog.fields.names.ClientAddr=keep"
+      # https://doc.traefik.io/traefik/reference/install-configuration/entrypoints/#forwarded-headers
+      # https://traefik-log-dashboard.hhf.technology/docs/troubleshooting#geoip-issues
+      # Cloudflare: https://www.cloudflare.com/ips/
+      # Docker: https://docs.docker.com/engine/network/drivers/bridge/
+      - "--entrypoints.websecure.forwardedHeaders.trustedIPs=173.245.48.0/20,103.21.244.0/22,103.22.200.0/22,103.31.4.0/22,141.101.64.0/18,108.162.192.0/18,190.93.240.0/20,188.114.96.0/20,197.234.240.0/22,198.41.128.0/17,162.158.0.0/15,104.16.0.0/13,104.24.0.0/14,172.64.0.0/13,131.0.72.0/22,172.16.0.0/12"
+
     ports:
       - "80:80"
       - "443:443"
@@ -109,19 +108,19 @@ services:
       - ./traefik-data/logs:/logs
     networks:
       - network
-
-  # --- Traefik Log Dashboard Agent (ログを解析) ---
+  # https://traefik-log-dashboard.hhf.technology/docs/quickstart
   traefik-agent:
     image: hhftechnology/traefik-log-dashboard-agent:latest
     container_name: traefik-agent
     restart: unless-stopped
     environment:
+      # https://traefik-log-dashboard.hhf.technology/docs/configuration/environment-variables
       - TRAEFIK_LOG_DASHBOARD_ACCESS_PATH=/logs/access.log
+      - TRAEFIK_LOG_DASHBOARD_ERROR_PATH=/logs/traefik.log
       - TRAEFIK_LOG_DASHBOARD_AUTH_TOKEN=${TRAEFIK_LOG_DASHBOARD_AUTH_TOKEN}
-      # 地図を有効化
-      - TRAEFIK_LOG_DASHBOARD_GEOIP_ENABLED=true
-      # データベースの保存先
-      - TRAEFIK_LOG_DASHBOARD_GEOIP_DB_PATH=/data/GeoLite2-City.mmdb
+      - TRAEFIK_LOG_DASHBOARD_SYSTEM_MONITORING=true    
+      - TRAEFIK_LOG_DASHBOARD_LOG_FORMAT=json
+      - PORT=5000
     labels:
       app: traefik-agent
     volumes:
@@ -140,6 +139,9 @@ services:
     environment:
       - AGENT_API_URL=http://traefik-agent:5000
       - AGENT_API_TOKEN=${TRAEFIK_LOG_DASHBOARD_AUTH_TOKEN}
+      - AGENT_NAME=TraefikAgent
+      - NODE_ENV=production
+      - PORT=3000
     labels:
       app: traefik-dashboard
       traefik.enable: "true"
