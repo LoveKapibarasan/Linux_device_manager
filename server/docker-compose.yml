@@ -108,8 +108,9 @@ services:
       - /etc/letsencrypt:/letsencrypt
       - ./traefik/dynamic_conf.yml:/etc/traefik/dynamic/dynamic_conf.yml
       - ./traefik-data/logs:/logs
-    networks:
-      - network
+    #networks:
+    #  - network
+  
   # https://traefik-log-dashboard.hhf.technology/docs/quickstart
   traefik-agent:
     image: hhftechnology/traefik-log-dashboard-agent:latest
