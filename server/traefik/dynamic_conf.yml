@@ -49,6 +49,20 @@ http:
       tls:
         certResolver: le
 
+    backup-router:
+      rule: "Host(`backup.lovekapibarasan.org`)"
+      entryPoints: [ "websecure" ]
+      service: backup-service
+      tls:
+        certResolver: le
+
+    backupUI-router:
+      rule: "Host(`backupUI.lovekapibarasan.org`)"
+      entryPoints: [ "websecure" ]
+      service: backupUI-service
+      tls:
+        certResolver: le
+
     anki-router:
       rule: "Host(`anki.lovekapibarasan.org`)"
       entryPoints: ["websecure"]
@@ -123,6 +137,16 @@ http:
       loadBalancer:
         servers:
           - url: "http://10.10.0.2:8097"
+
+    backup-service:
+      loadBalancer:
+        servers:
+          - url: "http://10.10.0.2:8099"
+
+    backupUI-service:
+      loadBalancer:
+        servers:
+          - url: "http://10.10.0.2:8101"
     
     anki-service:
       loadBalancer:
