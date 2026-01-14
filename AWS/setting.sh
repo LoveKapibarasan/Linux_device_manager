@@ -23,7 +23,8 @@ sudo sniproxy -c /etc/sniproxy.conf -f
 sudo systemctl restart sniproxy
 
 # !! Notes !!
-# Use external DNS server for its own DNS resolution
+## Use external DNS server for its own DNS resolution
+## You may need to make this immutable
 sudo vim /etc/resolv.conf
 
 # sudo: unable to resolve host ip-xxx-xxx-xxx-xxx

@@ -224,11 +224,11 @@ services:
       - '8085:8085'
     labels:
       app: vaultwarden
-      traefik.enable: "true"
-      traefik.http.routers.password.rule: Host(`password.lovekapibarasan.org`)
-      traefik.http.routers.password.entrypoints: websecure
-      traefik.http.routers.password.tls.certresolver: le
-      traefik.http.services.password.loadbalancer.server.port: "8085"
+      #traefik.enable: "true"
+      #traefik.http.routers.password.rule: Host(`password.lovekapibarasan.org`)
+      #traefik.http.routers.password.entrypoints: websecure
+      #traefik.http.routers.password.tls.certresolver: le
+      #traefik.http.services.password.loadbalancer.server.port: "8085"
     networks:
       - network
 
@@ -469,11 +469,11 @@ services:
       - portainer_data:/data
     labels:
       app: portainer
-      traefik.enable: "true"
-      traefik.http.routers.docker.rule: Host(`docker.lovekapibarasan.org`)
-      traefik.http.routers.docker.entrypoints: websecure
-      traefik.http.routers.docker.tls.certresolver: le
-      traefik.http.services.docker.loadbalancer.server.port: "9000"
+      #traefik.enable: "true"
+      #traefik.http.routers.docker.rule: Host(`docker.lovekapibarasan.org`)
+      #traefik.http.routers.docker.entrypoints: websecure
+      #traefik.http.routers.docker.tls.certresolver: le
+      #traefik.http.services.docker.loadbalancer.server.port: "9000"
     networks:
       - network
 
@@ -496,7 +496,7 @@ services:
     networks:
       - network
 
-# Watch and collect metrics data
+# !! Deprecated !!
   prometheus:
     image: prom/prometheus:latest
     container_name: prometheus
@@ -566,7 +566,7 @@ services:
       - "12345:12345"
     networks:
       - network
-# Visualize
+
   grafana:
     image: grafana/grafana:latest
     container_name: grafana
@@ -585,15 +585,14 @@ services:
       - grafana-storage:/var/lib/grafana
     labels:
       app: grafana
-      traefik.enable: "true"
-      traefik.http.routers.log.rule: "Host(`log.lovekapibarasan.org`)"
-      traefik.http.routers.log.entrypoints: websecure
-      traefik.http.routers.log.tls.certresolver: le
-      traefik.http.services.log.loadbalancer.server.port: "3000"
+      #traefik.enable: "true"
+      #traefik.http.routers.log.rule: "Host(`log.lovekapibarasan.org`)"
+      #traefik.http.routers.log.entrypoints: websecure
+      #traefik.http.routers.log.tls.certresolver: le
+      #traefik.http.services.log.loadbalancer.server.port: "3000"
     networks:
       - network
 
-# log management, search
   loki:
     image: grafana/loki:latest
     container_name: loki
@@ -609,7 +608,7 @@ services:
     networks:
       - network
 
-# log collector
+# !! Deprecated !!
   promtail:
     image: grafana/promtail:latest
     container_name: promtail
@@ -734,11 +733,11 @@ services:
       - db
     labels:
       app: firefly_iii
-      traefik.enable: "true"
-      traefik.http.routers.expense.rule: Host(`expense.lovekapibarasan.org`)
-      traefik.http.routers.expense.entrypoints: websecure
-      traefik.http.routers.expense.tls.certresolver: le
-      traefik.http.services.expense.loadbalancer.server.port: "8080"
+      #traefik.enable: "true"
+      #traefik.http.routers.expense.rule: Host(`expense.lovekapibarasan.org`)
+      #traefik.http.routers.expense.entrypoints: websecure
+      #traefik.http.routers.expense.tls.certresolver: le
+      #traefik.http.services.expense.loadbalancer.server.port: "8080"
     networks:
       - network
 
