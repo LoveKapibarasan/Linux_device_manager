@@ -34,6 +34,13 @@ http:
       service: docker-service
       tls:
         certResolver: le
+    
+    task-router:
+      rule: "Host(`tasks.lovekapibarasan.org`)"
+      entryPoints: ["websecure"]
+      service: task-service
+      tls:
+        certResolver: le
 
     anki-router:
       rule: "Host(`anki.lovekapibarasan.org`)"
@@ -49,6 +56,13 @@ http:
       tls:
         certResolver: le
     
+    minio-router:
+      rule: "Host(`minio.lovekapibarasan.org`)"
+      entryPoints: ["websecure"]
+      service: minio-service
+      tls:
+        certResolver: le
+
   services:
     search-service:
       loadBalancer:
@@ -75,6 +89,11 @@ http:
         servers:
           - url: "http://10.10.0.2:8096"
     
+    task-service:
+      loadBalancer:
+        servers:
+          - url: "http://10.10.0.2:8097"
+    
     anki-service:
       loadBalancer:
         servers:
@@ -84,3 +103,8 @@ http:
       loadBalancer:
         servers:
           - url: "http://10.10.0.7:8094"
+    
+    minio-service:
+      loadBalancer:
+        servers:
+          - url: "http://10.10.0.7:9009"

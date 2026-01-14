@@ -12,4 +12,3 @@ curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/master/install.sh | bash
 
 # OAuthtool
 # https://github.com/django-oauth/django-oauth-toolkit.git
-

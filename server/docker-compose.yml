@@ -83,6 +83,7 @@ services:
     #  - "80:80"
     #  - "443:443"
     #  - "8080:8082"
+    # Use Network mode host to collect geo data
     network_mode: host 
 
     environment:
