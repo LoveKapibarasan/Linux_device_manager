@@ -20,6 +20,13 @@ http:
       service: password-service
       tls:
         certResolver: le
+    
+    roundcube-router:
+      rule: "Host(`roundcube.lovekapibarasan.org`)"
+      entryPoints: ["websecure"]
+      service: roundcube-service
+      tls:
+        certResolver: le
 
     expense-router:
       rule: "Host(`expense.lovekapibarasan.org`)"
@@ -78,6 +85,11 @@ http:
       loadBalancer:
         servers:
           - url: "http://10.10.0.2:8085"
+    
+    roundcube-service:
+      loadBalancer:
+        servers:
+          - url: "http://10.10.0.2:8088"
     
     docker-service:
       loadBalancer:

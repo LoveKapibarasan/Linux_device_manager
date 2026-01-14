@@ -153,6 +153,8 @@ services:
       traefik.http.routers.tdash.entrypoints: websecure
       traefik.http.routers.tdash.tls.certresolver: le
       traefik.http.services.tdash.loadbalancer.server.port: "3000"
+      traefik.http.middlewares.dashboard-auth.basicauth.users: ${BASIC_AUTH}
+      traefik.http.routers.traefik.middlewares: dashboard-auth
     ports:
       - "8098:3000"
     depends_on:
@@ -846,11 +848,11 @@ services:
     restart: always
     labels:
       app: superproductivity
-      traefik.enable: "true"
-      traefik.http.routers.tasks.rule: Host(`tasks.lovekapibarasan.org`)
-      traefik.http.routers.tasks.entrypoints: websecure
-      traefik.http.routers.tasks.tls.certresolver: le
-      traefik.http.services.tasks.loadbalancer.server.port: "80"
+      #traefik.enable: "true"
+      #traefik.http.routers.tasks.rule: Host(`tasks.lovekapibarasan.org`)
+      #traefik.http.routers.tasks.entrypoints: websecure
+      #traefik.http.routers.tasks.tls.certresolver: le
+      #traefik.http.services.tasks.loadbalancer.server.port: "80"
     depends_on:
       - "webdav"
     networks:
