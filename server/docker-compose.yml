@@ -640,6 +640,9 @@ services:
       - ./alloy/config.alloy:/etc/alloy/config.alloy:ro
     ports:
       - "12345:12345"
+    depends_on:
+      - node_exporter
+      - cadvisor
     networks:
       - network
 
