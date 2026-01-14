@@ -80,6 +80,7 @@ services:
       #- CF_API_EMAIL=${CF_API_EMAIL}
       - CF_DNS_API_TOKEN=${CF_API_KEY}
       #- CF_API_KEY=${CF_API_KEY}
+      - TRAEFIK_LOG_DASHBOARD_AUTH_TOKEN=${TRAEFIK_LOG_DASHBOARD_AUTH_TOKEN}
     labels:
       app: traefik
       traefik.enable: true
@@ -96,8 +97,36 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock:ro
       - /etc/letsencrypt:/letsencrypt
       - ./traefik/dynamic_conf.yml:/etc/traefik/dynamic/dynamic_conf.yml
+      - ./traefik-data/logs:/logs
     networks:
       - network
+
+  # --- Traefik Log Dashboard Agent (ログを解析) ---
+  traefik-agent:
+    image: hhftechnology/traefik-log-dashboard-agent:latest
+    container_name: traefik-log-dashboard-agent
+    restart: unless-stopped
+    environment:
+      - TRAEFIK_LOG_DASHBOARD_ACCESS_PATH=/logs/access.log
+      - TRAEFIK_LOG_DASHBOARD_AUTH_TOKEN= ${TRAEFIK_LOG_DASHBOARD_AUTH_TOKEN}
+    volumes:
+      - ./traefik-data/logs:/logs:ro # Traefikのログを読み取り専用でマウント
+      - ./traefik-data/positions:/data # 読み取り位置を保存（再起動対策）
+    ports:
+      - "5000:5000"
+
+  # --- Traefik Log Dashboard  ---
+  traefik-dashboard:
+    image: hhftechnology/traefik-log-dashboard:latest
+    container_name: traefik-log-dashboard
+    restart: unless-stopped
+    environment:
+      - AGENT_API_URL=http://traefik-agent:5000
+      - AGENT_API_TOKEN=your_secure_token_here # 上記Agentと同じトークン
+    ports:
+      - "8098:3000"
+    depends_on:
+      - traefik-agent  
 
   pihole:
       container_name: pihole
@@ -823,19 +852,22 @@ services:
     networks:
       - network
 
-  restic-server:
+  restic:
       image: restic/rest-server:latest
-      container_name: restic-server
+      container_name: restic
       restart: always
       ports:
         - "8000:8000"
       volumes:
         - ./data:/data          # バックアップデータの保存先
+      labels:
+        app: restic
       environment:
         - OPTIONS=--append-only # 過去のデータを上書き禁止にする（セキュリティ向上）
       networks:
         - network
-
+#============================================        
+# Memo: Skip: 8098
 #============================================
 
   portainer_agent:

@@ -48,8 +48,7 @@ sudo systemctl cat ssh.socket
 sudo vim /lib/systemd/system/ssh.socket
 sudo vim /etc/systemd/system/ssh.socket.d/listen.conf
 
-# Vaultwarden
-## account -> security -> 2FA
+
 
 # Searxng
 ### Permission Error
@@ -176,3 +175,8 @@ sudo systemctl daemon-reload
 sudo systemctl enable --now anki-sync-server
 # Tools -> Preferences -> Sync
 # Do not forget tail /
+
+
+# Mimir
+docker exec -it minio mc alias set local_mimir http://127.0.0.1:9000 minioadmin ${MINIO_ROOT_PASSWORD}
+docker exec -it minio mc mb local_mimir/mimir
