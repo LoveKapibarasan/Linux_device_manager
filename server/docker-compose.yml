@@ -39,13 +39,13 @@ services:
         max-file: "1"
     labels:
       app: searxng
-      traefik.enable: "true"
+      #traefik.enable: "true"
       # Router
-      traefik.http.routers.app.rule: Host(`search.lovekapibarasan.org`)
-      traefik.http.routers.app.entrypoints: websecure
-      traefik.http.routers.app.tls.certresolver: le
+      #traefik.http.routers.app.rule: Host(`search.lovekapibarasan.org`)
+      #traefik.http.routers.app.entrypoints: websecure
+      #traefik.http.routers.app.tls.certresolver: le
       # Service
-      traefik.http.services.app.loadbalancer.server.port: "8081"
+      #traefik.http.services.app.loadbalancer.server.port: "8081"
     networks:
       - network
 
@@ -57,9 +57,12 @@ services:
       - "--providers.docker.exposedbydefault=false"
       - "--entrypoints.web.address=:80"
       - "--entrypoints.websecure.address=:443"
-      - "--certificatesresolvers.le.acme.httpchallenge=true"
-      - "--certificatesresolvers.le.acme.httpchallenge.entrypoint=web"
-      - "--certificatesresolvers.le.acme.email=tmp@lovekapibarasan.org"
+      #- "--certificatesresolvers.le.acme.httpchallenge=true"
+      #- "--certificatesresolvers.le.acme.httpchallenge.entrypoint=web"
+      # Use Claudflare
+      - "--certificatesresolvers.le.acme.dnschallenge=true"
+      - "--certificatesresolvers.le.acme.dnschallenge.provider=cloudflare"
+      - "--certificatesresolvers.le.acme.email=${EMAIL}"
       - "--certificatesresolvers.le.acme.storage=/letsencrypt/acme.json"
       - "--api.dashboard=true"
       - "--accesslog=true"
@@ -72,6 +75,10 @@ services:
       - "80:80"
       - "443:443"
       - "8082:8080"
+    environment:
+      # CloudflareのグローバルAPIキー、または特定の権限を持つトークン
+      - CF_API_EMAIL="${CF_API_EMAIL}"
+      - CF_API_KEY="${CF_API_KEY}"
     labels:
       app: traefik
       traefik.enable: true
