@@ -921,6 +921,8 @@ services:
     environment:
       - BACKREST_CONFIG=/config/config.json
       - BACKREST_DATA=/data
+    depends_on:
+      - restic
     ports:
       - "8099:9898"
     restart: unless-stopped
