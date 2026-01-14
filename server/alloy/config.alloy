@@ -83,7 +83,7 @@ loki.write "default" {
     // 1. Basic Auth
     basic_auth {
       username = "admin"
-      password = "LOKI_BASIC_PASSWORD"
+      password = "LOKI_PASSWORD"
     }
 
     // 2. Tenant ID (Mimir)
@@ -98,7 +98,7 @@ prometheus.remote_write "mimir" {
     // 1. Basic Auth
     basic_auth {
       username = "admin"
-      password = "LOKI_BASIC_PASSWORD"
+      password = "LOKI_PASSWORD"
     }
 
     // 2. Tenant ID (Mimir)
