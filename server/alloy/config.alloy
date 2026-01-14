@@ -95,6 +95,7 @@ loki.write "default" {
 prometheus.remote_write "mimir" {
   endpoint {
     url = "http://mimir:9009/api/v1/push"
+  }
 
   // 1. Basic Auth
   basic_auth {

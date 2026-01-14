@@ -95,6 +95,7 @@ services:
     labels:
       app: traefik
       traefik.enable: true
+      # for network mode host
       traefik.http.services.traefik-server.loadbalancer.server.port: 8080
       # Dashboard Router
       traefik.http.routers.traefik.rule: Host(`traefik.lovekapibarasan.org`)
