@@ -224,6 +224,8 @@ http:
       loadBalancer:
         servers:
           - url: "http://10.10.0.7:8103"
+        responseForwarding:
+          flushInterval: "900s"
     
     minio-service:
       loadBalancer:
@@ -247,7 +249,7 @@ http:
           - "LOKI_BASIC_PASSWORD"
     nextcloud-cors:
       headers:
-        # 許可するオリジン（Super ProductivityのURL）
+        # 許可するオリジン（Super Productivity URL）
         accessControlAllowOriginList:
           - "https://tasks.lovekapibarasan.org"
         # 許可するメソッド（WebDAVに必要なものを網羅）

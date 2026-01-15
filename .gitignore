@@ -1,4 +1,5 @@
 .env
+.env.share
 node_modules/
 .venv/
 venv/
@@ -20,3 +21,4 @@ tts-azure-web/
 samba/
 backup/
 webdav/
+htpasswd

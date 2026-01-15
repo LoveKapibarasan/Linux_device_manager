@@ -73,6 +73,9 @@ services:
       - "--accesslog.filepath=/logs/access.log"
       # Config
       - "--providers.file.directory=/etc/traefik/dynamic"
+      - "--entrypoints.websecure.transport.respondingtimeouts.readtimeout=900s"
+      - "--entrypoints.websecure.transport.respondingtimeouts.writetimeout=900s"
+      - "--entrypoints.websecure.transport.respondingtimeouts.idletimeout=900s"
       # https://doc.traefik.io/traefik/reference/install-configuration/entrypoints/#forwarded-headers
       # https://traefik-log-dashboard.hhf.technology/docs/troubleshooting#geoip-issues
       # Cloudflare: https://www.cloudflare.com/ips/
@@ -620,7 +623,7 @@ services:
       - network
 
   alloy:
-    image: 'grafana/alloy:v1.11.3'
+    image: 'grafana/alloy:latest'
     container_name: "alloy"
     # http://localhost:12345
     command:
@@ -688,7 +691,7 @@ services:
     networks:
       - network
 
-# !! Deprecated !!
+  # !! Deprecated !!
   promtail:
     image: grafana/promtail:latest
     container_name: promtail
@@ -958,6 +961,7 @@ services:
     networks:
       - network
 
+# https://github.com/project-zot/zot/issues/3104
   zot:
     image: ghcr.io/project-zot/zot-linux-amd64:latest
     container_name: zot
@@ -965,6 +969,7 @@ services:
       - "8103:8103"
     volumes:
       - zot-data:/var/lib/registry
+      - ./htpasswd:/etc/zot/htpasswd
       - ./zot/config.json:/etc/zot/config.json:ro # https://github.com/project-zot/zot/blob/main/examples/config-ui.json
     command: ["serve", "/etc/zot/config.json"]
     networks:
@@ -1018,6 +1023,21 @@ services:
       app: portainer_agent_2
     networks:
       - network
+  
+  filebrowser:
+    image: filebrowser/filebrowser:s6
+    container_name: filebrowser
+    # 「/」 -> File Browser「/srv」
+    volumes:
+      - /:/srv
+      - ./filebrowser/filebrowser.db:/database/filebrowser.db
+      - ./filebrowser/settings.json:/config/settings.json
+    environment:
+      - PUID=0
+      - PGID=0
+    ports:
+      - "8080:80"
+    restart: always
 
 volumes:
   valkey-data2:
