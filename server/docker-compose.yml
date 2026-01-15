@@ -918,7 +918,7 @@ services:
       - backrest-config:/config
       - backrest-data:/data
       # 2. Backup data
-      - /var/lib/docker/:/source:ro
+      - /mnt/data:/source:ro
       # 3. バックアップ先
       - /mnt/usb_backup:/repository
     environment:
@@ -961,9 +961,11 @@ services:
   zot:
     image: ghcr.io/project-zot/zot-linux-amd64:latest
     ports:
-      - "5000:5000"
+      - "8103:8103"
     volumes:
       - zot-data:/var/lib/registry
+      - ./zod/config.json:/etc/zot/config.json:ro
+    command: ["serve", "/etc/zot/config.json"]
     networks:
       - network
 
