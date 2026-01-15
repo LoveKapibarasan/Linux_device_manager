@@ -180,3 +180,6 @@ sudo systemctl enable --now anki-sync-server
 # Mimir
 docker exec -it minio mc alias set local_mimir http://127.0.0.1:9000 minioadmin ${MINIO_ROOT_PASSWORD}
 docker exec -it minio mc mb local_mimir/mimir
+
+# Vaultwarden
+bw send -n ".env_server" -d 7 -f .env --password "$password"

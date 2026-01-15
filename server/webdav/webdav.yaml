@@ -6,4 +6,5 @@ auth: true
 users:
   - username: "admin"
     password: WEBDAV_PASSWORD
-    scope: /data
+    # https://github.com/super-productivity/super-productivity/discussions/3851
+    scope: /data/admin
