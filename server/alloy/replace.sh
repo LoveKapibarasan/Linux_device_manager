@@ -1,6 +1,6 @@
 #!/bin/bash
 
-source ../.env
+source .env
 read -p "Enter org ID: " ORG_ID
 # ORG_ID = Home
 export ORG_ID='' 

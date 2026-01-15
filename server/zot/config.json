@@ -13,9 +13,6 @@
         "path": "/etc/zot/htpasswd"
       }
     },
-    "log": {
-        "level": "debug"
-    },
     "accessControl": {
       "repositories": {
         "**": {
