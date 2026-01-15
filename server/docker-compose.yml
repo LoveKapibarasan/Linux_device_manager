@@ -960,6 +960,7 @@ services:
 
   zot:
     image: ghcr.io/project-zot/zot-linux-amd64:latest
+    container_name: zot
     ports:
       - "8103:8103"
     volumes:
