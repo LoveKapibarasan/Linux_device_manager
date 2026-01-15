@@ -871,7 +871,7 @@ services:
       - "2345:2345"
     volumes:
       - ./webdav/webdav.yaml:/config.yml:ro
-      - ./data:/data
+      - ./webdav/data:/data
     restart: always
     labels: 
       app: webdav
