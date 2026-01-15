@@ -34,11 +34,25 @@ http:
       service: expense-service
       tls:
         certResolver: le
+
+    nextcloud-router:
+      rule: "Host(`nextcloud.lovekapibarasan.org`)"
+      entryPoints: [ "websecure" ]
+      service: nextcloud-service
+      tls:
+        certResolver: le
     
     docker-router:
       rule: "Host(`docker.lovekapibarasan.org`)"
       entryPoints: ["websecure"]
       service: docker-service
+      tls:
+        certResolver: le
+
+    memo-router:
+      rule: "Host(`memo.lovekapibarasan.org`)"
+      entryPoints: [ "websecure" ]
+      service: memo-service
       tls:
         certResolver: le
     
@@ -85,7 +99,14 @@ http:
       service: log-service
       tls:
         certResolver: le
-    
+
+    gitea-router:
+      rule: "Host(`gitea.lovekapibarasan.org`)"
+      entryPoints: ["websecure"]
+      service: gitea-service
+      tls:
+        certResolver: le
+
     minio-router:
       rule: "Host(`minio.lovekapibarasan.org`)"
       entryPoints: ["websecure"]
@@ -122,11 +143,21 @@ http:
       loadBalancer:
         servers:
           - url: "http://10.10.0.2:8088"
+
+    nextcloud-service:
+      loadBalancer:
+        servers:
+          - url: "http://10.10.0.2:8091"
     
     docker-service:
       loadBalancer:
         servers:
           - url: "http://10.10.0.2:8092"
+
+    memo-service:
+      loadBalancer:
+        servers:
+          - url: "http://10.10.0.2:8093"
 
     expense-service:
       loadBalancer:
@@ -162,6 +193,11 @@ http:
       loadBalancer:
         servers:
           - url: "http://10.10.0.7:8094"
+
+    gitea-service:
+      loadBalancer:
+        servers:
+          - url: "http://10.10.0.7:8102"
     
     minio-service:
       loadBalancer:
