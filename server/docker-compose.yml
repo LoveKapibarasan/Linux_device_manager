@@ -961,6 +961,7 @@ services:
     networks:
       - network
 
+# https://github.com/project-zot/zot/issues/3104
   zot:
     image: ghcr.io/project-zot/zot-linux-amd64:latest
     container_name: zot
