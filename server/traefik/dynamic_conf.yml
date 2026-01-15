@@ -1,5 +1,12 @@
 http:
   routers:
+    webdav-router:
+      rule: "Host(`webdav.lovekapibarasan.org`)"
+      entryPoints: [ "websecure" ]
+      service: webdav-service
+      tls:
+        certResolver: le
+
     search-router:
       rule: "Host(`search.lovekapibarasan.org`)"
       entryPoints: ["websecure"]
@@ -124,6 +131,11 @@ http:
         certResolver: le
 
   services:
+    webdav-service:
+      loadBalancer:
+        servers:
+          - url: "http://10.10.0.2:2345"
+
     search-service:
       loadBalancer:
         servers:
