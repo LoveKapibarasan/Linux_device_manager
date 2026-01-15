@@ -116,6 +116,13 @@ http:
       tls:
         certResolver: le
 
+    zot-router:
+      rule: "Host(`zot.lovekapibarasan.org`)"
+      entryPoints: ["websecure"]
+      service: zot-service
+      tls:
+        certResolver: le
+
     minio-router:
       rule: "Host(`minio.lovekapibarasan.org`)"
       entryPoints: ["websecure"]
@@ -212,6 +219,11 @@ http:
       loadBalancer:
         servers:
           - url: "http://10.10.0.7:8102"
+
+    zot-service:
+      loadBalancer:
+        servers:
+          - url: "http://10.10.0.7:8103"
     
     minio-service:
       loadBalancer:
