@@ -73,6 +73,9 @@ services:
       - "--accesslog.filepath=/logs/access.log"
       # Config
       - "--providers.file.directory=/etc/traefik/dynamic"
+      - "--entrypoints.websecure.transport.respondingtimeouts.readtimeout=900s"
+      - "--entrypoints.websecure.transport.respondingtimeouts.writetimeout=900s"
+      - "--entrypoints.websecure.transport.respondingtimeouts.idletimeout=900s"
       # https://doc.traefik.io/traefik/reference/install-configuration/entrypoints/#forwarded-headers
       # https://traefik-log-dashboard.hhf.technology/docs/troubleshooting#geoip-issues
       # Cloudflare: https://www.cloudflare.com/ips/
