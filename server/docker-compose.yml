@@ -844,7 +844,8 @@ services:
       app: cron
     networks:
       - network
-  
+
+  # https://github.com/nextcloud/server/issues/3131
   super-productivity:
     image: johannesjo/super-productivity:latest
     container_name: super-productivity-app
@@ -871,7 +872,7 @@ services:
       - "2345:2345"
     volumes:
       - ./webdav/webdav.yaml:/config.yml:ro
-      - ./webdav/data:/data
+      - webdav-data:/data
     restart: always
     labels: 
       app: webdav
@@ -914,8 +915,8 @@ services:
     hostname: backrest
     volumes:
       # 1. Backrest Setting
-      - ./config:/config
-      - ./data:/data
+      - backrest-config:/config
+      - backrest-data:/data
       # 2. Backup data
       - /var/lib/docker/:/source:ro
       # 3. バックアップ先
@@ -932,6 +933,7 @@ services:
 #============================================
 # Memo: Skip: 8098
 #============================================
+  # ROOT_URL = https://gitea.lovekapibarasan.org/, SSH Port 2224 in gitea/data/gitea/conf/app.ini
   gitea:
     image: gitea/gitea:latest
     container_name: gitea
@@ -944,10 +946,8 @@ services:
       - GITEA__database__USER=gitea
       - GITEA__database__PASSWD=$GITEA_DB_PASSWORD
     restart: always
-    networks:
-      - network
     volumes:
-      - ./gitea/data:/data
+      - gitea-data:/data
       - /etc/timezone:/etc/timezone:ro
       - /etc/localtime:/etc/localtime:ro
     ports:
@@ -955,6 +955,17 @@ services:
       - "2224:22"
     depends_on:
       - db
+    networks:
+      - network
+
+  zot:
+    image: ghcr.io/project-zot/zot-linux-amd64:latest
+    ports:
+      - "5000:5000"
+    volumes:
+      - zot-data:/var/lib/registry
+    networks:
+      - network
 
   portainer_agent_1:
     image: portainer/agent:latest
@@ -1019,6 +1030,12 @@ volumes:
   minio-data:
   mimir-data:
   portainer_agent_data:
+  gitea-data:
+  webdav-data:
+  backrest-data:
+  backrest-config:
+  zot-data:
+
 
 networks:
   network:
