@@ -11,6 +11,22 @@
       "htpasswd": {
         "path": "/etc/zot/htpasswd"
       }
+    },
+    "accessControl": {
+      "repositories": {
+        "**": {
+          "policies": [
+            {
+              "users": ["admin"],
+              "actions": ["read", "create", "update", "delete"]
+            },
+            {
+              "users": ["viewer"],
+              "actions": ["read"]
+            }
+          ]
+        }
+      }
     }
   },
   "extensions": {
