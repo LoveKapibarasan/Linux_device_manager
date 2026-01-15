@@ -945,7 +945,7 @@ services:
       - GITEA__database__PASSWD=$GITEA_DB_PASSWORD
     restart: always
     networks:
-      - gitea
+      - network
     volumes:
       - ./gitea/data:/data
       - /etc/timezone:/etc/timezone:ro
