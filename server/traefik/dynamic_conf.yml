@@ -46,6 +46,8 @@ http:
       rule: "Host(`nextcloud.lovekapibarasan.org`)"
       entryPoints: [ "websecure" ]
       service: nextcloud-service
+      middlewares:
+        - "nextcloud-cors"
       tls:
         certResolver: le
     
@@ -231,3 +233,35 @@ http:
       basicAuth:
         users:
           - "LOKI_BASIC_PASSWORD"
+    nextcloud-cors:
+      headers:
+        # 許可するオリジン（Super ProductivityのURL）
+        accessControlAllowOriginList:
+          - "https://tasks.lovekapibarasan.org"
+        # 許可するメソッド（WebDAVに必要なものを網羅）
+        accessControlAllowMethods:
+          - "GET"
+          - "POST"
+          - "PUT"
+          - "DELETE"
+          - "OPTIONS"
+          - "PROPFIND"
+          - "MKCOL"
+          - "COPY"
+          - "MOVE"
+          - "LOCK"
+          - "UNLOCK"
+        # 許可するヘッダー
+        accessControlAllowHeaders:
+          - "Authorization"
+          - "Content-Type"
+          - "Depth"
+          - "User-Agent"
+          - "X-File-Size"
+          - "X-Requested-With"
+          - "If-Modified-Since"
+          - "X-File-Name"
+          - "Cache-Control"
+        accessControlAllowCredentials: true
+        accessControlMaxAge: 100
+        addVaryHeader: true
