@@ -20,3 +20,4 @@ tts-azure-web/
 samba/
 backup/
 webdav/
+htpasswd

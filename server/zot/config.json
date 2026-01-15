@@ -6,7 +6,12 @@
   "http": {
     "address": "0.0.0.0",
     "port": "8103",
-    "externalURL": "https://zot.lovekapibarasan.org"
+    "externalURL": "https://zot.lovekapibarasan.org",
+    "auth": {
+      "htpasswd": {
+        "path": "/etc/zot/htpasswd"
+      }
+    }
   },
   "extensions": {
     "ui": {
