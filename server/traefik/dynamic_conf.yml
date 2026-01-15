@@ -119,6 +119,13 @@ http:
     zot-router:
       rule: "Host(`zot.lovekapibarasan.org`)"
       entryPoints: ["websecure"]
+        websecure:
+          address: ":443"
+          transport:
+            respondingTimeouts:
+              readTimeout: "900s"
+              writeTimeout: "900s"
+              idleTimeout: "900s"
       service: zot-service
       tls:
         certResolver: le
@@ -247,7 +254,7 @@ http:
           - "LOKI_BASIC_PASSWORD"
     nextcloud-cors:
       headers:
-        # 許可するオリジン（Super ProductivityのURL）
+        # 許可するオリジン（Super Productivity URL）
         accessControlAllowOriginList:
           - "https://tasks.lovekapibarasan.org"
         # 許可するメソッド（WebDAVに必要なものを網羅）
