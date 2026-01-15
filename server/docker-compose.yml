@@ -1008,6 +1008,21 @@ services:
       app: portainer_agent_2
     networks:
       - network
+  
+  filebrowser:
+    image: filebrowser/filebrowser:s6
+    container_name: filebrowser
+    # 「/」 -> File Browser「/srv」
+    volumes:
+      - /:/srv
+      - ./filebrowser/filebrowser.db:/database/filebrowser.db
+      - ./filebrowser/settings.json:/config/settings.json
+    environment:
+      - PUID=0
+      - PGID=0
+    ports:
+      - "8080:80"
+    restart: always
 
 volumes:
   valkey-data2:
