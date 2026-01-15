@@ -119,13 +119,6 @@ http:
     zot-router:
       rule: "Host(`zot.lovekapibarasan.org`)"
       entryPoints: ["websecure"]
-        websecure:
-          address: ":443"
-          transport:
-            respondingTimeouts:
-              readTimeout: "900s"
-              writeTimeout: "900s"
-              idleTimeout: "900s"
       service: zot-service
       tls:
         certResolver: le
@@ -231,6 +224,8 @@ http:
       loadBalancer:
         servers:
           - url: "http://10.10.0.7:8103"
+        responseForwarding:
+          flushInterval: "900s"
     
     minio-service:
       loadBalancer:
