@@ -965,7 +965,7 @@ services:
       - "8103:8103"
     volumes:
       - zot-data:/var/lib/registry
-      - ./zot/config.json:/etc/zot/config.json:ro
+      - ./zot/config.json:/etc/zot/config.json:ro # https://github.com/project-zot/zot/blob/main/examples/config-ui.json
     command: ["serve", "/etc/zot/config.json"]
     networks:
       - network
