@@ -129,7 +129,14 @@ http:
       service: minio-service
       tls:
         certResolver: le
-    
+
+    s3-router:
+      rule: "Host(`s3.lovekapibarasan.org`)"
+      entryPoints: [ "websecure" ]
+      service: s3-service
+      tls:
+        certResolver: le
+
     mimir-router:
       rule: "Host(`mimir.lovekapibarasan.org`)"
       entryPoints: ["websecure"]
@@ -231,6 +238,11 @@ http:
       loadBalancer:
         servers:
           - url: "http://10.10.0.7:9001"
+
+    s3-service:
+      loadBalancer:
+        servers:
+          - url: "http://10.10.0.7:9000"
     
     mimir-service:
       loadBalancer:
