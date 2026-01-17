@@ -130,10 +130,10 @@ http:
       tls:
         certResolver: le
 
-    s3-router:
-      rule: "Host(`s3.lovekapibarasan.org`)"
+    file-router:
+      rule: "Host(`file.lovekapibarasan.org`)"
       entryPoints: [ "websecure" ]
-      service: s3-service
+      service: file-service
       tls:
         certResolver: le
 
@@ -239,7 +239,7 @@ http:
         servers:
           - url: "http://10.10.0.7:9001"
 
-    s3-service:
+    file-service:
       loadBalancer:
         servers:
           - url: "http://10.10.0.7:9000"

@@ -747,11 +747,11 @@ services:
     restart: unless-stopped
     labels:
       app: minio
-      traefik.enable: "true"
-      traefik.http.routers.minio.rule: Host(`minio.lovekapibarasan.org`)
-      traefik.http.routers.minio.entrypoints: websecure
-      traefik.http.routers.minio.tls.certresolver: le
-      traefik.http.services.minio.loadbalancer.server.port: "9001"
+      #traefik.enable: "true"
+      #traefik.http.routers.minio.rule: Host(`minio.lovekapibarasan.org`)
+      #traefik.http.routers.minio.entrypoints: websecure
+      #traefik.http.routers.minio.tls.certresolver: le
+      #traefik.http.services.minio.loadbalancer.server.port: "9001"
     networks:
       - network
 
