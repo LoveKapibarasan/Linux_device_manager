@@ -30,9 +30,10 @@ sudo apt install ./google-chrome-stable_current_amd64.deb -y
 
 
 # OBS
-sudo apt install obs-studio v4l-utils cheese \ 
+sudo apt install -y obs-studio v4l-utils cheese \
 pipewire pipewire-pulse wireplumber gstreamer1.0-pipewire \
-xdg-desktop-portal xdg-desktop-portal-gnome xdg-desktop-portal-gtk -y --no-install-recommends
+xdg-desktop-portal xdg-desktop-portal-gnome xdg-desktop-portal-gtk
+
 
 # Video editor
 sudo apt install shotcut ffmpeg -y
