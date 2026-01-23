@@ -108,6 +108,20 @@ http:
       service: payment-service
       tls:
         certResolver: le
+    
+    everest-router:
+      rule: "Host(`everest.lovekapibarasan.org`)"
+      entryPoints: ["websecure"]
+      service: everest-service
+      tls:
+        certResolver: le
+    
+    opui-router:
+      rule: "Host(`opui.lovekapibarasan.org`)"
+      entryPoints: ["websecure"]
+      service: opui-service
+      tls:
+        certResolver: le
 
     log-router:
       rule: "Host(`log.lovekapibarasan.org`)"
@@ -223,6 +237,16 @@ http:
       loadBalancer:
         servers:
           - url: "http://10.10.0.2:9010"
+    
+    everest-service:
+      loadBalancer:
+        servers:
+          - url: "http://10.10.0.2:1880"
+    
+    opui-service:
+      loadBalancer:
+        servers:
+          - url: "http://10.10.0.2:3000"
 
     loki-service:
       loadBalancer:
