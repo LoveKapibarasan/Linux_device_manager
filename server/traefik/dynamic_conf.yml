@@ -102,6 +102,13 @@ http:
       tls:
         certResolver: le     
 
+    payment-router:
+      rule: "Host(`payment.lovekapibarasan.org`)"
+      entryPoints: ["websecure"]
+      service: payment-service
+      tls:
+        certResolver: le
+
     log-router:
       rule: "Host(`log.lovekapibarasan.org`)"
       entryPoints: ["websecure"]
@@ -129,7 +136,14 @@ http:
       service: minio-service
       tls:
         certResolver: le
-    
+
+    file-router:
+      rule: "Host(`file.lovekapibarasan.org`)"
+      entryPoints: [ "websecure" ]
+      service: file-service
+      tls:
+        certResolver: le
+
     mimir-router:
       rule: "Host(`mimir.lovekapibarasan.org`)"
       entryPoints: ["websecure"]
@@ -205,10 +219,15 @@ http:
         servers:
           - url: "http://10.10.0.2:9003"
 
+    payment-service:
+      loadBalancer:
+        servers:
+          - url: "http://10.10.0.2:9010"
+
     loki-service:
       loadBalancer:
         servers:
-          - url: "http://10.10.0.7:3100"      
+          - url: "http://10.10.0.7:3100"
 
     log-service:
       loadBalancer:
@@ -231,6 +250,11 @@ http:
       loadBalancer:
         servers:
           - url: "http://10.10.0.7:9001"
+
+    file-service:
+      loadBalancer:
+        servers:
+          - url: "http://10.10.0.7:9000"
     
     mimir-service:
       loadBalancer:

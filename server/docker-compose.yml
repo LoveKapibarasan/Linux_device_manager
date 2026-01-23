@@ -737,6 +737,8 @@ services:
     environment:
       MINIO_ROOT_USER: minioadmin
       MINIO_ROOT_PASSWORD: $MINIO_ROOT_PASSWORD
+      MINIO_SERVER_URL: "https://file.lovekapibarasan.org"
+      MINIO_BROWSER_REDIRECT_URL: "https://minio.lovekapibarasan.org"
     volumes:
       - minio-data:/data
     ports:
@@ -745,11 +747,11 @@ services:
     restart: unless-stopped
     labels:
       app: minio
-      traefik.enable: "true"
-      traefik.http.routers.minio.rule: Host(`minio.lovekapibarasan.org`)
-      traefik.http.routers.minio.entrypoints: websecure
-      traefik.http.routers.minio.tls.certresolver: le
-      traefik.http.services.minio.loadbalancer.server.port: "9001"
+      #traefik.enable: "true"
+      #traefik.http.routers.minio.rule: Host(`minio.lovekapibarasan.org`)
+      #traefik.http.routers.minio.entrypoints: websecure
+      #traefik.http.routers.minio.tls.certresolver: le
+      #traefik.http.services.minio.loadbalancer.server.port: "9001"
     networks:
       - network
 
@@ -1021,7 +1023,7 @@ services:
       - PUID=0
       - PGID=0
     ports:
-      - "8080:80"
+      - "8104:80"
     restart: always
 
 volumes:
