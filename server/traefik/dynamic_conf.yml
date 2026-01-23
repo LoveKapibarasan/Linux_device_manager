@@ -102,6 +102,13 @@ http:
       tls:
         certResolver: le     
 
+    payment-router:
+      rule: "Host(`payment.lovekapibarasan.org`)"
+      entryPoints: ["websecure"]
+      service: payment-service
+      tls:
+        certResolver: le
+
     log-router:
       rule: "Host(`log.lovekapibarasan.org`)"
       entryPoints: ["websecure"]
@@ -212,10 +219,15 @@ http:
         servers:
           - url: "http://10.10.0.2:9003"
 
+    payment-service:
+      loadBalancer:
+        servers:
+          - url: "http://10.10.0.2:9010"
+
     loki-service:
       loadBalancer:
         servers:
-          - url: "http://10.10.0.7:3100"      
+          - url: "http://10.10.0.7:3100"
 
     log-service:
       loadBalancer:
