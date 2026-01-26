@@ -7,6 +7,27 @@ http:
       tls:
         certResolver: le
 
+    directus-router:
+      rule: "Host(`directus.lovekapibarasan.org`)"
+      entryPoints: [ "websecure" ]
+      service: directus-service
+      tls:
+        certResolver: le
+    
+    hasura-router:
+      rule: "Host(`hasura.lovekapibarasan.org`)"
+      entryPoints: [ "websecure" ]
+      service: hasura-service
+      tls:
+        certResolver: le
+
+    citrinecore-router:
+      rule: "Host(`core.lovekapibarasan.org`)"
+      entryPoints: [ "websecure" ]
+      service: citrinecore-service
+      tls:
+        certResolver: le
+
     search-router:
       rule: "Host(`search.lovekapibarasan.org`)"
       entryPoints: ["websecure"]
@@ -172,6 +193,21 @@ http:
       loadBalancer:
         servers:
           - url: "http://10.10.0.2:2345"
+
+    directus-service:
+      loadBalancer:
+        servers:
+          - url: "http://10.10.0.2:8050"       
+
+    hasura-service:
+      loadBalancer:
+        servers:
+          - url: "http://10.10.0.2:8078"          
+
+    citrinecore-service:
+      loadBalancer:
+        servers:
+          - url: "http://10.10.0.2:8080"      
 
     search-service:
       loadBalancer:

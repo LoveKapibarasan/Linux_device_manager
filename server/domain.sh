@@ -40,6 +40,7 @@ sudo certbot certonly \
   -d lovekapibarasan.org \
   -d "*.lovekapibarasan.org"
 # After this, you can delete generated TXT records
+# Test: --dry-run
 sudo /home/user/certbot/.venv/bin/certbot renew --dry-run
 sudo pacman -S cronie
 sudo systemctl enable --now cronie
