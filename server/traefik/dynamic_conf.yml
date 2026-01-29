@@ -9,12 +9,21 @@ tcp:
       service: citrine-ocpp-service
       tls:
         passthrough: true # ← これが「何もさせるな」の正体
+    gitea-ssh-router:
+      rule: "HostSNI(`*`)"       # SSHはドメイン名が見えないので * 固定
+      entryPoints:
+        - "ssh-entry"            # 上で定義した entryPoint 名
+      service: "gitea-ssh-service"
 
   services:
     citrine-ocpp-service:
       loadBalancer:
         servers:
           - address: "10.10.0.2:8443"
+    gitea-ssh-service:
+      loadBalancer:
+        servers:
+          - address: "10.10.0.7:22" # GiteaコンテナのSSHポート(通常22)
 
 http:
   routers:
