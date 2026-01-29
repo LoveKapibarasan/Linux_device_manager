@@ -59,7 +59,7 @@ services:
       - "--entrypoints.web.address=:80"
       - "--entrypoints.websecure.address=:443"
       - "--entrypoints.wss-port.address=:8443"
-      - "--entrypoints.ssh-entry.address=:2224" # これを追加！
+      - "--entrypoints.ssh-entry.address=:2224"
       #- "--certificatesresolvers.le.acme.httpchallenge=true"
       #- "--certificatesresolvers.le.acme.httpchallenge.entrypoint=web"
       # Use Claudflare

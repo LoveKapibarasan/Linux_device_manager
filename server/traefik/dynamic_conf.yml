@@ -9,11 +9,20 @@ tcp:
       service: citrine-ocpp-service
       tls:
         passthrough: true # ← これが「何もさせるな」の正体
+
     gitea-ssh-router:
       rule: "HostSNI(`*`)"       # SSHはドメイン名が見えないので * 固定
       entryPoints:
         - "ssh-entry"            # 上で定義した entryPoint 名
       service: "gitea-ssh-service"
+
+    zulip-router:
+      rule: "HostSNI(`zulip.lovekapibarasan.org`)"
+      entryPoints:
+        - "websecure"
+      service: zulip-service
+      tls:
+        passthrough: true # SSL複合せず、Zulip側の証明書をそのまま使う
 
   services:
     citrine-ocpp-service:
@@ -24,6 +33,10 @@ tcp:
       loadBalancer:
         servers:
           - address: "10.10.0.7:2224" # GiteaコンテナのSSHポート(通常22)
+    zulip-service:
+      loadBalancer:
+        servers:
+          - address: "zulip:443" # コンテナ内は443で受けているはずなのでここへ飛ばす
 
 http:
   routers:
@@ -178,6 +191,20 @@ http:
       tls:
         certResolver: le
 
+    rustify-router:
+      rule: "Host(`rustify.lovekapibarasan.org`)"
+      entryPoints: ["websecure"]
+      service: rustify-service
+      tls:
+        certResolver: le
+
+    chat-router:
+      rule: "Host(`chat.lovekapibarasan.org`)"
+      entryPoints: ["websecure"]
+      service: chat-service
+      tls:
+        certResolver: le
+
     log-router:
       rule: "Host(`log.lovekapibarasan.org`)"
       entryPoints: ["websecure"]
@@ -322,6 +349,11 @@ http:
       loadBalancer:
         servers:
           - url: "http://10.10.0.2:8180"
+
+    rustify-service:
+      loadBalancer:
+        servers:
+          - url: "http://10.10.0.2:8182"
 
     loki-service:
       loadBalancer:
