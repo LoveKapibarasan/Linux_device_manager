@@ -28,6 +28,14 @@ http:
       tls:
         certResolver: le
 
+    citrine-ocpp-router:
+      rule: "Host(`core.lovekapibarasan.org`)"
+      entryPoints: [ "wss-port" ]
+      service: citrine-ocpp-service
+      tls:
+        certResolver: le
+
+
     search-router:
       rule: "Host(`search.lovekapibarasan.org`)"
       entryPoints: ["websecure"]
@@ -207,7 +215,12 @@ http:
     citrinecore-service:
       loadBalancer:
         servers:
-          - url: "http://10.10.0.2:8080"      
+          - url: "http://10.10.0.2:8080"    
+
+    citrine-ocpp-service:
+      loadBalancer:
+        servers:
+          - url: "http://10.10.0.2:8443"        
 
     search-service:
       loadBalancer:
