@@ -171,6 +171,13 @@ http:
       tls:
         certResolver: le
 
+    login-router:
+      rule: "Host(`login.lovekapibarasan.org`)"
+      entryPoints: ["websecure"]
+      service: login-service
+      tls:
+        certResolver: le
+
     log-router:
       rule: "Host(`log.lovekapibarasan.org`)"
       entryPoints: ["websecure"]
@@ -310,6 +317,11 @@ http:
       loadBalancer:
         servers:
           - url: "http://10.10.0.2:3000"
+
+    login-service:
+      loadBalancer:
+        servers:
+          - url: "http://10.10.0.2:8180"
 
     loki-service:
       loadBalancer:
