@@ -68,8 +68,8 @@ services:
       - "--certificatesresolvers.le.acme.storage=/letsencrypt/acme.json"
       - "--api.dashboard=true"
       - "--accesslog=true"
-      - "--accesslog.format=json" # JSON形式を指定
-      - "--accesslog.fields.names.ClientAddr=keep" # IPアドレスを保持
+      - "--accesslog.format=json" # JSON style
+      - "--accesslog.fields.names.ClientAddr=keep" # Keep IP address
       # 【重要】書き出し先のパスを明示的に指定
       - "--accesslog.filepath=/logs/access.log"
       # Config

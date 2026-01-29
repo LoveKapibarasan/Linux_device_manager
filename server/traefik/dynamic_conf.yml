@@ -1,3 +1,21 @@
+tcp:
+  routers:
+    # 8443ポート用のルーター（パススルー設定）
+    citrine-ocpp-router:
+      # HostSNI(`*`) は全てのTLS通信を通す設定。ドメインを特定するならHostSNI(`core.lovekapibarasan.org`)
+      rule: "HostSNI(`core.lovekapibarasan.org`)"
+      entryPoints:
+        - "wss-port"
+      service: citrine-ocpp-service
+      tls:
+        passthrough: true # ← これが「何もさせるな」の正体
+
+  services:
+    citrine-ocpp-service:
+      loadBalancer:
+        servers:
+          - address: "10.10.0.2:8443"
+
 http:
   routers:
     webdav-router:
@@ -27,14 +45,6 @@ http:
       service: citrinecore-service
       tls:
         certResolver: le
-
-    citrine-ocpp-router:
-      rule: "Host(`core.lovekapibarasan.org`)"
-      entryPoints: [ "wss-port" ]
-      service: citrine-ocpp-service
-      tls:
-        certResolver: le
-
 
     search-router:
       rule: "Host(`search.lovekapibarasan.org`)"
@@ -215,12 +225,7 @@ http:
     citrinecore-service:
       loadBalancer:
         servers:
-          - url: "http://10.10.0.2:8080"    
-
-    citrine-ocpp-service:
-      loadBalancer:
-        servers:
-          - url: "http://10.10.0.2:8443"        
+          - url: "http://10.10.0.2:8080"          
 
     search-service:
       loadBalancer:
