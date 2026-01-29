@@ -58,6 +58,7 @@ services:
       - "--providers.docker.exposedbydefault=false"
       - "--entrypoints.web.address=:80"
       - "--entrypoints.websecure.address=:443"
+      - "--entrypoints.wss-port.address=:8443"
       #- "--certificatesresolvers.le.acme.httpchallenge=true"
       #- "--certificatesresolvers.le.acme.httpchallenge.entrypoint=web"
       # Use Claudflare
