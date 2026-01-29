@@ -23,7 +23,7 @@ tcp:
     gitea-ssh-service:
       loadBalancer:
         servers:
-          - address: "10.10.0.7:22" # GiteaコンテナのSSHポート(通常22)
+          - address: "10.10.0.7:2224" # GiteaコンテナのSSHポート(通常22)
 
 http:
   routers:
