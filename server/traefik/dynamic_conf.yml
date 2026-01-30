@@ -407,10 +407,6 @@ http:
       basicAuth:
         usersFile: "/etc/traefik/.htpasswd"
 
-    alloy-auth:
-      basicAuth:
-        usersFile: "/etc/traefik/.htpasswd"
-
     nextcloud-cors:
       headers:
         # 許可するオリジン（Super Productivity URL）
