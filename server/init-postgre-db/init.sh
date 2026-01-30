@@ -27,6 +27,8 @@ BEGIN
     END IF;
 END
 \$$;
+-- Zulipユーザーにスーパーユーザーに近い権限を一時的に与える
+ALTER USER zulip WITH SUPERUSER;
 SELECT 'CREATE DATABASE zulip LC_COLLATE = ''C'' LC_CTYPE = ''C''' WHERE NOT EXISTS (SELECT FROM pg_database WHERE datname = 'zulip')\gexec
 GRANT ALL PRIVILEGES ON DATABASE zulip TO zulip;
 
