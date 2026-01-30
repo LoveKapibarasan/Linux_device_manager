@@ -1027,6 +1027,7 @@ volumes:
   firefly_iii_upload:
   minio-data:
   mimir-data:
+  tempo-data:
   portainer_agent_data:
   gitea-data:
   webdav-data:
