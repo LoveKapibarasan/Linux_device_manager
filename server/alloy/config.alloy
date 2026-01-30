@@ -134,6 +134,6 @@ faro.receiver "default" {
   }
   output {
     logs   = [loki.process.logs.receiver]
-    traces = [otelcol.exporter.otlp.default.input]
+    traces = [otelcol.exporter.otlp.tempo.input]
   }
 }
