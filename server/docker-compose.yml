@@ -801,6 +801,7 @@ services:
       POSTGRES_PASSWORD: ${N8N_DB_PASSWORD}
     volumes:
     # Version 18
+      - ./init-postgre-db:/docker-entrypoint-initdb.d
       - postgres_data:/var/lib/postgresql
     labels:
       app: postgres
