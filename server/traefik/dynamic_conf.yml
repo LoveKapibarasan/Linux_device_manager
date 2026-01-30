@@ -198,6 +198,13 @@ http:
       tls:
         certResolver: le
 
+    alloy-router:
+      rule: "Host(`alloy.lovekapibarasan.org`)"
+      entryPoints: ["websecure"]
+      service: alloy-service
+      tls:
+        certResolver: le
+
     log-router:
       rule: "Host(`log.lovekapibarasan.org`)"
       entryPoints: ["websecure"]
@@ -348,6 +355,11 @@ http:
         servers:
           - url: "http://10.10.0.2:8182"
 
+    alloy-service:
+      loadBalancer:
+        servers:
+          - url: "http://10.10.0.2:12347"
+
     loki-service:
       loadBalancer:
         servers:
@@ -389,12 +401,16 @@ http:
     loki-auth:
       basicAuth:
         # htpasswd
-        users:
-          - "LOKI_BASIC_PASSWORD"
+        usersFile: "/etc/traefik/.htpasswd"
+
     mimir-auth:
       basicAuth:
-        users:
-          - "LOKI_BASIC_PASSWORD"
+        usersFile: "/etc/traefik/.htpasswd"
+
+    alloy-auth:
+      basicAuth:
+        usersFile: "/etc/traefik/.htpasswd"
+
     nextcloud-cors:
       headers:
         # 許可するオリジン（Super Productivity URL）

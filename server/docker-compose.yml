@@ -49,51 +49,15 @@ services:
     networks:
       - network
 
-  # You may need sudo chmod 777 ./traefik-data/logs 
+  # You may need sudo chmod 777 ./traefik-data/logs
   traefik:
     image: traefik:latest
     container_name: "traefik"
-    command:
-      - "--providers.docker=true"
-      - "--providers.docker.exposedbydefault=false"
-      - "--entrypoints.web.address=:80"
-      - "--entrypoints.websecure.address=:443"
-      - "--entrypoints.wss-port.address=:8443"
-      - "--entrypoints.ssh-entry.address=:2224"
-      #- "--certificatesresolvers.le.acme.httpchallenge=true"
-      #- "--certificatesresolvers.le.acme.httpchallenge.entrypoint=web"
-      # Use Claudflare
-      - "--certificatesresolvers.le.acme.dnschallenge=true"
-      - "--certificatesresolvers.le.acme.dnschallenge.provider=cloudflare"
-      - "--certificatesresolvers.le.acme.email=${CF_API_EMAIL}"
-      - "--certificatesresolvers.le.acme.storage=/letsencrypt/acme.json"
-      - "--api.dashboard=true"
-      - "--accesslog=true"
-      - "--accesslog.format=json" # JSON style
-      - "--accesslog.fields.names.ClientAddr=keep" # Keep IP address
-      # 【重要】書き出し先のパスを明示的に指定
-      - "--accesslog.filepath=/logs/access.log"
-      # Config
-      - "--providers.file.directory=/etc/traefik/dynamic"
-      - "--entrypoints.websecure.transport.respondingtimeouts.readtimeout=900s"
-      - "--entrypoints.websecure.transport.respondingtimeouts.writetimeout=900s"
-      - "--entrypoints.websecure.transport.respondingtimeouts.idletimeout=900s"
-      # https://doc.traefik.io/traefik/reference/install-configuration/entrypoints/#forwarded-headers
-      # https://traefik-log-dashboard.hhf.technology/docs/troubleshooting#geoip-issues
-      # Cloudflare: https://www.cloudflare.com/ips/
-      # Docker: https://docs.docker.com/engine/network/drivers/bridge/
-      - "--entrypoints.websecure.forwardedHeaders.trustedIPs=173.245.48.0/20,103.21.244.0/22,103.22.200.0/22,103.31.4.0/22,141.101.64.0/18,108.162.192.0/18,190.93.240.0/20,188.114.96.0/20,197.234.240.0/22,198.41.128.0/17,162.158.0.0/15,104.16.0.0/13,104.24.0.0/14,172.64.0.0/13,131.0.72.0/22,172.16.0.0/12,10.10.0.0/16"
-
-    #ports:
-    #  - "80:80"
-    #  - "443:443"
-    #  - "8080:8082"
     # Use Network mode host to collect geo data
     network_mode: host 
-
     environment:
     # https://medium.com/@svenvanginkel/the-ultimate-guide-to-setting-up-traefik-650bd68ae633
-      #- CF_API_EMAIL=${CF_API_EMAIL}
+      - CF_API_EMAIL=${CF_API_EMAIL}
       - CF_DNS_API_TOKEN=${CF_API_KEY}
       #- CF_API_KEY=${CF_API_KEY}
       - TRAEFIK_LOG_DASHBOARD_AUTH_TOKEN=${TRAEFIK_LOG_DASHBOARD_AUTH_TOKEN}
@@ -115,10 +79,10 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock:ro
       - /etc/letsencrypt:/letsencrypt
       - ./traefik/dynamic_conf.yml:/etc/traefik/dynamic/dynamic_conf.yml
+      - ./traefik/traefik.yaml:/etc/traefik/traefik.yaml:ro
       - ./traefik-data/logs:/logs
-    #networks:
-    #  - network
-  
+      - ./traefik/.htpasswd:/etc/traefik/.htpasswd:ro
+
   # https://traefik-log-dashboard.hhf.technology/docs/quickstart
   traefik-agent:
     image: hhftechnology/traefik-log-dashboard-agent:latest
@@ -645,9 +609,8 @@ services:
       - ./alloy/config.alloy:/etc/alloy/config.alloy:ro
     ports:
       - "12345:12345"
-    #depends_on:
-      #- node_exporter
-      #- cadvisor
+    environment:
+      - LOKI_PASSWORD=${LOKI_PASSWORD}
     networks:
       - network
 
@@ -727,6 +690,17 @@ services:
       restart: unless-stopped
     labels:
       app: mimir
+    networks:
+      - network
+
+  tempo:
+    image: grafana/tempo:latest
+    command: [ "-config.file=/etc/tempo.yaml" ]
+    volumes:
+      - ./tempo/tempo.yaml:/etc/tempo.yaml
+      - tempo-data:/var/tempo
+    ports:
+      - "4317:4317"  # OTLP gRPC
     networks:
       - network
 

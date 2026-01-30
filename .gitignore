@@ -18,6 +18,7 @@ build/
 wg0.conf
 init-db.sql
 init.sql
+.htpasswd
 tts-azure-web/
 samba/
 backup/
