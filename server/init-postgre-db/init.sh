@@ -7,7 +7,7 @@ else
   exit 1
 fi
 
-cat > init-db.sql << EOF
+cat > init.sql << EOF
 -- 1. n8n用
 DO \$$
 BEGIN
