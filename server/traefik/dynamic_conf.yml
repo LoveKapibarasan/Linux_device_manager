@@ -36,7 +36,7 @@ tcp:
     zulip-service:
       loadBalancer:
         servers:
-          - address: "zulip:443" # コンテナ内は443で受けているはずなのでここへ飛ばす
+          - address: "10.10.0.2:443"
 
 http:
   routers:
