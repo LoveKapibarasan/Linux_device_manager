@@ -130,9 +130,8 @@ faro.receiver "default" {
     listen_address = "0.0.0.0"
     listen_port = 12347
 
-    cors_allowed_origins = [https://lovekapibarasan.org"]
+    cors_allowed_origins = ["https://lovekapibarasan.org"]
   }
-
   output {
     logs   = [loki.process.logs.receiver]
     traces = [otelcol.exporter.otlp.default.input]
