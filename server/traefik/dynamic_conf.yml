@@ -198,13 +198,6 @@ http:
       tls:
         certResolver: le
 
-    chat-router:
-      rule: "Host(`chat.lovekapibarasan.org`)"
-      entryPoints: ["websecure"]
-      service: chat-service
-      tls:
-        certResolver: le
-
     log-router:
       rule: "Host(`log.lovekapibarasan.org`)"
       entryPoints: ["websecure"]

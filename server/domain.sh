@@ -7,14 +7,13 @@ hostname -I
 echo "Please ensure that the domain $DOMAIN is pointing to this server's IP address.(A record)"
 nslookup $DOMAIN
 
-# Certbot
+# === Certbot ===
 # https://deepwiki.com/cloudflare/certbot-dns-cloudflare/2-installation-and-setup
 sudo apt update
-# Do not use sudo in .venv
-sudo pip install --upgrade cloudflare certbot-dns-cloudflare --break-system-packages
 sudo apt install certbot -y
 
-# Zone == DNS
+# === Token ===
+# Zone: DNS
 # https://dash.cloudflare.com/profile/api-tokens
 mkdir -p ~/.secrets
 echo "dns_cloudflare_api_token=${TOKEN}" >> ~/.secrets/cloudflare.ini
@@ -29,23 +28,25 @@ fi
 
 # Note:  Turn off cloudflare proxy ( visitor → Cloudflare → server )
 
-# Logs
-sudo tail -100 /var/log/letsencrypt/letsencrypt.log
-
-# Wildcard certification
-# /home/ubuntu/cert/.venv/bin/certbot
-sudo certbot certonly \
+# === venv ===
+mkdir ~/cert && cd ~/cert
+python3 -m venv .venv
+source .venv/bin/activate
+pip install --upgrade cloudflare certbot-dns-cloudflare
+sudo /home/user/cert/.venv/bin/certbot certonly \
   --dns-cloudflare \
   --dns-cloudflare-credentials /home/user/.secrets/cloudflare.ini \
+  --dns-cloudflare-propagation-seconds 120 \
   -d lovekapibarasan.org \
-  -d "*.lovekapibarasan.org"
-# After this, you can delete generated TXT records
+  -d "*.lovekapibarasan.org"\
+
 # Test: --dry-run
+
 sudo /home/user/certbot/.venv/bin/certbot renew --dry-run
-sudo pacman -S cronie
-sudo systemctl enable --now cronie
+# sudo pacman -S cronie
+# sudo systemctl enable --now cronie
 sudo crontab -e
-# 0 0,12 * * * /home/ubuntu/cert/.venv/bin/certbot renew --quiet
+# 0 0,12 * * * /home/user/cert/.venv/bin/certbot renew --quiet
 
 # Check
 sudo openssl x509 -in "/etc/letsencrypt/live/${DOMAIN}/fullchain.pem" -noout -text | grep -A1 "Subject Alternative Name"
