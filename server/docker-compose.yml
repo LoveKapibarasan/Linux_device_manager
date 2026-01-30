@@ -792,13 +792,9 @@ services:
       - network
 
   postgres:
-    image: postgres:latest
+    image: postgres:16
     container_name: postgres
     restart: unless-stopped
-    environment:
-      POSTGRES_DB: n8n
-      POSTGRES_USER: n8n
-      POSTGRES_PASSWORD: ${N8N_DB_PASSWORD}
     volumes:
     # Version 18
       - ./init-postgre-db:/docker-entrypoint-initdb.d
