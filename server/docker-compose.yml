@@ -950,6 +950,8 @@ services:
     networks:
       - network
 
+
+
   portainer_agent_1:
     image: portainer/agent:latest
     container_name: portainer_agent_1
