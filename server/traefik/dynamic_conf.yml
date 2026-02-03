@@ -198,6 +198,13 @@ http:
       tls:
         certResolver: le
 
+    rustifyDoc-router:
+      rule: "Host(`doc.rustify.lovekapibarasan.org`)"
+      entryPoints: ["websecure"]
+      service: rustifyDoc-service
+      tls:
+        certResolver: le
+
     alloy-router:
       rule: "Host(`alloy.lovekapibarasan.org`)"
       entryPoints: ["websecure"]
@@ -354,6 +361,11 @@ http:
       loadBalancer:
         servers:
           - url: "http://10.10.0.2:8182"
+
+    rustifyDoc-service:
+      loadBalancer:
+        servers:
+          - url: "http://10.10.0.2:8183"
 
     alloy-service:
       loadBalancer:
