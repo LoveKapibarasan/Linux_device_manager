@@ -1009,7 +1009,7 @@ services:
       - "8105:8080"
     volumes:
       - pypi_data:/data/packages
-      - ./auth:/data/auth          # htpasswd
+      - ./pypi/auth:/data/auth          # htpasswd
     command: -P /data/auth/.htpasswd /data/packages
     restart: always  
 

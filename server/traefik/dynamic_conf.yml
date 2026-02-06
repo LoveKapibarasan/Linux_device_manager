@@ -255,6 +255,13 @@ http:
         - "mimir-auth"
       tls:
         certResolver: le
+    
+    pip-router:
+      rule: "Host(`pip.lovekapibarasan.org`)"
+      entryPoints: ["websecure"]
+      service: pip-service
+      tls:
+        certResolver: le
 
   services:
     webdav-service:
@@ -408,6 +415,11 @@ http:
       loadBalancer:
         servers:
           - url: "http://10.10.0.7:9009"
+
+    pip-service:
+      loadBalancer:
+        servers:
+          - url: "http://10.10.0.7:8105"
 
   middlewares:
     loki-auth:
