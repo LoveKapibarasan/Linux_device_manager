@@ -1001,6 +1001,8 @@ services:
     ports:
       - "8104:80"
     restart: always
+    networks:
+      - network
 
   pypiserver:
     image: pypiserver/pypiserver:latest
@@ -1011,7 +1013,9 @@ services:
       - pypi_data:/data/packages
       - ./pypi/auth:/data/auth          # htpasswd
     command: -P /data/auth/.htpasswd /data/packages
-    restart: always  
+    restart: always 
+    networks:
+      - network 
 
 volumes:
   valkey-data2:
