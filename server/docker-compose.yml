@@ -754,8 +754,8 @@ services:
       - GENERIC_TIMEZONE=Europe/Berlin
     volumes:
       - n8n_data:/home/node/.n8n
-    depends_on:
-      - postgres
+    #depends_on:
+    #  - postgres
     labels:
       app: n8n
       traefik.enable: "true"
