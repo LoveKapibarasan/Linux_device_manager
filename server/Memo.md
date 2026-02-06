@@ -1,12 +1,5 @@
-# Replace
-* General
-1. Mimir
-2. Grafana
-* Main
-1. Traefik
-* Others
-1. Webdav
+CREATE USER n8n WITH PASSWORD '${N8N_DB_PASSWORD}';
 
-# Share
+CREATE DATABASE n8n;
 
-1. Viewer
+GRANT ALL PRIVILEGES ON DATABASE n8n TO n8n;
