@@ -1,8 +1,0 @@
-#!/bin/bash
-
-source .env
-read -p "Enter org ID: " ORG_ID
-# ORG_ID = Home
-export ORG_ID='' 
-sed -i "s/LOKI_PASSWORD/${LOKI_PASSWORD}/g" ./alloy/config.alloy
-sed -i "s/ORG_ID/${ORG_ID}/g" ./alloy/config.alloy

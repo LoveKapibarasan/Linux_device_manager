@@ -10,11 +10,33 @@ tcp:
       tls:
         passthrough: true # ← これが「何もさせるな」の正体
 
+    gitea-ssh-router:
+      rule: "HostSNI(`*`)"       # SSHはドメイン名が見えないので * 固定
+      entryPoints:
+        - "ssh-entry"            # 上で定義した entryPoint 名
+      service: "gitea-ssh-service"
+
+    zulip-router:
+      rule: "HostSNI(`zulip.lovekapibarasan.org`)"
+      entryPoints:
+        - "websecure"
+      service: zulip-service
+      tls:
+        passthrough: true # SSL複合せず、Zulip側の証明書をそのまま使う
+
   services:
     citrine-ocpp-service:
       loadBalancer:
         servers:
           - address: "10.10.0.2:8443"
+    gitea-ssh-service:
+      loadBalancer:
+        servers:
+          - address: "10.10.0.7:2224" # GiteaコンテナのSSHポート(通常22)
+    zulip-service:
+      loadBalancer:
+        servers:
+          - address: "10.10.0.2:443"
 
 http:
   routers:
@@ -162,6 +184,34 @@ http:
       tls:
         certResolver: le
 
+    login-router:
+      rule: "Host(`login.lovekapibarasan.org`)"
+      entryPoints: ["websecure"]
+      service: login-service
+      tls:
+        certResolver: le
+
+    rustify-router:
+      rule: "Host(`rustify.lovekapibarasan.org`)"
+      entryPoints: ["websecure"]
+      service: rustify-service
+      tls:
+        certResolver: le
+
+    rustifyDoc-router:
+      rule: "Host(`doc.rustify.lovekapibarasan.org`)"
+      entryPoints: ["websecure"]
+      service: rustifyDoc-service
+      tls:
+        certResolver: le
+
+    alloy-router:
+      rule: "Host(`alloy.lovekapibarasan.org`)"
+      entryPoints: ["websecure"]
+      service: alloy-service
+      tls:
+        certResolver: le
+
     log-router:
       rule: "Host(`log.lovekapibarasan.org`)"
       entryPoints: ["websecure"]
@@ -302,6 +352,26 @@ http:
         servers:
           - url: "http://10.10.0.2:3000"
 
+    login-service:
+      loadBalancer:
+        servers:
+          - url: "http://10.10.0.2:8180"
+
+    rustify-service:
+      loadBalancer:
+        servers:
+          - url: "http://10.10.0.2:8182"
+
+    rustifyDoc-service:
+      loadBalancer:
+        servers:
+          - url: "http://10.10.0.2:8183"
+
+    alloy-service:
+      loadBalancer:
+        servers:
+          - url: "http://10.10.0.2:12347"
+
     loki-service:
       loadBalancer:
         servers:
@@ -343,12 +413,12 @@ http:
     loki-auth:
       basicAuth:
         # htpasswd
-        users:
-          - "LOKI_BASIC_PASSWORD"
+        usersFile: "/etc/traefik/.htpasswd"
+
     mimir-auth:
       basicAuth:
-        users:
-          - "LOKI_BASIC_PASSWORD"
+        usersFile: "/etc/traefik/.htpasswd"
+
     nextcloud-cors:
       headers:
         # 許可するオリジン（Super Productivity URL）

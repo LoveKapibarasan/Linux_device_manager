@@ -94,7 +94,7 @@ loki.write "default" {
     // 1. Basic Auth
     basic_auth {
       username = "admin"
-      password = "LOKI_PASSWORD"
+      password = sys.env("LOKI_PASSWORD")
     }
 
     // 2. Tenant ID (Mimir)
@@ -109,7 +109,7 @@ prometheus.remote_write "mimir" {
     // 1. Basic Auth
     basic_auth {
       username = "admin"
-      password = "LOKI_PASSWORD"
+      password = sys.env("LOKI_PASSWORD")
     }
 
     // 2. Tenant ID (Mimir)
@@ -117,4 +117,26 @@ prometheus.remote_write "mimir" {
       "X-Scope-OrgID" = "ORG_ID",
     }
   }  
+}
+
+otelcol.exporter.otlp "tempo" {
+  client {
+    endpoint = "tempo:4317"
+  }
+}
+
+faro.receiver "default" {
+  server {
+    listen_address = "0.0.0.0"
+    listen_port = 12347
+
+    cors_allowed_origins = [
+    "https://lovekapibarasan.org",
+    "https://rustify.lovekapibarasan.org",
+    ]
+  }
+  output {
+    logs   = [loki.process.logs.receiver]
+    traces = [otelcol.exporter.otlp.tempo.input]
+  }
 }
