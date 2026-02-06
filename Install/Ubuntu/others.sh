@@ -128,3 +128,10 @@ sudo apt remove nodejs npm
 
 # Rust
 curl https://sh.rustup.rs -sSf | sh
+
+# Flutter
+sudo snap install flutter --classic
+flutter sdk-path
+
+# Go
+sudo snap install go --classic

@@ -1001,6 +1001,21 @@ services:
     ports:
       - "8104:80"
     restart: always
+    networks:
+      - network
+
+  pypiserver:
+    image: pypiserver/pypiserver:latest
+    container_name: pypiserver
+    ports:
+      - "8105:8080"
+    volumes:
+      - pypi_data:/data/packages
+      - ./pypi/auth:/data/auth          # htpasswd
+    command: -P /data/auth/.htpasswd /data/packages
+    restart: always 
+    networks:
+      - network 
 
 volumes:
   valkey-data2:
@@ -1037,6 +1052,7 @@ volumes:
   backrest-data:
   backrest-config:
   zot-data:
+  pypi_data: 
 
 
 networks:
