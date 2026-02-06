@@ -126,6 +126,13 @@ http:
       tls:
         certResolver: le
     
+    n8n-router:
+      rule: "Host(`n8n.lovekapibarasan.org`)"
+      entryPoints: [ "websecure" ]
+      service: n8n-service
+      tls:
+        certResolver: le
+
     task-router:
       rule: "Host(`tasks.lovekapibarasan.org`)"
       entryPoints: ["websecure"]
@@ -311,6 +318,11 @@ http:
       loadBalancer:
         servers:
           - url: "http://10.10.0.2:8093"
+
+    n8n-service:
+      loadBalancer:
+        servers:
+          - url: "http://10.10.0.2:8095"
 
     expense-service:
       loadBalancer:
