@@ -30,8 +30,8 @@ services:
     environment:
       - SEARXNG_BASE_URL=https://search.lovekapibarasan.org/
       - GRANIAN_PORT=8081
-    depends_on:
-      - redis
+    #depends_on:
+    #  - redis
     logging:
       driver: "json-file"
       options:
