@@ -9,6 +9,11 @@ server:
   port: 8081
   bind_address: "0.0.0.0"
 
+search:
+  formats:
+    - html
+    - json
+
 # redis: <-- Old
 valkey:
   url: redis://redis:6379/0
