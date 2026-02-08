@@ -732,6 +732,8 @@ services:
     networks:
       - network
 
+# Nodes:
+### Bluesky: n8n-nodes-bluesky
   n8n:
     image: n8nio/n8n:latest
     container_name: "n8n"
@@ -1015,7 +1017,20 @@ services:
     command: -P /data/auth/.htpasswd /data/packages
     restart: always 
     networks:
-      - network 
+      - network
+
+  verdaccio:
+    image: verdaccio/verdaccio
+    container_name: verdaccio
+    ports:
+      - "8106:4873"
+    volumes:
+      - verdaccio_storage:/verdaccio/storage
+      - verdaccio_conf:/verdaccio/conf
+      - verdaccio_plugins:/verdaccio/plugins
+    restart: always
+    networks:
+      - network
 
 volumes:
   valkey-data2:
