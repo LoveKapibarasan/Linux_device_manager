@@ -11,6 +11,12 @@ uplinks:
     url: https://registry.npmjs.org/
 
 packages:
+  '@*/*':
+    access: $all
+    publish: $authenticated
+    unpublish: $authenticated
+    proxy: npmjs # 本家npmjs.orgに取りに行く設定
+
   '**':
     access: $all
     publish: $authenticated
