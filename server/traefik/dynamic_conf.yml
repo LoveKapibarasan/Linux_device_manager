@@ -281,6 +281,8 @@ http:
       rule: "Host(`npm.lovekapibarasan.org`)"
       entryPoints: ["websecure"]
       service: npm-service
+      middlewares:
+        - "allow-slash"
       tls:
         certResolver: le
 
@@ -499,3 +501,7 @@ http:
         accessControlAllowCredentials: true
         accessControlMaxAge: 100
         addVaryHeader: true
+
+    allow-slash:
+        encodedCharacters:
+          allowEncodedSlash: true
