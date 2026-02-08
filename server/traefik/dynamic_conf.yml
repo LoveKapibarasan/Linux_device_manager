@@ -503,5 +503,5 @@ http:
         addVaryHeader: true
 
     allow-slash:
-        encodedCharacters:
-          allowEncodedSlash: true
+      encodedCharacters:
+        allowEncodedSlash: true
