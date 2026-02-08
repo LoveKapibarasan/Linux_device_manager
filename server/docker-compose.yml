@@ -1026,7 +1026,7 @@ services:
       - "8106:4873"
     volumes:
       - verdaccio_storage:/verdaccio/storage
-      - verdaccio_conf:/verdaccio/conf
+      - ./conf:/verdaccio/conf
       - verdaccio_plugins:/verdaccio/plugins
     restart: always
     networks:
@@ -1067,7 +1067,9 @@ volumes:
   backrest-data:
   backrest-config:
   zot-data:
-  pypi_data: 
+  pypi_data:
+  verdaccio_storage:
+  verdaccio_plugins:
 
 
 networks:
