@@ -1026,7 +1026,7 @@ services:
       - "8106:4873"
     volumes:
       - verdaccio_storage:/verdaccio/storage
-      - ./conf:/verdaccio/conf
+      - ./verdaccio:/verdaccio/conf
       - verdaccio_plugins:/verdaccio/plugins
     restart: always
     networks:
