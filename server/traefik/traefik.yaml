@@ -12,6 +12,11 @@ entryPoints:
     address: ":80"
   websecure:
     address: ":443"
+    http:
+      encodedCharacters:
+        #https://github.com/traefik/traefik/pull/12360
+        # %2f (/)
+        allow: true
     transport:
       respondingTimeouts:
         readTimeout: 900s
