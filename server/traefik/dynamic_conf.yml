@@ -1,19 +1,26 @@
 tcp:
   routers:
-    # 8443ポート用のルーター（パススルー設定）
+    # Pass through
+    citrine-simple-router:
+      rule: "HostSNI(`dev.core.lovekapibarasan.org`)"
+      entryPoints: 
+        - "ws-port"
+      service: citrine-simple-service
+      tls: 
+        passthrough: true
+
     citrine-ocpp-router:
-      # HostSNI(`*`) は全てのTLS通信を通す設定。ドメインを特定するならHostSNI(`core.lovekapibarasan.org`)
       rule: "HostSNI(`core.lovekapibarasan.org`)"
       entryPoints:
         - "wss-port"
       service: citrine-ocpp-service
       tls:
-        passthrough: true # ← これが「何もさせるな」の正体
+        passthrough: true 
 
     gitea-ssh-router:
-      rule: "HostSNI(`*`)"       # SSHはドメイン名が見えないので * 固定
+      rule: "HostSNI(`*`)"
       entryPoints:
-        - "ssh-entry"            # 上で定義した entryPoint 名
+        - "ssh-entry"
       service: "gitea-ssh-service"
 
     zulip-router:
@@ -22,9 +29,14 @@ tcp:
         - "websecure"
       service: zulip-service
       tls:
-        passthrough: true # SSL複合せず、Zulip側の証明書をそのまま使う
+        passthrough: true
 
   services:
+    citrine-simple-service:
+      loadBalancer:
+        servers:
+          - address: "10.10.0.2:8079" # 8079 -> Container 8081
+
     citrine-ocpp-service:
       loadBalancer:
         servers:
