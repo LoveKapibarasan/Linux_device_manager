@@ -30,8 +30,8 @@ services:
     environment:
       - SEARXNG_BASE_URL=https://search.lovekapibarasan.org/
       - GRANIAN_PORT=8081
-    depends_on:
-      - redis
+    #depends_on:
+    #  - redis
     logging:
       driver: "json-file"
       options:
@@ -732,6 +732,8 @@ services:
     networks:
       - network
 
+# Nodes:
+### Bluesky: n8n-nodes-bluesky
   n8n:
     image: n8nio/n8n:latest
     container_name: "n8n"
@@ -740,7 +742,7 @@ services:
       - "8095:5678"
     environment:
       - DB_TYPE=postgresdb
-      - DB_POSTGRESDB_HOST=postgres
+      - DB_POSTGRESDB_HOST=${POSTGRES_HOST}
       - DB_POSTGRESDB_PORT=5432
       - DB_POSTGRESDB_DATABASE=n8n
       - DB_POSTGRESDB_USER=n8n
@@ -754,8 +756,8 @@ services:
       - GENERIC_TIMEZONE=Europe/Berlin
     volumes:
       - n8n_data:/home/node/.n8n
-    depends_on:
-      - postgres
+    #depends_on:
+    #  - postgres
     labels:
       app: n8n
       traefik.enable: "true"
@@ -1015,7 +1017,20 @@ services:
     command: -P /data/auth/.htpasswd /data/packages
     restart: always 
     networks:
-      - network 
+      - network
+
+  verdaccio:
+    image: verdaccio/verdaccio
+    container_name: verdaccio
+    ports:
+      - "8106:4873"
+    volumes:
+      - verdaccio_storage:/verdaccio/storage
+      - ./verdaccio:/verdaccio/conf
+      - verdaccio_plugins:/verdaccio/plugins
+    restart: always
+    networks:
+      - network
 
 volumes:
   valkey-data2:
@@ -1052,7 +1067,9 @@ volumes:
   backrest-data:
   backrest-config:
   zot-data:
-  pypi_data: 
+  pypi_data:
+  verdaccio_storage:
+  verdaccio_plugins:
 
 
 networks:

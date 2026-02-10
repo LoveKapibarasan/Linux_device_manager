@@ -12,6 +12,9 @@ entryPoints:
     address: ":80"
   websecure:
     address: ":443"
+    http:
+      encodedCharacters:
+        allowEncodedSlash: true
     transport:
       respondingTimeouts:
         readTimeout: 900s

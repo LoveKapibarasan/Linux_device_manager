@@ -1,12 +1,5 @@
-# Replace
-* General
-1. Mimir
-2. Grafana
-* Main
-1. Traefik
-* Others
-1. Webdav
-
-# Share
-
-1. Viewer
+psql -U citrine -d n8n
+CREATE USER n8n WITH PASSWORD '${N8N_DB_PASSWORD}';
+CREATE DATABASE n8n;
+GRANT ALL ON SCHEMA public TO n8n;
+ALTER SCHEMA public OWNER TO n8n;
