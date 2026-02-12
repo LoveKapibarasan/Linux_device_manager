@@ -1033,6 +1033,7 @@ services:
       - network
 
   openproject:
+    container_name: openproject
     image: openproject/openproject:17-rc-slim
     volumes:
       - opdata:/var/openproject/assets
