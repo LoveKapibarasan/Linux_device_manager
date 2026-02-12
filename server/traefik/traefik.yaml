@@ -39,6 +39,8 @@ entryPoints:
         - "131.0.72.0/22"
         - "172.16.0.0/12"
         - "10.10.0.0/16"
+  ws-port:
+    address: ":8081"
   wss-port:
     address: ":8443"
   ssh-entry:

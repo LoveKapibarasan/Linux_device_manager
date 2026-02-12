@@ -39,6 +39,12 @@ xdg-desktop-portal xdg-desktop-portal-gnome xdg-desktop-portal-gtk
 sudo apt install shotcut ffmpeg -y
 
 # Adb
+tar -zxvf android-studio-2025.2.3.9-linux.tar.gz
+
+cd android-studio/bin
+
+# 起動！
+./studio.sh
 sudo apt install android-tools-adb android-tools-fastboot android-sdk-platform-tools-common -y
 sudo usermod -aG plugdev $USER
 
