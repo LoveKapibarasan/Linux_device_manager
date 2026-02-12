@@ -1032,6 +1032,21 @@ services:
     networks:
       - network
 
+  openproject:
+    image: openproject/community:latest
+    volumes:
+      - opdata:/var/openproject/assets
+    environment:
+      OPENPROJECT_HTTPS: "true"
+      OPENPROJECT_SECRET_KEY_BASE: ${OPENPROJECT_SECRET_KEY_BASE}
+      DATABASE_URL: ${OPENPROJECT_DB_URL}
+      RAILS_MIN_THREADS: 4
+      RAILS_MAX_THREADS: 16
+    ports:
+      - "8107:80"
+    networks:
+      - network
+
 volumes:
   valkey-data2:
   searxng-data:
