@@ -212,6 +212,13 @@ http:
       tls:
         certResolver: le
 
+    rustify-agent-router:
+      rule: "Host(`agent.lovekapibarasan.org`)"
+      entryPoints: ["websecure"]
+      service: rustify-agent-service
+      tls:
+        certResolver: le
+
     rustifyDoc-router:
       rule: "Host(`doc.rustify.lovekapibarasan.org`)"
       entryPoints: ["websecure"]
@@ -399,6 +406,11 @@ http:
       loadBalancer:
         servers:
           - url: "http://10.10.0.2:8182"
+
+    rustify-agent-service:
+      loadBalancer:
+        servers:
+          - url: "http://10.10.0.2:8181"
 
     rustifyDoc-service:
       loadBalancer:
