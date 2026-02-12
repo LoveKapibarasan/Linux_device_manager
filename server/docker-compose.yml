@@ -1033,7 +1033,7 @@ services:
       - network
 
   openproject:
-    image: openproject/community:latest
+    image: openproject/community:openproject/openproject:17-rc-slim
     volumes:
       - opdata:/var/openproject/assets
     environment:
