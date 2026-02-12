@@ -302,6 +302,13 @@ http:
       service: npm-service
       tls:
         certResolver: le
+    
+    project-router:
+      rule: "Host(`project.lovekapibarasan.org`)"
+      entryPoints: ["websecure"]
+      service: project-service
+      tls:
+        certResolver: le
 
   services:
     wordpress-service:
@@ -480,6 +487,11 @@ http:
       loadBalancer:
         servers:
           - url: "http://10.10.0.7:8106"
+    
+    project-service:
+      loadBalancer:
+        servers:
+          - url: "http://10.10.0.7:8107"
 
   middlewares:
     loki-auth:
