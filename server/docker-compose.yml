@@ -1085,6 +1085,7 @@ volumes:
   pypi_data:
   verdaccio_storage:
   verdaccio_plugins:
+  opdata:
 
 
 networks:

@@ -8,7 +8,6 @@ else
 fi
 
 cat > init.sql << EOF
--- 1. n8n用
 DO \$$
 BEGIN
     IF NOT EXISTS (SELECT FROM pg_catalog.pg_user WHERE usename = 'n8n') THEN
@@ -27,9 +26,18 @@ BEGIN
     END IF;
 END
 \$$;
--- Zulipユーザーにスーパーユーザーに近い権限を一時的に与える
 ALTER USER zulip WITH SUPERUSER;
 SELECT 'CREATE DATABASE zulip LC_COLLATE = ''C'' LC_CTYPE = ''C''' WHERE NOT EXISTS (SELECT FROM pg_database WHERE datname = 'zulip')\gexec
 GRANT ALL PRIVILEGES ON DATABASE zulip TO zulip;
+
+DO \$$
+BEGIN
+    IF NOT EXISTS (SELECT FROM pg_catalog.pg_user WHERE usename = 'op') THEN
+        CREATE USER op WITH PASSWORD '${OPENPROJECT_PASSWORD}';
+    END IF;
+END
+\$$;
+SELECT 'CREATE DATABASE op' WHERE NOT EXISTS (SELECT FROM pg_database WHERE datname = 'op')\gexec
+GRANT ALL PRIVILEGES ON DATABASE op TO op;
 
 EOF
