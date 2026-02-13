@@ -40,4 +40,10 @@ END
 SELECT 'CREATE DATABASE op' WHERE NOT EXISTS (SELECT FROM pg_database WHERE datname = 'op')\gexec
 GRANT ALL PRIVILEGES ON DATABASE op TO op;
 
+-- 1. opユーザーに、publicスキーマでのテーブル作成を許可する
+GRANT CREATE ON SCHEMA public TO op;
+
+-- 2. (念のため) すべての権限を現在のスキーマに付与
+GRANT ALL ON SCHEMA public TO op;
+
 EOF
