@@ -52,8 +52,12 @@ def shutdown_all():
 
 def suspend_all():
     os_name = platform.system()
+    notify(f"Default suspend for: {os_name}")
     try:
         if "Windows" in os_name:
+            subprocess.run(["powercfg", "/h", "on"], check=True) # check with powercfg /a
+            subprocess.run(["rundll32.exe", "powrprof.dll,SetSuspendState", "1,1,0"], check=True)
+            """ SSign Off
             # 現在のセッションを取得
             result = subprocess.run(
                 ["query", "session"], capture_output=True, text=True
@@ -72,9 +76,9 @@ def suspend_all():
                 subprocess.run(["logoff", current_session_id], check=True)
             else:
                 notify("No active session found to log off.")
+            """
 
         else:
-            notify(f"Default suspend for: {os_name}")
             subprocess.run(["systemctl", "suspend"], check=True)
 
     except Exception as e:
