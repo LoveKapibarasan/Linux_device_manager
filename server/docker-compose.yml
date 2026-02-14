@@ -1044,7 +1044,7 @@ services:
       RAILS_MIN_THREADS: 4
       RAILS_MAX_THREADS: 16
     ports:
-      - "8107:80"
+      - "8107:8080"
     networks:
       - network
 
